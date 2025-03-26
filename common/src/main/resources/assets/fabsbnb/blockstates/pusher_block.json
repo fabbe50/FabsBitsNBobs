@@ -1,0 +1,19 @@
+{
+    "variants": {
+        "facing=west": {
+            "model": "fabsbnb:block/pusher_block",
+            "y": 90
+        },
+        "facing=north": {
+            "model": "fabsbnb:block/pusher_block",
+            "y": 180
+        },
+        "facing=east": {
+            "model": "fabsbnb:block/pusher_block",
+            "y": 270
+        },
+        "facing=south": {
+            "model": "fabsbnb:block/pusher_block"
+        }
+    }
+}

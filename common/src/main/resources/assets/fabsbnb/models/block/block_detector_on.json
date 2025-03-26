@@ -1,0 +1,6 @@
+{
+    "parent": "fabsbnb:block/block_detector",
+    "textures": {
+        "bottom": "minecraft:block/observer_back_on"
+    }
+}

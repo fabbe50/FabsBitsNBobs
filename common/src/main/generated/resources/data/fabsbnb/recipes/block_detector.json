@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "fabsbnbdetector",
+  "key": {
+    "C": {
+      "tag": "minecraft:stone_crafting_materials"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "W": {
+      "item": "minecraft:quartz_block"
+    }
+  },
+  "pattern": [
+    "CCC",
+    "CWC",
+    "CRC"
+  ],
+  "result": {
+    "item": "fabsbnb:block_detector"
+  },
+  "show_notification": true
+}

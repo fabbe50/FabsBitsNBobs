@@ -1,0 +1,38 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "fabsbnb",
+  "ingredients": [
+    {
+      "item": "minecraft:water_bucket"
+    },
+    {
+      "item": "fabsbnb:lava_sponge_used"
+    },
+    {
+      "item": "fabsbnb:lava_sponge_used"
+    },
+    {
+      "item": "fabsbnb:lava_sponge_used"
+    },
+    {
+      "item": "fabsbnb:lava_sponge_used"
+    },
+    {
+      "item": "fabsbnb:lava_sponge_used"
+    },
+    {
+      "item": "fabsbnb:lava_sponge_used"
+    },
+    {
+      "item": "fabsbnb:lava_sponge_used"
+    },
+    {
+      "item": "fabsbnb:lava_sponge_used"
+    }
+  ],
+  "result": {
+    "count": 8,
+    "item": "fabsbnb:lava_sponge"
+  }
+}

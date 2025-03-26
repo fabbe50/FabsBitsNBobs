@@ -1,0 +1,110 @@
+{
+  "variants": {
+      "face=ceiling,facing=east,lit=false": {
+          "model": "fabsbnb:block/thin_light_off",
+          "x": 180,
+          "y": 270
+      },
+      "face=ceiling,facing=east,lit=true": {
+          "model": "fabsbnb:block/thin_light",
+          "x": 180,
+          "y": 270
+      },
+      "face=ceiling,facing=north,lit=false": {
+          "model": "fabsbnb:block/thin_light_off",
+          "x": 180,
+          "y": 180
+      },
+      "face=ceiling,facing=north,lit=true": {
+          "model": "fabsbnb:block/thin_light",
+          "x": 180,
+          "y": 180
+      },
+      "face=ceiling,facing=south,lit=false": {
+          "model": "fabsbnb:block/thin_light_off",
+          "x": 180
+      },
+      "face=ceiling,facing=south,lit=true": {
+          "model": "fabsbnb:block/thin_light",
+          "x": 180
+      },
+      "face=ceiling,facing=west,lit=false": {
+          "model": "fabsbnb:block/thin_light_off",
+          "x": 180,
+          "y": 90
+      },
+      "face=ceiling,facing=west,lit=true": {
+          "model": "fabsbnb:block/thin_light",
+          "x": 180,
+          "y": 90
+      },
+      "face=floor,facing=east,lit=false": {
+          "model": "fabsbnb:block/thin_light_off",
+          "y": 90
+      },
+      "face=floor,facing=east,lit=true": {
+          "model": "fabsbnb:block/thin_light",
+          "y": 90
+      },
+      "face=floor,facing=north,lit=false": {
+          "model": "fabsbnb:block/thin_light_off"
+      },
+      "face=floor,facing=north,lit=true": {
+          "model": "fabsbnb:block/thin_light"
+      },
+      "face=floor,facing=south,lit=false": {
+          "model": "fabsbnb:block/thin_light_off",
+          "y": 180
+      },
+      "face=floor,facing=south,lit=true": {
+          "model": "fabsbnb:block/thin_light",
+          "y": 180
+      },
+      "face=floor,facing=west,lit=false": {
+          "model": "fabsbnb:block/thin_light_off",
+          "y": 270
+      },
+      "face=floor,facing=west,lit=true": {
+          "model": "fabsbnb:block/thin_light",
+          "y": 270
+      },
+      "face=wall,facing=east,lit=false": {
+          "model": "fabsbnb:block/thin_light_off",
+          "x": 90,
+          "y": 90
+      },
+      "face=wall,facing=east,lit=true": {
+          "model": "fabsbnb:block/thin_light",
+          "x": 90,
+          "y": 90
+      },
+      "face=wall,facing=north,lit=false": {
+          "model": "fabsbnb:block/thin_light_off",
+          "x": 90
+      },
+      "face=wall,facing=north,lit=true": {
+          "model": "fabsbnb:block/thin_light",
+          "x": 90
+      },
+      "face=wall,facing=south,lit=false": {
+          "model": "fabsbnb:block/thin_light_off",
+          "x": 90,
+          "y": 180
+      },
+      "face=wall,facing=south,lit=true": {
+          "model": "fabsbnb:block/thin_light",
+          "x": 90,
+          "y": 180
+      },
+      "face=wall,facing=west,lit=false": {
+          "model": "fabsbnb:block/thin_light_off",
+          "x": 90,
+          "y": 270
+      },
+      "face=wall,facing=west,lit=true": {
+          "model": "fabsbnb:block/thin_light",
+          "x": 90,
+          "y": 270
+      }
+  }
+}

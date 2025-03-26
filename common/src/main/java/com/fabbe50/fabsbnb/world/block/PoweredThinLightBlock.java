@@ -1,0 +1,48 @@
+package com.fabbe50.fabsbnb.world.block;
+
+import com.fabbe50.fabsbnb.world.block.base.ExtFaceAttachedHorizontalDirectionalBlock;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.AttachFace;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
+
+public class PoweredThinLightBlock extends ExtFaceAttachedHorizontalDirectionalBlock {
+    protected static final VoxelShape CEILING_AABB = Block.box(5.0F, 15.0F, 5.0F, 11.0F, 16.0F, 11.0F);
+    protected static final VoxelShape FLOOR_AABB = Block.box(5.0F, 0.0F, 5.0F, 11.0F, 1.0F, 11.0F);
+    protected static final VoxelShape SOUTH_AABB = Block.box(5.0F, 5.0F, 0.0F, 11.0F, 11.0F, 1.0F);
+    protected static final VoxelShape NORTH_AABB = Block.box(5.0F, 5.0F, 15.0F, 11.0F, 11.0F, 16.0F);
+    protected static final VoxelShape EAST_AABB = Block.box(0.0F, 5.0F, 5.0F, 1.0F, 11.0F, 11.0F);
+    protected static final VoxelShape WEST_AABB = Block.box(15.0F, 5.0F, 5.0F, 16.0F, 11.0F, 11.0F);
+
+    public PoweredThinLightBlock(Properties properties) {
+        super(properties.strength(0.3F).sound(SoundType.GLASS).isValidSpawn((blockState, blockGetter, blockPos, object) -> true));
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(FACE, AttachFace.WALL));
+    }
+
+    @Override
+    public @NotNull VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
+        Direction direction = state.getValue(FACING);
+        return switch (state.getValue(FACE)) {
+            case FLOOR -> FLOOR_AABB;
+            case WALL -> switch (direction) {
+                case EAST -> EAST_AABB;
+                case WEST -> WEST_AABB;
+                case SOUTH -> SOUTH_AABB;
+                case NORTH, UP, DOWN -> NORTH_AABB;
+            };
+            default -> CEILING_AABB;
+        };
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(FACING, FACE);
+    }
+}

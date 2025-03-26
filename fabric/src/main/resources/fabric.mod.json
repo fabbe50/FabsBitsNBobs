@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "id": "fabsbnb",
+  "version": "${version}",
+  "name": "Fab's Bits & Bobs",
+  "description": "Adds my random ideas.",
+  "authors": [
+    "fabbe50"
+  ],
+  "contact": {
+    "homepage": "https://fabbe50.com"
+  },
+  "license": "LGPL-3.0",
+  "icon": "assets/fabsbnb/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.fabbe50.fabsbnb.fabric.FabsBnBFabric"
+    ],
+    "client": [
+      "com.fabbe50.fabsbnb.fabric.client.FabsBnBFabricClient"
+    ],
+    "emi": [
+      "com.fabbe50.fabsbnb.integration.ModEmiPlugin"
+    ],
+    "jei_mod_plugin": [
+      "com.fabbe50.fabsbnb.integration.ModJEIPlugin"
+    ],
+    "modmenu": [
+      "com.fabbe50.fabsbnb.fabric.client.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "fabsbnb.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16",
+    "minecraft": "~1.20.1",
+    "java": ">=17",
+    "architectury": ">=9.2.14",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "cloth-config2": "*"
+  }
+}

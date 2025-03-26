@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "package": "com.fabbe50.fabsbnb.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "minVersion": "0.8",
+  "client": [
+  ],
+  "mixins": [
+    "CreeperMixin",
+    "LayeredCauldronBlockMixin",
+    "PhantomSweepAttackGoalMixin",
+    "SpiderMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

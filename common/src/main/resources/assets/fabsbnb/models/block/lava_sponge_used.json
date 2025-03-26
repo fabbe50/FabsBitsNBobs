@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "fabsbnb:block/lava_sponge_used"
+  }
+}

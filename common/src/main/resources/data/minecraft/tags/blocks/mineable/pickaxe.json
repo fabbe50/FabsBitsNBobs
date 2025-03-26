@@ -1,0 +1,10 @@
+{
+  "values": [
+    "fabsbnb:pusher_block",
+    "fabsbnb:thin_light",
+    "fabsbnb:powered_thin_light",
+    "fabsbnb:block_breaker",
+    "fabsbnb:block_placer",
+    "fabsbnb:block_detector"
+  ]
+}

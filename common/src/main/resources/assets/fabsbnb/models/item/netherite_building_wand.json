@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "fabsbnb:item/netherite_building_wand"
+  }
+}

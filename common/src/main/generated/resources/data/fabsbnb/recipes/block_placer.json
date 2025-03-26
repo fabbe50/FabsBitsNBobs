@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "fabsbnbplacer",
+  "key": {
+    "C": {
+      "tag": "minecraft:stone_crafting_materials"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "W": {
+      "item": "fabsbnb:diamond_building_wand"
+    }
+  },
+  "pattern": [
+    "CCC",
+    "CWC",
+    "CRC"
+  ],
+  "result": {
+    "item": "fabsbnb:block_placer"
+  },
+  "show_notification": true
+}
