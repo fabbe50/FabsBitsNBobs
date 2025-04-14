@@ -31,6 +31,7 @@
   "item.fabsbnb.netherite_building_wand": "Netherite Building Wand",
   "item.fabsbnb.building_wand.tooltip.block": "Selected Block: %s",
   "item.fabsbnb.building-wand.set-block": "Set block to %s",
+  "item.fabsbnb.building-wand.not-enough-blocks": "Not enough blocks to complete placement.",
   "item.fabsbnb.water_cauldron": "Water Cauldron",
   "item.fabsbnb.cat_claw": "Cat Claw",
   "item.fabsbnb.whoosh_wand": "Whoosh Wand",

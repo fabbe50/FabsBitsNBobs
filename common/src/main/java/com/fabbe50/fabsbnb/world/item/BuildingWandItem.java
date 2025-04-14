@@ -26,12 +26,15 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class BuildingWandItem extends ModTieredItem {
     public BuildingWandItem(Tier tier, Properties properties) {
@@ -95,22 +98,29 @@ public class BuildingWandItem extends ModTieredItem {
                 Direction direction2 = face.getAxis().equals(Direction.Axis.Y) ? Direction.EAST : (face.getAxis().equals(Direction.Axis.X) ? Direction.NORTH : Direction.EAST);
 
                 Iterable<BlockPos.MutableBlockPos> positions = BlockPos.spiralAround(pos.relative(face), maxRadius, direction1, direction2);
+                AtomicReference<Set<Long>> placedAtAtomic = new AtomicReference<>(new HashSet<>());
                 positions.forEach(mutableBlockPos -> {
                     BlockState blockToPlaceOn = level.getBlockState(mutableBlockPos.relative(face.getOpposite()));
-                    if ((state.is(blockToPlaceOn.getBlock()) || (fuzzy && !(blockToPlaceOn.isAir() || blockToPlaceOn.canBeReplaced()))) && blockToPlaceOn.isFaceSturdy(level, mutableBlockPos.relative(face.getOpposite()), face) && (level.getBlockState(mutableBlockPos).canBeReplaced() || level.getBlockState(mutableBlockPos).isAir())) {
-                        if (!player.getAbilities().instabuild) {
-                            if (player.getInventory().hasAnyOf(Set.of(blockToPlace.asItem()))) {
-                                int slot = player.getInventory().findSlotMatchingItem(new ItemStack(blockToPlace.asItem()));
-                                player.getInventory().removeItem(slot, 1);
-                            } else {
-                                ((ServerPlayer)player).sendSystemMessage(Component.translatable("item.fabsbnb.building-wand.not-enough-blocks").withStyle(ChatFormatting.RED), true);
-                                return;
+                    Set<Long> placedAt = placedAtAtomic.get();
+                    if (placedAt.isEmpty() || (checkSurroundingBlocksIsVisited(placedAt, mutableBlockPos) || fuzzy)) {
+                        if ((state.is(blockToPlaceOn.getBlock()) || (fuzzy && !(blockToPlaceOn.isAir() || blockToPlaceOn.canBeReplaced()))) && blockToPlaceOn.isFaceSturdy(level, mutableBlockPos.relative(face.getOpposite()), face) && (level.getBlockState(mutableBlockPos).canBeReplaced() || level.getBlockState(mutableBlockPos).isAir())) {
+                            if (!player.getAbilities().instabuild) {
+                                if (player.getInventory().hasAnyOf(Set.of(blockToPlace.asItem()))) {
+                                    int slot = player.getInventory().findSlotMatchingItem(new ItemStack(blockToPlace.asItem()));
+                                    player.getInventory().removeItem(slot, 1);
+                                } else {
+                                    ((ServerPlayer) player).sendSystemMessage(Component.translatable("item.fabsbnb.building-wand.not-enough-blocks").withStyle(ChatFormatting.RED), true);
+                                    return;
+                                }
                             }
-                        }
-                        level.setBlock(mutableBlockPos, blockToPlace.defaultBlockState(), 3);
-                        level.playSound(null, mutableBlockPos, blockToPlace.getSoundType(blockToPlace.defaultBlockState()).getPlaceSound(), SoundSource.BLOCKS, 0.5f, 0.5f + level.random.nextFloat());
-                        if (!player.getAbilities().instabuild) {
-                            stack.hurtAndBreak(1, player, player1 -> player1.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                            if (level.setBlock(mutableBlockPos, blockToPlace.defaultBlockState(), 3)) {
+                                placedAt.add(mutableBlockPos.asLong());
+                                placedAtAtomic.set(placedAt);
+                                level.playSound(null, mutableBlockPos, blockToPlace.getSoundType(blockToPlace.defaultBlockState()).getPlaceSound(), SoundSource.BLOCKS, 0.5f, 0.5f + level.random.nextFloat());
+                                if (!player.getAbilities().instabuild) {
+                                    stack.hurtAndBreak(1, player, player1 -> player1.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                                }
+                            }
                         }
                     }
                 });
@@ -118,6 +128,11 @@ public class BuildingWandItem extends ModTieredItem {
             }
         }
         return InteractionResult.PASS;
+    }
+
+    private boolean checkSurroundingBlocksIsVisited(Set<Long> visited, BlockPos posToTestAround) {
+        AABB testArea = new AABB(posToTestAround).inflate(1);
+        return visited.stream().anyMatch(pos -> testArea.contains(BlockPos.of(pos).getCenter()));
     }
 
     @Override
