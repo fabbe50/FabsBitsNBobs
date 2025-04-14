@@ -162,6 +162,14 @@ public class Recipes extends RecipeProvider {
                 .unlockedBy("has_emerald", has(Items.EMERALD))
                 .group(FabsBnB.MOD_ID + "xp_holder")
                 .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ModRegistries.WRENCH.get(), 1)
+                .pattern("I I")
+                .pattern(" I ")
+                .pattern(" I ")
+                .define('I', Items.IRON_INGOT)
+                .unlockedBy("has_iron_ingot", has(Items.IRON_INGOT))
+                .group(FabsBnB.MOD_ID + "wrench")
+                .save(recipeOutput);
     }
 
     private SmithingTransformRecipeBuilder smithingNoTemplate(Item output, Item base, Item addition) {
