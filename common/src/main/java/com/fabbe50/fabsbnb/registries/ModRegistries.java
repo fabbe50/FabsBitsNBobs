@@ -6,6 +6,7 @@ import com.fabbe50.fabsbnb.world.block.*;
 import com.fabbe50.fabsbnb.world.block.entity.BlockBreakerBlockEntity;
 import com.fabbe50.fabsbnb.world.block.entity.BlockDetectorBlockEntity;
 import com.fabbe50.fabsbnb.world.block.entity.BlockPlacerBlockEntity;
+import com.fabbe50.fabsbnb.world.block.entity.XPHolderBlockEntity;
 import com.fabbe50.fabsbnb.world.effects.MobEffectExt;
 import com.fabbe50.fabsbnb.world.inventory.BlockBreakerMenu;
 import com.fabbe50.fabsbnb.world.item.BlockYoinkerItem;
@@ -18,7 +19,6 @@ import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.menu.MenuRegistry;
-import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.Registrar;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
@@ -71,6 +71,7 @@ public class ModRegistries {
     public static final RegistrySupplier<Block> BLOCK_PLACER                                                            = registerBlock(FabsBnB.location("block_placer"), () -> new BlockPlacerBlock(BlockBehaviour.Properties.of()));
     public static final RegistrySupplier<Block> BLOCK_BREAKER                                                           = registerBlock(FabsBnB.location("block_breaker"), () -> new BlockBreakerBlock(BlockBehaviour.Properties.of()));
     public static final RegistrySupplier<Block> BLOCK_DETECTOR                                                          = registerBlock(FabsBnB.location("block_detector"), () -> new BlockDetectorBlock(BlockBehaviour.Properties.of()));
+    public static final RegistrySupplier<Block> XP_HOLDER                                                               = registerBlock(FabsBnB.location("xp_holder"), () -> new XPHolderBlock(BlockBehaviour.Properties.of()));
 
     private static RegistrySupplier<Block> registerBlock(ResourceLocation location, Supplier<Block> blockSupplier) {
         RegistrySupplier<Block> block = BLOCKS.register(location, blockSupplier);
@@ -82,6 +83,7 @@ public class ModRegistries {
     public static final RegistrySupplier<BlockEntityType<BlockPlacerBlockEntity>> BLOCK_PLACER_BLOCK_ENTITY             = BLOCK_ENTITIES.register(FabsBnB.location("block_placer_block_entity"), Suppliers.memoize(() -> BlockEntityType.Builder.of(BlockPlacerBlockEntity::new, BLOCK_PLACER.get()).build(null)));
     public static final RegistrySupplier<BlockEntityType<BlockBreakerBlockEntity>> BLOCK_BREAKER_BLOCK_ENTITY           = BLOCK_ENTITIES.register(FabsBnB.location("block_breaker_block_entity"), Suppliers.memoize(() -> BlockEntityType.Builder.of(BlockBreakerBlockEntity::new, BLOCK_BREAKER.get()).build(null)));
     public static final RegistrySupplier<BlockEntityType<BlockDetectorBlockEntity>> BLOCK_DETECTOR_BLOCK_ENTITY         = BLOCK_ENTITIES.register(FabsBnB.location("block_detector_block_entity"), Suppliers.memoize(() -> BlockEntityType.Builder.of(BlockDetectorBlockEntity::new, BLOCK_DETECTOR.get()).build(null)));
+    public static final RegistrySupplier<BlockEntityType<XPHolderBlockEntity>> XP_HOLDER_BLOCK_ENTITY                   = BLOCK_ENTITIES.register(FabsBnB.location("xp_holder_block_entity"), Suppliers.memoize(() -> BlockEntityType.Builder.of(XPHolderBlockEntity::new, XP_HOLDER.get()).build(null)));
 
     // Items
     public static final RegistrySupplier<Item> WOODEN_BUILDING_WAND                                                     = registerItem(FabsBnB.location("wooden_building_wand"), () -> new BuildingWandItem(Tiers.WOOD, new Item.Properties()));
@@ -101,6 +103,7 @@ public class ModRegistries {
     public static final RegistrySupplier<Item> ITEM_BLOCK_PLACER                                                        = registerItem(FabsBnB.location("block_placer"), () -> new ModBlockItem(BLOCK_PLACER.get(), new Item.Properties()));
     public static final RegistrySupplier<Item> ITEM_BLOCK_BREAKER                                                       = registerItem(FabsBnB.location("block_breaker"), () -> new ModBlockItem(BLOCK_BREAKER.get(), new Item.Properties()));
     public static final RegistrySupplier<Item> ITEM_BLOCK_DETECTOR                                                      = registerItem(FabsBnB.location("block_detector"), () -> new ModBlockItem(BLOCK_DETECTOR.get(), new Item.Properties()));
+    public static final RegistrySupplier<Item> ITEM_XP_HOLDER                                                           = registerItem(FabsBnB.location("xp_holder"), () -> new ModBlockItem(XP_HOLDER.get(), new Item.Properties()));
     public static final RegistrySupplier<Item> FULL_WATER_CAULDRON                                                      = registerItem(FabsBnB.location("water_cauldron"), () -> new BlockItem(Blocks.WATER_CAULDRON, new Item.Properties()), false);
 
     private static RegistrySupplier<Item> registerItem(ResourceLocation location, Supplier<Item> itemSupplier) {

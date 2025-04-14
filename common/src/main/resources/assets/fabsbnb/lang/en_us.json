@@ -9,12 +9,15 @@
   "block.fabsbnb.block_placer": "Block Placer",
   "block.fabsbnb.block_breaker": "Block Breaker",
   "block.fabsbnb.block_detector": "Block Detector",
+  "block.fabsbnb.xp_holder": "XP Holder",
 
   "fabsbnb.container.block_placer": "Block Placer",
   "fabsbnb.container.block_breaker": "Block Breaker",
   "fabsbnb.container.block_detector": "Block Detector",
   "fabsbnb.detector.set": "Set target to: %s",
   "fabsbnb.detector.info": "Right click with a redstone torch when the block you want to target is in front of the detector. Current Target: %s",
+  "fabsbnb.xp_holder.collect": "Collect XP Mode: %s",
+  "fabsbnb.xp_holder.stored_level": "Stored Levels: %s",
 
   "item.fabsbnb.block_yoinker": "Block Yoinker",
   "item.fabsbnb.block_yoinker.desc": "Allows you to yoink blocks out of the world and place them somewhere else.",
@@ -71,7 +74,6 @@
 
   "emi.category.fabsbnb.cauldron_conversion": "Cauldron Conversion",
   "tag.item.fabsbnb.building_wands": "Building Wands",
-  "jei.category.fabsbnb.cauldron_conversion": "Cauldron Conversion"
   "jei.category.fabsbnb.cauldron_conversion": "Cauldron Conversion",
   "fabsbnb.cauldron_conversion": "Cauldron Conversion"
 }

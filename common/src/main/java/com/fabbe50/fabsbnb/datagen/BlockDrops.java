@@ -23,6 +23,7 @@ public class BlockDrops extends VanillaBlockLoot {
         dropSelf(ModRegistries.BLOCK_PLACER.get());
         dropSelf(ModRegistries.BLOCK_BREAKER.get());
         dropSelf(ModRegistries.BLOCK_DETECTOR.get());
+        dropSelf(ModRegistries.XP_HOLDER.get());
     }
 
     @Override

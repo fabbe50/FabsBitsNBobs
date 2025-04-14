@@ -3,6 +3,7 @@ package com.fabbe50.fabsbnb;
 import com.fabbe50.fabsbnb.registries.*;
 import com.google.common.base.Suppliers;
 import dev.architectury.registry.registries.RegistrarManager;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -26,6 +27,10 @@ public final class FabsBnB {
 
     public static Component translatable(String key, Object value) {
         return Component.translatable(translation(key), value);
+    }
+
+    public static Component translatable(String key, Object value, ChatFormatting formatting) {
+        return Component.translatable(translation(key), value).withStyle(formatting);
     }
 
     public static String translation(String key) {

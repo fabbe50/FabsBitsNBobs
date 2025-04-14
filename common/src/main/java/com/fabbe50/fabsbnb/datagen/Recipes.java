@@ -152,7 +152,16 @@ public class Recipes extends RecipeProvider {
                 .unlockedBy("has_quartz_block", has(Items.QUARTZ_BLOCK))
                 .group(FabsBnB.MOD_ID + "detector")
                 .save(recipeOutput);
-
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModRegistries.ITEM_XP_HOLDER.get(), 1)
+                .pattern(" E ")
+                .pattern("DOD")
+                .pattern("OOO")
+                .define('E', Items.EMERALD)
+                .define('D', Items.DIAMOND)
+                .define('O', Items.OBSIDIAN)
+                .unlockedBy("has_emerald", has(Items.EMERALD))
+                .group(FabsBnB.MOD_ID + "xp_holder")
+                .save(recipeOutput);
     }
 
     private SmithingTransformRecipeBuilder smithingNoTemplate(Item output, Item base, Item addition) {

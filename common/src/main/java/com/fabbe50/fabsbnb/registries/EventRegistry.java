@@ -1,7 +1,9 @@
 package com.fabbe50.fabsbnb.registries;
 
 import com.fabbe50.fabsbnb.Platform;
+import com.fabbe50.fabsbnb.world.block.interfaces.ILeftClickable;
 import dev.architectury.event.EventResult;
+import dev.architectury.event.events.client.ClientRecipeUpdateEvent;
 import dev.architectury.event.events.common.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -42,6 +44,16 @@ public class EventRegistry {
                 ItemEntity drop = new ItemEntity(cat.level(), cat.getX(), cat.getY(), cat.getZ(), stack);
                 cat.level().addFreshEntity(drop);
                 return EventResult.interruptTrue();
+            }
+            return EventResult.pass();
+        });
+        InteractionEvent.LEFT_CLICK_BLOCK.register((player, interactionHand, blockPos, direction) -> {
+            Level level = player.level();
+            if (level.getBlockState(blockPos).getBlock() instanceof ILeftClickable clickableBlock && player.getMainHandItem().isEmpty() && player.getOffhandItem().isEmpty()) {
+                if (level.isClientSide) {
+                    return EventResult.interruptTrue();
+                }
+                return clickableBlock.onLeftClick(level, blockPos, player, interactionHand, direction);
             }
             return EventResult.pass();
         });
