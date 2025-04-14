@@ -56,12 +56,7 @@ public class BlockYoinkerItem extends ModItem {
                 if (player != null && player.isShiftKeyDown()) {
                     if (blockEntity != null) {
                         YoinkerData.setBlockEntity(yoinker, blockEntity);
-                        if (blockEntity instanceof Container container) {
-                            ContainerHelper.clearOrCountMatchingItems(container, stack -> true, -1, false);
-                            if (blockEntity instanceof FurnaceBlockEntity furnace) {
-                                furnace.setRecipeUsed(null);
-                            }
-                        }
+                        level.removeBlockEntity(pos);
                         return this.yoinkBlock(yoinker, blockState, (ServerLevel) level, pos);
                     }
                 }
