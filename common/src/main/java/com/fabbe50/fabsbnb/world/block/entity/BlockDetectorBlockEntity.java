@@ -5,19 +5,23 @@ import com.fabbe50.fabsbnb.registries.ModRegistries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class BlockDetectorBlockEntity extends BlockEntity {
+    private CompoundTag stateTag;
+    private boolean isFinalized = false;
     private BlockState stateToCheckFor;
 
     public BlockDetectorBlockEntity(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
         super(blockEntityType, blockPos, blockState);
-        stateToCheckFor = Blocks.AIR.defaultBlockState();
     }
 
     public BlockDetectorBlockEntity(BlockPos pos, BlockState state) {
@@ -29,17 +33,19 @@ public class BlockDetectorBlockEntity extends BlockEntity {
     }
 
     public BlockState getStateToCheckFor() {
-        return stateToCheckFor;
+        if (this.level != null && this.stateTag != null && !this.isFinalized) {
+            this.stateToCheckFor = NbtUtils.readBlockState(Utilities.getBlockRegistryLookup(this.level.registryAccess()), this.stateTag);
+            this.stateTag = null;
+            this.isFinalized = true;
+        }
+        return this.stateToCheckFor;
     }
 
     @Override
     public void load(CompoundTag compoundTag) {
         super.load(compoundTag);
         if (compoundTag.contains("stateToCheckFor")) {
-            Level level = this.getLevel();
-            if (level != null) {
-                this.stateToCheckFor = NbtUtils.readBlockState(Utilities.getBlockRegistryLookup(level.registryAccess()), compoundTag.getCompound("stateToCheckFor"));
-            }
+            this.stateTag = compoundTag.getCompound("stateToCheckFor");
         }
     }
 
@@ -53,5 +59,19 @@ public class BlockDetectorBlockEntity extends BlockEntity {
                 compoundTag.put("stateToCheckFor", blockData);
             }
         }
+    }
+
+    @Override
+    public @NotNull CompoundTag getUpdateTag() {
+        CompoundTag compoundTag = new CompoundTag();
+        if (this.stateToCheckFor != null) {
+            compoundTag.put("stateToCheckFor", NbtUtils.writeBlockState(this.stateToCheckFor));
+        }
+        return compoundTag;
+    }
+
+    @Override
+    public @Nullable Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 }
