@@ -51,7 +51,7 @@ public class BlockDetectorBlock extends ExtBaseEntityBlock {
                 if (heldItem.is(Items.REDSTONE_TORCH)) {
                     Direction facing = blockState.getValue(FACING);
                     BlockState blockInFront = level.getBlockState(blockPos.relative(facing));
-                    if (!detectorBlockEntity.getStateToCheckFor().equals(blockInFront)) {
+                    if (detectorBlockEntity.getStateToCheckFor() == null || !detectorBlockEntity.getStateToCheckFor().equals(blockInFront)) {
                         detectorBlockEntity.setStateToCheckFor(blockInFront);
                         ResourceLocation location = blockInFront.getBlock().arch$registryName();
                         if (location != null) {
@@ -61,9 +61,14 @@ public class BlockDetectorBlock extends ExtBaseEntityBlock {
                         return InteractionResult.SUCCESS;
                     }
                 } else {
-                    ResourceLocation location = detectorBlockEntity.getStateToCheckFor().getBlock().arch$registryName();
-                    if (location != null) {
-                        serverPlayer.sendSystemMessage(Component.translatable(FabsBnB.translation("detector.info"), Component.literal(location.toString())), true);
+                    BlockState stateToCheckFor = detectorBlockEntity.getStateToCheckFor();
+                    if (stateToCheckFor == null) {
+                        serverPlayer.sendSystemMessage(Component.translatable(FabsBnB.translation("detector.info"), Component.translatable("item.fabsbnb.block_yoinker.empty")), true);
+                    } else {
+                        ResourceLocation location = stateToCheckFor.getBlock().arch$registryName();
+                        if (location != null) {
+                            serverPlayer.sendSystemMessage(Component.translatable(FabsBnB.translation("detector.info"), Component.literal(location.toString())), true);
+                        }
                     }
                 }
             }
@@ -100,6 +105,9 @@ public class BlockDetectorBlock extends ExtBaseEntityBlock {
         if (blockPos.relative(facing).equals(blockPos2)) {
             BlockEntity blockEntity = level.getBlockEntity(blockPos);
             if (blockEntity instanceof BlockDetectorBlockEntity detectorBlockEntity) {
+                if (detectorBlockEntity.getStateToCheckFor() == null) {
+                    return;
+                }
                 BlockState stateAtPos = level.getBlockState(blockPos2);
                 if (detectorBlockEntity.getStateToCheckFor().getBlock().equals(stateAtPos.getBlock()) && !blockState.getValue(POWERED)) {
                     level.setBlock(blockPos, blockState.setValue(POWERED, true), 2);
