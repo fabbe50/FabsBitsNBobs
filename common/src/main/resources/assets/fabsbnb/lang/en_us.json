@@ -35,6 +35,8 @@
   "item.fabsbnb.cat_claw": "Cat Claw",
   "item.fabsbnb.whoosh_wand": "Whoosh Wand",
   "item.fabsbnb.whoosh_wand.desc": "Gives a boost on use. Completely negates fall-damage when the item is held.",
+  "item.fabsbnb.wrench": "Wrench",
+  "item.fabsbnb.wrench.tooltip": "Allows you to rotate directional blocks in the world.",
 
   "text.fabsbnb.building-wand.not-enough-blocks": "Not enough blocks in inventory to place.",
   "text.fabsbnb.building_wand.fuzzy-toggle": "Fuzzy Mode: %s",

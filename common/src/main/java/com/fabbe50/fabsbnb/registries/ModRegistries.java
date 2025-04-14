@@ -12,6 +12,7 @@ import com.fabbe50.fabsbnb.world.inventory.BlockBreakerMenu;
 import com.fabbe50.fabsbnb.world.item.BlockYoinkerItem;
 import com.fabbe50.fabsbnb.world.item.BuildingWandItem;
 import com.fabbe50.fabsbnb.world.item.WhooshWandItem;
+import com.fabbe50.fabsbnb.world.item.WrenchItem;
 import com.fabbe50.fabsbnb.world.item.base.ModBlockItem;
 import com.fabbe50.fabsbnb.world.item.base.ModItem;
 import com.fabbe50.fabsbnb.world.item.enchantments.VeinMinerEnchant;
@@ -95,6 +96,7 @@ public class ModRegistries {
     public static final RegistrySupplier<Item> ITEM_BLOCK_YOINKER                                                       = registerItem(FabsBnB.location("block_yoinker"), () -> new BlockYoinkerItem(new Item.Properties()));
     public static final RegistrySupplier<Item> WHOOSH_WAND                                                              = registerItem(FabsBnB.location("whoosh_wand"), () -> new WhooshWandItem(new Item.Properties()));
     public static final RegistrySupplier<Item> CAT_CLAW                                                                 = registerItem(FabsBnB.location("cat_claw"), () -> new ModItem(new Item.Properties()));
+    public static final RegistrySupplier<Item> WRENCH                                                                   = registerItem(FabsBnB.location("wrench"), () -> new WrenchItem(new Item.Properties()));
     public static final RegistrySupplier<Item> ITEM_LAVA_SPONGE                                                         = registerItem(FabsBnB.location("lava_sponge"), () -> new ModBlockItem(LAVA_SPONGE.get(), new Item.Properties()));
     public static final RegistrySupplier<Item> ITEM_LAVA_SPONGE_USED                                                    = registerItem(FabsBnB.location("lava_sponge_used"), () -> new ModBlockItem(LAVA_SPONGE_USED.get(), new Item.Properties()));
     public static final RegistrySupplier<Item> ITEM_PUSHER_BLOCK                                                        = registerItem(FabsBnB.location("pusher_block"), () -> new ModBlockItem(PUSHER_BLOCK.get(), new Item.Properties()));
