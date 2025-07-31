@@ -9,10 +9,7 @@ import com.fabbe50.fabsbnb.world.block.entity.BlockPlacerBlockEntity;
 import com.fabbe50.fabsbnb.world.block.entity.XPHolderBlockEntity;
 import com.fabbe50.fabsbnb.world.effects.MobEffectExt;
 import com.fabbe50.fabsbnb.world.inventory.BlockBreakerMenu;
-import com.fabbe50.fabsbnb.world.item.BlockYoinkerItem;
-import com.fabbe50.fabsbnb.world.item.BuildingWandItem;
-import com.fabbe50.fabsbnb.world.item.WhooshWandItem;
-import com.fabbe50.fabsbnb.world.item.WrenchItem;
+import com.fabbe50.fabsbnb.world.item.*;
 import com.fabbe50.fabsbnb.world.item.base.ModBlockItem;
 import com.fabbe50.fabsbnb.world.item.base.ModItem;
 import com.fabbe50.fabsbnb.world.item.enchantments.VeinMinerEnchant;
@@ -144,6 +141,7 @@ public class ModRegistries {
     public static final TagKey<Item> BUILDING_WANDS                                                                     = TagKey.create(Registries.ITEM, FabsBnB.location("building_wands"));
     public static final TagKey<Block> BLOCK_YOINKER_BLACKLIST                                                           = TagKey.create(Registries.BLOCK, FabsBnB.location("block_yoinker_blacklist"));
     public static final TagKey<Block> SPIDER_NOT_CLIMBABLE                                                              = TagKey.create(Registries.BLOCK, FabsBnB.location("spider_not_climbable"));
+    public static final TagKey<Block> ORE_MINER_WHITELIST                                                               = TagKey.create(Registries.BLOCK, FabsBnB.location("ore_miner_whitelist"));
 
     public static void init() {}
 }

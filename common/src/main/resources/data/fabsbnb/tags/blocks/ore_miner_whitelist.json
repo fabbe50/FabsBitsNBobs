@@ -1,0 +1,20 @@
+{
+  "values": [
+    {
+      "id": "#c:ores",
+      "required": false
+    },
+    {
+      "id": "#c:clusters",
+      "required": false
+    },
+    {
+      "id": "#forge:ores",
+      "required": false
+    },
+    {
+      "id": "#forge:clusters",
+      "required": false
+    }
+  ]
+}

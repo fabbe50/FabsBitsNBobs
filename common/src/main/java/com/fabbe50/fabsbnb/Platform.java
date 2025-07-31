@@ -9,4 +9,9 @@ public class Platform {
     public static TagKey<Block> getOresTag() {
         throw new AssertionError();
     }
+
+    @ExpectPlatform
+    public static boolean isModLoaded(String modId) {
+        throw new AssertionError();
+    }
 }

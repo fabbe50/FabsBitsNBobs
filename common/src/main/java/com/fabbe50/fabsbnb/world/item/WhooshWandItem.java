@@ -37,7 +37,7 @@ public class WhooshWandItem extends ModItem {
             serverPlayer.connection.send(new ClientboundSetEntityMotionPacket(player));
             player.resetFallDistance();
             level.playSound(null, player.blockPosition(), SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 0.5f, 0.125f);
-
+            player.getCooldowns().addCooldown(this, 5);
             return InteractionResultHolder.success(serverPlayer.getItemInHand(interactionHand));
         }
         return super.use(level, player, interactionHand);

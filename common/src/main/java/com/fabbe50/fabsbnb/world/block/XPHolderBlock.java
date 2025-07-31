@@ -126,7 +126,9 @@ public class XPHolderBlock extends ExtBaseEntityBlock implements ILeftClickable 
             BlockEntity blockEntity = level.getBlockEntity(blockPos);
             if (blockEntity instanceof XPHolderBlockEntity xpHolder) {
                 CompoundTag tag = BlockItem.getBlockEntityData(stack);
-                xpHolder.load(tag);
+                if (tag != null) {
+                    xpHolder.load(tag);
+                }
             }
         }
     }

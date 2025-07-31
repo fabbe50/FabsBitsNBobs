@@ -1,9 +1,7 @@
 package com.fabbe50.fabsbnb.registries;
 
-import com.fabbe50.fabsbnb.Platform;
 import com.fabbe50.fabsbnb.world.block.interfaces.ILeftClickable;
 import dev.architectury.event.EventResult;
-import dev.architectury.event.events.client.ClientRecipeUpdateEvent;
 import dev.architectury.event.events.common.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -75,12 +73,14 @@ public class EventRegistry {
         LifecycleEvent.SERVER_STARTING.register(minecraftServer -> {
             PotionBrewing.addMix(Potions.AWKWARD, ModRegistries.CAT_CLAW.get(), ModRegistries.FELINE_AURA_POTION_SHORT.get());
             PotionBrewing.addMix(ModRegistries.FELINE_AURA_POTION_SHORT.get(), Items.REDSTONE, ModRegistries.FELINE_AURA_POTION_LONG.get());
+
+
         });
         BlockEvent.BREAK.register((level, blockPos, blockState, serverPlayer, intValue) -> {
             ItemStack stack = serverPlayer.getItemInHand(InteractionHand.MAIN_HAND);
             if (stack.getItem() instanceof DiggerItem) {
                 if (EnchantmentHelper.getEnchantments(stack).containsKey(ModRegistries.VEIN_MINER.get())) {
-                    if (!blockState.is(Platform.getOresTag())) {
+                    if (!blockState.is(ModRegistries.ORE_MINER_WHITELIST)) {
                         return EventResult.pass();
                     }
                     int range = 2;
