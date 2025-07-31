@@ -8,6 +8,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -22,6 +23,16 @@ public class PusherBlock extends ExtHorizontalDirectionalBlock {
     public PusherBlock(Properties properties) {
         super(properties.strength(2.0f).sound(SoundType.STONE).isValidSpawn((blockState, blockGetter, blockPos, object) -> true));
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
+    }
+
+    @Override
+    public boolean canSurvive(BlockState blockState, LevelReader levelReader, BlockPos blockPos) {
+        return canAttach(levelReader, blockPos, Direction.DOWN);
+    }
+
+    public static boolean canAttach(LevelReader levelReader, BlockPos blockPos, Direction direction) {
+        BlockPos pos2 = blockPos.relative(direction);
+        return levelReader.getBlockState(pos2).isFaceSturdy(levelReader, blockPos, direction.getOpposite());
     }
 
     @Override
