@@ -170,6 +170,32 @@ public class Recipes extends RecipeProvider {
                 .unlockedBy("has_iron_ingot", has(Items.IRON_INGOT))
                 .group(FabsBnB.MOD_ID + "wrench")
                 .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.FOOD, ModRegistries.MILK_BOTTLE.get(), 8)
+                .pattern("BBB")
+                .pattern("BMB")
+                .pattern("BBB")
+                .define('B', Items.GLASS_BOTTLE)
+                .define('M', Items.MILK_BUCKET)
+                .unlockedBy("has_milk", has(Items.MILK_BUCKET))
+                .group(FabsBnB.MOD_ID + "milk_bottle")
+                .save(recipeOutput);
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.FOOD, ModRegistries.CHOCOLATE_MILK_BOTTLE.get(), 1)
+                .requires(ModRegistries.MILK_BOTTLE.get())
+                .requires(Items.COCOA_BEANS)
+                .unlockedBy("has_milk_bottle", has(ModRegistries.MILK_BOTTLE.get()))
+                .group(FabsBnB.MOD_ID + "chocolate_milk_bottle")
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModRegistries.CHOCOLATE_NECKLACE.get(), 1)
+                .pattern("NGN")
+                .pattern("GCG")
+                .pattern("NSN")
+                .define('N', Items.GOLD_NUGGET)
+                .define('G', Items.GOLD_INGOT)
+                .define('C', ModRegistries.CHOCOLATE_MILK_BOTTLE.get())
+                .define('S', Items.NETHER_STAR)
+                .unlockedBy("has_chocolate_milk", has(ModRegistries.CHOCOLATE_MILK_BOTTLE.get()))
+                .group(FabsBnB.MOD_ID + "chocolate_necklace")
+                .save(recipeOutput);
     }
 
     private SmithingTransformRecipeBuilder smithingNoTemplate(Item output, Item base, Item addition) {

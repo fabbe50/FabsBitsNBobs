@@ -64,6 +64,9 @@ dependencies {
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-forge:$rei_version"
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-forge:$rei_version"
 
+    modCompileOnly "top.theillusivec4.curios:curios-forge:${curios_version}:api"
+    modRuntimeOnly "top.theillusivec4.curios:curios-forge:${curios_version}"
+
     modApi "me.shedaniel.cloth:cloth-config-forge:${rootProject.cloth_config_version}"
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }

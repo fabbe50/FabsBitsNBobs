@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "fabsbnbchocolate_necklace",
+  "key": {
+    "C": {
+      "item": "fabsbnb:chocolate_milk_bottle"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "N": {
+      "item": "minecraft:gold_nugget"
+    },
+    "S": {
+      "item": "minecraft:nether_star"
+    }
+  },
+  "pattern": [
+    "NGN",
+    "GCG",
+    "NSN"
+  ],
+  "result": {
+    "item": "fabsbnb:chocolate_necklace"
+  },
+  "show_notification": true
+}

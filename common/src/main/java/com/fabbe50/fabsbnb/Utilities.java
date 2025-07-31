@@ -8,6 +8,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
@@ -16,6 +18,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.function.ToIntFunction;
 
@@ -132,5 +135,17 @@ public class Utilities {
         int expToRemove = Math.min(currentTotalExp, pointsToRemove);
         player.giveExperiencePoints(-expToRemove);
         return expToRemove;  // Amount of exp removed
+    }
+
+    public static boolean clearMobEffects(LivingEntity livingEntity, boolean clearBeneficial) {
+        boolean hasCleared = false;
+        for (MobEffectInstance effect : new ArrayList<>(livingEntity.getActiveEffects())) {
+            if (clearBeneficial || !effect.getEffect().isBeneficial()) {
+                if (livingEntity.removeEffect(effect.getEffect())) {
+                    hasCleared = true;
+                }
+            }
+        }
+        return hasCleared;
     }
 }

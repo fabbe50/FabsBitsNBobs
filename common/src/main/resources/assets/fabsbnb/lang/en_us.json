@@ -38,6 +38,9 @@
   "item.fabsbnb.whoosh_wand.desc": "Gives a boost on use. Completely negates fall-damage when the item is held.",
   "item.fabsbnb.wrench": "Wrench",
   "item.fabsbnb.wrench.tooltip": "Allows you to rotate directional blocks in the world.",
+  "item.fabsbnb.milk_bottle": "Milk Bottle",
+  "item.fabsbnb.chocolate_milk_bottle": "Chocolate Milk Bottle",
+  "item.fabsbnb.chocolate_necklace": "Chocolate Empowered Necklace",
 
   "text.fabsbnb.building-wand.not-enough-blocks": "Not enough blocks in inventory to place.",
   "text.fabsbnb.building_wand.fuzzy-toggle": "Fuzzy Mode: %s",
