@@ -20,6 +20,6 @@ public class CreeperMixin extends Monster {
 
     @Inject(at = @At("TAIL"), method = "registerGoals")
     private void injectRegisterGoals(CallbackInfo ci) {
-        this.goalSelector.addGoal(3, new AvoidEntityWithPotionEffectGoal<>(this, LivingEntity.class, ModRegistries.FELINE_AURA.get(), 6.0F, 1.0F, 1.2));
+        this.goalSelector.addGoal(3, new AvoidEntityWithPotionEffectGoal<>(this, LivingEntity.class, ModRegistries.FELINE_AURA, 6.0F, 1.0F, 1.2));
     }
 }

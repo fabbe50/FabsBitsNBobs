@@ -6,6 +6,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -22,6 +23,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -38,7 +40,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class BuildingWandItem extends ModTieredItem {
     public BuildingWandItem(Tier tier, Properties properties) {
-        super(tier, properties.stacksTo(1).defaultDurability(tier.getUses() * Utilities.square(Utilities.getRadiusFromTier(tier))));
+        super(tier, properties.stacksTo(1).durability(tier.getUses() * Utilities.square(Utilities.getRadiusFromTier(tier))));
     }
 
     @Override
@@ -57,14 +59,14 @@ public class BuildingWandItem extends ModTieredItem {
             }
             Tier tier = this.getTier();
 
-            CompoundTag tag = stack.getOrCreateTag();
+            CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
 
             if (player.isShiftKeyDown()) {
                 if (state.getMenuProvider(level, pos) == null) {
                     ResourceKey<Block> blockKey = state.getBlockHolder().unwrapKey().orElse(null);
                     if (blockKey != null) {
                         tag.putString("setBlock", blockKey.location().toString());
-                        stack.setTag(tag);
+                        stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
                         player.setItemInHand(useOnContext.getHand(), stack);
                         ((ServerPlayer)player).sendSystemMessage(Component.translatable("item.fabsbnb.building-wand.set-block", Component.literal(blockKey.location().toString()).withStyle(ChatFormatting.GOLD)), true);
                         return InteractionResult.SUCCESS;
@@ -113,12 +115,13 @@ public class BuildingWandItem extends ModTieredItem {
                                     return;
                                 }
                             }
-                            if (level.setBlock(mutableBlockPos, blockToPlace.defaultBlockState(), 3)) {
+                            BlockState blockStateToPlace = blockToPlace.defaultBlockState();
+                            if (level.setBlock(mutableBlockPos, blockStateToPlace, 3)) {
                                 placedAt.add(mutableBlockPos.asLong());
                                 placedAtAtomic.set(placedAt);
-                                level.playSound(null, mutableBlockPos, blockToPlace.getSoundType(blockToPlace.defaultBlockState()).getPlaceSound(), SoundSource.BLOCKS, 0.5f, 0.5f + level.random.nextFloat());
+                                level.playSound(null, mutableBlockPos, blockStateToPlace.getSoundType().getPlaceSound(), SoundSource.BLOCKS, 0.5f, 0.5f + level.random.nextFloat());
                                 if (!player.getAbilities().instabuild) {
-                                    stack.hurtAndBreak(1, player, player1 -> player1.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                                    stack.hurtAndBreak(1, player, Utilities.convertInteractionHandToEquipmentSlot(InteractionHand.MAIN_HAND));
                                 }
                             }
                         }
@@ -140,7 +143,7 @@ public class BuildingWandItem extends ModTieredItem {
         if (level instanceof ServerLevel) {
             if (player.isShiftKeyDown() && !player.isUsingItem()) {
                 ItemStack stack = player.getItemInHand(interactionHand);
-                CompoundTag tag = stack.getOrCreateTag();
+                CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
                 boolean fuzzy = false;
                 if (tag.contains("fuzzy")) {
                     fuzzy = !tag.getBoolean("fuzzy");
@@ -150,7 +153,7 @@ public class BuildingWandItem extends ModTieredItem {
                 tag.putBoolean("fuzzy", fuzzy);
                 ((ServerPlayer) player).sendSystemMessage(Component.translatable("text.fabsbnb.building_wand.fuzzy-toggle", fuzzy ? Component.translatable("text.true").withStyle(ChatFormatting.GREEN) : Component.translatable("text.false").withStyle(ChatFormatting.RED)), true);
 
-                stack.setTag(tag);
+                stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
                 player.setItemInHand(interactionHand, stack);
                 return InteractionResultHolder.success(stack);
             }
@@ -159,10 +162,10 @@ public class BuildingWandItem extends ModTieredItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
-        super.appendHoverText(itemStack, level, list, tooltipFlag);
+    public void appendHoverText(ItemStack itemStack, TooltipContext tooltipContext, List<Component> list, TooltipFlag tooltipFlag) {
+        super.appendHoverText(itemStack, tooltipContext, list, tooltipFlag);
 
-        CompoundTag tag = itemStack.getOrCreateTag();
+        CompoundTag tag = itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         String blockSelected = "EMPTY";
         if (tag.contains("setBlock")) {
             blockSelected = tag.getString("setBlock");

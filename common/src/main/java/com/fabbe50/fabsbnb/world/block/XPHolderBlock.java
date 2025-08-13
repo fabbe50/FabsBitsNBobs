@@ -6,10 +6,12 @@ import com.fabbe50.fabsbnb.registries.ModRegistries;
 import com.fabbe50.fabsbnb.world.block.base.ExtBaseEntityBlock;
 import com.fabbe50.fabsbnb.world.block.entity.XPHolderBlockEntity;
 import com.fabbe50.fabsbnb.world.block.interfaces.ILeftClickable;
+import com.mojang.serialization.MapCodec;
 import dev.architectury.event.EventResult;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -17,15 +19,15 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SoundType;
@@ -44,11 +46,17 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class XPHolderBlock extends ExtBaseEntityBlock implements ILeftClickable {
+    public static final MapCodec<XPHolderBlock> CODEC = simpleCodec(XPHolderBlock::new);
     protected static final VoxelShape SHAPE = Block.box(0.0F, 0.0F, 0.0F, 16.0F, 12.0F, 16.0F);
     private int cooldown = 20;
 
     public XPHolderBlock(Properties properties) {
         super(properties.sound(SoundType.ANVIL).strength(2.5f));
+    }
+
+    @Override
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 
     @Override
@@ -67,17 +75,29 @@ public class XPHolderBlock extends ExtBaseEntityBlock implements ILeftClickable 
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
+    protected @NotNull ItemInteractionResult useItemOn(ItemStack itemStack, BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
         if (level.isClientSide) {
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         } else {
             BlockEntity blockEntity = level.getBlockEntity(blockPos);
             if (blockEntity instanceof XPHolderBlockEntity xpHolder) {
                 if (player.getItemInHand(interactionHand).is(Items.REDSTONE_TORCH)) {
                     boolean collectXP = xpHolder.toggleCollectXP();
                     ((ServerPlayer) player).sendSystemMessage(FabsBnB.translatable("xp_holder.collect", collectXP ? Component.translatable("text.true") : Component.translatable("text.false")), true);
-                    return InteractionResult.SUCCESS;
+                    return ItemInteractionResult.SUCCESS;
                 }
+            }
+        }
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    }
+
+    @Override
+    protected @NotNull InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult blockHitResult) {
+        if (level.isClientSide) {
+            return InteractionResult.SUCCESS;
+        } else {
+            BlockEntity blockEntity = level.getBlockEntity(blockPos);
+            if (blockEntity instanceof XPHolderBlockEntity xpHolder) {
                 if (player.getMainHandItem().isEmpty() && player.getOffhandItem().isEmpty()) {
                     if (player.isShiftKeyDown()) {
                         xpHolder.storeXP(player, -1);
@@ -124,28 +144,26 @@ public class XPHolderBlock extends ExtBaseEntityBlock implements ILeftClickable 
         super.setPlacedBy(level, blockPos, blockState, livingEntity, stack);
         if (!level.isClientSide) {
             BlockEntity blockEntity = level.getBlockEntity(blockPos);
-            if (blockEntity instanceof XPHolderBlockEntity xpHolder) {
-                CompoundTag tag = BlockItem.getBlockEntityData(stack);
-                if (tag != null) {
-                    xpHolder.load(tag);
-                }
+            if (blockEntity instanceof XPHolderBlockEntity) {
+                BlockItem.updateCustomBlockEntityTag(level, livingEntity instanceof Player ? (Player) livingEntity : null, blockPos, stack);
             }
         }
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
+    public @NotNull BlockState playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
         BlockEntity blockEntity = level.getBlockEntity(blockPos);
         if (blockEntity instanceof XPHolderBlockEntity xpHolder) {
             if (!level.isClientSide && player.isCreative() && xpHolder.getXp() != 0) {
                 ItemStack stack = new ItemStack(ModRegistries.ITEM_XP_HOLDER.get());
-                xpHolder.saveToItem(stack);
+                xpHolder.saveToItem(stack, level.registryAccess());
                 ItemEntity itemEntity = new ItemEntity(level, blockPos.getX() + 0.5f, blockPos.getY() + 0.5f, blockPos.getZ() + 0.5f, stack);
                 itemEntity.setDefaultPickUpDelay();
                 level.addFreshEntity(itemEntity);
+                return blockState;
             }
         }
-        super.playerWillDestroy(level, blockPos, blockState, player);
+        return super.playerWillDestroy(level, blockPos, blockState, player);
     }
 
     @Override
@@ -153,19 +171,23 @@ public class XPHolderBlock extends ExtBaseEntityBlock implements ILeftClickable 
         List<ItemStack> drops = super.getDrops(blockState, builder);
         BlockEntity blockEntity = builder.getParameter(LootContextParams.BLOCK_ENTITY);
         if (blockEntity instanceof XPHolderBlockEntity xpHolder && xpHolder.getXp() != 0) {
+            Level level = xpHolder.getLevel();
             ItemStack stack = new ItemStack(this);
-            xpHolder.saveToItem(stack);
-            drops.clear();
-            drops.add(stack);
+            if (level != null) {
+                xpHolder.saveToItem(stack, level.registryAccess());
+                drops.clear();
+                drops.add(stack);
+            }
         }
         return drops;
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable BlockGetter blockGetter, List<Component> list, TooltipFlag tooltipFlag) {
-        super.appendHoverText(itemStack, blockGetter, list, tooltipFlag);
-        CompoundTag tag = BlockItem.getBlockEntityData(itemStack);
-        if (tag != null) {
+    public void appendHoverText(ItemStack itemStack, Item.TooltipContext tooltipContext, List<Component> list, TooltipFlag tooltipFlag) {
+        super.appendHoverText(itemStack, tooltipContext, list, tooltipFlag);
+        CustomData blockEntityData = itemStack.getOrDefault(DataComponents.BLOCK_ENTITY_DATA, CustomData.EMPTY);
+        if (!blockEntityData.isEmpty()) {
+            CompoundTag tag = blockEntityData.copyTag();
             if (tag.contains("xp")) {
                 list.add(FabsBnB.translatable("xp_holder.stored_level", Utilities.getLevelFromTotalExperience(tag.getInt("xp")), ChatFormatting.GRAY));
             }

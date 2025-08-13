@@ -52,7 +52,7 @@ public abstract class DrinkItem extends Item {
     abstract void applyEffects(LivingEntity livingEntity);
 
     @Override
-    public int getUseDuration(ItemStack itemStack) {
+    public int getUseDuration(ItemStack itemStack, LivingEntity livingEntity) {
         return DRINK_DURATION;
     }
 

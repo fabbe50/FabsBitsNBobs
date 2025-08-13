@@ -2,6 +2,7 @@ package com.fabbe50.fabsbnb.data;
 
 import com.fabbe50.fabsbnb.Utilities;
 import net.minecraft.core.*;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
@@ -20,8 +21,7 @@ public class YoinkerData {
 
     public static void clearData(ItemStack yoinker) {
         setBlockState(yoinker, Blocks.AIR.defaultBlockState());
-//        setBlockEntity(yoinker, CustomData.EMPTY);
-        CompoundTag tag = yoinker.getOrCreateTag();
+        CompoundTag tag = getCompoundTag(yoinker);
         if (tag.contains(YOINKED_BLOCK_KEY)) {
             tag.remove(YOINKED_BLOCK_KEY);
         }
@@ -34,61 +34,55 @@ public class YoinkerData {
     }
 
     public static void setBlockState(ItemStack yoinker, BlockState blockState) {
-        CompoundTag tag = yoinker.getOrCreateTag();
+        CompoundTag tag = getCompoundTag(yoinker);
         ResourceLocation location = blockState.getBlock().arch$registryName();
         if (location != null) {
             tag.putString(YOINKED_BLOCK_KEY, location.toString());
             CompoundTag blockData = NbtUtils.writeBlockState(blockState);
             tag.put(YOINKED_BLOCK_DATA_KEY, blockData);
-            yoinker.setTag(tag);
+            saveCompoundTag(yoinker, tag);
         }
-//        yoinker.set(DataComponents.YOINK_BLOCKSTATE.get(), blockState);
     }
 
-    public static BlockState getBlockState(RegistryAccess registryAccess, ItemStack yoinker) {
-        CompoundTag tag = yoinker.getOrCreateTag();
-        Holder.Reference<Block> blockReference = Utilities.parseBlockReference(registryAccess, yoinker, YOINKED_BLOCK_KEY);
+    public static BlockState getBlockState(HolderLookup.Provider provider, ItemStack yoinker) {
+        CompoundTag tag = yoinker.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+        Holder.Reference<Block> blockReference = Utilities.parseBlockReference(provider, yoinker, YOINKED_BLOCK_KEY);
         if (blockReference != null) {
             if (tag.contains(YOINKED_BLOCK_DATA_KEY)) {
-                return NbtUtils.readBlockState(Utilities.getBlockRegistryLookup(registryAccess), tag.getCompound(YOINKED_BLOCK_DATA_KEY));
+                return NbtUtils.readBlockState(Utilities.getBlockRegistryLookup(provider), tag.getCompound(YOINKED_BLOCK_DATA_KEY));
             }
         }
         return Blocks.AIR.defaultBlockState();
-//        return yoinker.getOrDefault(DataComponents.YOINK_BLOCKSTATE.get(), Blocks.AIR.defaultBlockState());
     }
 
     public static boolean hasData(ItemStack yoinker) {
-        CompoundTag tag = yoinker.getOrCreateTag();
+        CompoundTag tag = getCompoundTag(yoinker);
         return tag.contains(YOINKED_BLOCK_KEY);
     }
 
-    public static void setBlockEntity(ItemStack yoinker, BlockEntity blockEntity) {
-        CompoundTag tag = yoinker.getOrCreateTag();
-        CompoundTag blockEntityData = blockEntity.saveWithFullMetadata();
+    public static void setBlockEntity(HolderLookup.Provider provider, ItemStack yoinker, BlockEntity blockEntity) {
+        CompoundTag tag = getCompoundTag(yoinker);
+        CompoundTag blockEntityData = blockEntity.saveWithFullMetadata(provider);
         tag.put("blockEntity", blockEntityData);
-        yoinker.setTag(tag);
-//        setBlockEntity(yoinker, CustomData.of(blockEntity.saveCustomAndMetadata(provider)));
+        saveCompoundTag(yoinker, tag);
     }
 
     public static CompoundTag getBlockEntityData(ItemStack yoinker) {
-        CompoundTag tag = yoinker.getOrCreateTag();
+        CompoundTag tag = getCompoundTag(yoinker);
         if (tag.contains("blockEntity")) {
             return tag.getCompound("blockEntity");
         }
         return new CompoundTag();
-//        return yoinker.getOrDefault(DataComponents.YOINK_BLOCKENTITY.get(), CustomData.EMPTY);
     }
 
     public static boolean hasBlockEntityData(ItemStack yoinker) {
-        CompoundTag tag = yoinker.getOrCreateTag();
+        CompoundTag tag = getCompoundTag(yoinker);
         return tag.contains("blockEntity");
     }
 
-    public static void setBlockContainerData(ItemStack yoinker, Container container) {
-        CompoundTag tag = ContainerHelper.saveAllItems(yoinker.getOrCreateTag(), getListOfItemsFromContainer(container));
-        yoinker.setTag(tag);
-        /*NonNullList<ItemStack> itemStacks = container.getItems();
-        yoinker.set(DataComponents.YOINK_BLOCKCONTAINER.get(), ItemContainerContents.fromItems(itemStacks));*/
+    public static void setBlockContainerData(HolderLookup.Provider provider, ItemStack yoinker, Container container) {
+        CompoundTag tag = ContainerHelper.saveAllItems(getCompoundTag(yoinker), getListOfItemsFromContainer(container), provider);
+        saveCompoundTag(yoinker, tag);
     }
 
     public static NonNullList<ItemStack> getListOfItemsFromContainer(Container container) {
@@ -99,20 +93,24 @@ public class YoinkerData {
         return stacks;
     }
 
-    public static void setContainerItems(Container container, ItemStack yoinker) {
-        NonNullList<ItemStack> itemStacks = YoinkerData.getContainerItems(yoinker);
+    public static void setContainerItems(HolderLookup.Provider provider, Container container, ItemStack yoinker) {
+        NonNullList<ItemStack> itemStacks = YoinkerData.getContainerItems(provider, yoinker);
         for (int i = 0; i < container.getContainerSize(); i++) {
             container.setItem(i, itemStacks.get(i));
         }
     }
 
-    public static NonNullList<ItemStack> getContainerItems(ItemStack yoinker) {
+    public static NonNullList<ItemStack> getContainerItems(HolderLookup.Provider provider, ItemStack yoinker) {
         NonNullList<ItemStack> containerItems = NonNullList.create();
-        ContainerHelper.loadAllItems(yoinker.getOrCreateTag(), containerItems);
+        ContainerHelper.loadAllItems(getCompoundTag(yoinker), containerItems, provider);
         return containerItems;
-        /*ItemContainerContents containerContents = yoinker.getOrDefault(DataComponents.YOINK_BLOCKCONTAINER.get(), ItemContainerContents.EMPTY);
-        NonNullList<ItemStack> itemStacks = NonNullList.create();
-        containerContents.copyInto(itemStacks);
-        return itemStacks;*/
+    }
+
+    private static CompoundTag getCompoundTag(ItemStack stack) {
+        return stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+    }
+
+    private static void saveCompoundTag(ItemStack stack, CompoundTag tag) {
+        stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
     }
 }

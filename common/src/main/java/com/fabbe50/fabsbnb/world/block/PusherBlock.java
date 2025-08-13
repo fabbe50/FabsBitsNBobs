@@ -2,6 +2,7 @@ package com.fabbe50.fabsbnb.world.block;
 
 import com.fabbe50.fabsbnb.ModConfig;
 import com.fabbe50.fabsbnb.world.block.base.ExtHorizontalDirectionalBlock;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
@@ -10,6 +11,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -18,11 +20,17 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
 public class PusherBlock extends ExtHorizontalDirectionalBlock {
+    public static final MapCodec<PusherBlock> CODEC = simpleCodec(PusherBlock::new);
     protected static final VoxelShape SHAPE = Block.box(0.0F, 0.0F, 0.0F, 16.0F, 1.0F, 16.0F);
 
     public PusherBlock(Properties properties) {
         super(properties.strength(2.0f).sound(SoundType.STONE).isValidSpawn((blockState, blockGetter, blockPos, object) -> true));
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
+    }
+
+    @Override
+    protected @NotNull MapCodec<? extends HorizontalDirectionalBlock> codec() {
+        return CODEC;
     }
 
     @Override

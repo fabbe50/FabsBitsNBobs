@@ -1,12 +1,14 @@
 package com.fabbe50.fabsbnb.world.block;
 
 import com.fabbe50.fabsbnb.world.block.base.ExtFaceAttachedHorizontalDirectionalBlock;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.FaceAttachedHorizontalDirectionalBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -23,6 +25,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class PoweredThinLightBlock extends ExtFaceAttachedHorizontalDirectionalBlock implements SimpleWaterloggedBlock {
+    public static final MapCodec<PoweredThinLightBlock> CODEC = simpleCodec(PoweredThinLightBlock::new);
+
     protected static final VoxelShape CEILING_AABB = Block.box(5.0F, 15.0F, 5.0F, 11.0F, 16.0F, 11.0F);
     protected static final VoxelShape FLOOR_AABB = Block.box(5.0F, 0.0F, 5.0F, 11.0F, 1.0F, 11.0F);
     protected static final VoxelShape SOUTH_AABB = Block.box(5.0F, 5.0F, 0.0F, 11.0F, 11.0F, 1.0F);
@@ -35,6 +39,11 @@ public class PoweredThinLightBlock extends ExtFaceAttachedHorizontalDirectionalB
     public PoweredThinLightBlock(Properties properties) {
         super(properties.strength(0.3F).sound(SoundType.GLASS).isValidSpawn((blockState, blockGetter, blockPos, object) -> true));
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(FACE, AttachFace.WALL).setValue(WATERLOGGED, false));
+    }
+
+    @Override
+    protected @NotNull MapCodec<? extends FaceAttachedHorizontalDirectionalBlock> codec() {
+        return CODEC;
     }
 
     @Override

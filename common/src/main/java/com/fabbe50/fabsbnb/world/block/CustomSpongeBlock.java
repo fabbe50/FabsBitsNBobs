@@ -62,7 +62,7 @@ public class CustomSpongeBlock extends ExtBlock {
                 if (fluidState.is(FLUID_TO_CLEAR)) {
                     Block block = blockState.getBlock();
                     if (block instanceof BucketPickup bucketPickup) {
-                        if (!bucketPickup.pickupBlock(level, blockPos2, blockState).isEmpty()) {
+                        if (!bucketPickup.pickupBlock(null, level, blockPos2, blockState).isEmpty()) {
                             return true;
                         }
                     }

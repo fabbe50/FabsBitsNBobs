@@ -33,3 +33,6 @@ mandatory = true
 versionRange = "[13,)"
 ordering = "AFTER"
 side = "BOTH"
+
+[[mixins]]
+config = "fabsbnb.mixins.json"

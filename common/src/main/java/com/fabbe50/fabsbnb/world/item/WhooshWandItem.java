@@ -1,6 +1,7 @@
 package com.fabbe50.fabsbnb.world.item;
 
 import com.fabbe50.fabsbnb.ModConfig;
+import com.fabbe50.fabsbnb.Utilities;
 import com.fabbe50.fabsbnb.world.item.base.ModItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -22,14 +23,14 @@ import java.util.List;
 
 public class WhooshWandItem extends ModItem {
     public WhooshWandItem(Properties properties) {
-        super(properties.stacksTo(1).defaultDurability(786));
+        super(properties.stacksTo(1).durability(786));
     }
 
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
         if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
             if (!serverPlayer.getAbilities().instabuild) {
-                serverPlayer.getItemInHand(interactionHand).hurtAndBreak(1, serverPlayer, serverPlayer1 -> serverPlayer1.broadcastBreakEvent(interactionHand));
+                serverPlayer.getItemInHand(interactionHand).hurtAndBreak(1, serverPlayer, Utilities.convertInteractionHandToEquipmentSlot(interactionHand));
             }
             Vec3 direction = player.getViewVector(1);
             double deltaMultiplier = 1.5 + ModConfig.INSTANCE.whooshWandMultiplier;
@@ -44,14 +45,9 @@ public class WhooshWandItem extends ModItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
-        super.appendHoverText(itemStack, level, list, tooltipFlag);
+    public void appendHoverText(ItemStack itemStack, TooltipContext tooltipContext, List<Component> list, TooltipFlag tooltipFlag) {
+        super.appendHoverText(itemStack, tooltipContext, list, tooltipFlag);
         list.add(Component.translatable("item.fabsbnb.whoosh_wand.desc").withStyle(ChatFormatting.GRAY));
-    }
-
-    @Override
-    public boolean canBeDepleted() {
-        return true;
     }
 
     @Override

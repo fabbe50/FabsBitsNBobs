@@ -56,6 +56,8 @@
 
   "enchantment.fabsbnb.vein_miner": "Ore Miner",
   "enchantment.fabsbnb.vein_miner.desc": "Mines the entire ore vein and drops the items at the original block.",
+  "enchantment.fabsbnb.tree_chopper": "Tree Chopper",
+  "enchantment.fabsbnb.tree_chopper.desc": "Mines the entire tree stem and drops the items at the original block.",
 
   "fabsbnb.config.wand-radius.wooden": "Wooden Building Wand Radius",
   "fabsbnb.config.wand-radius.wooden.tooltip": "The radius of which the building wand will place block in.",

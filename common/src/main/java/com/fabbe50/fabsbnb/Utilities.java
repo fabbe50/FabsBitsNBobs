@@ -46,12 +46,12 @@ public class Utilities {
     }
 
     /**
-     * @param registryAccess Registry Access
+     * @param provider Lookup
      * @param stack The itemstack to parse the block from.
      * @param key The key the block is saved under.
      * @return Returns a reference of the block in the registry, or null if the block doesn't exist or is invalid.
      */
-    public static Holder.Reference<Block> parseBlockReference(RegistryAccess registryAccess, ItemStack stack, String key) {
+    public static Holder.Reference<Block> parseBlockReference(HolderLookup.Provider provider, ItemStack stack, String key) {
         CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         if (tag.contains(key)) {
             String sLocation = tag.getString(key);
@@ -59,15 +59,15 @@ public class Utilities {
             if (location != null) {
                 return Optional.of(location)
                         .map(location1 -> ResourceKey.create(Registries.BLOCK, location1))
-                        .flatMap(resourceKey -> registryAccess.registryOrThrow(Registries.BLOCK).getHolder(resourceKey))
+                        .flatMap(resourceKey -> provider.lookupOrThrow(Registries.BLOCK).get(resourceKey))
                         .orElse(null);
             }
         }
         return null;
     }
 
-    public static HolderLookup<Block> getBlockRegistryLookup(RegistryAccess registryAccess) {
-        return registryAccess.lookup(Registries.BLOCK).orElseThrow();
+    public static HolderLookup<Block> getBlockRegistryLookup(HolderLookup.Provider provider) {
+        return provider.lookupOrThrow(Registries.BLOCK);
     }
 
     public static ToIntFunction<BlockState> litBlockEmission(int i) {

@@ -3,6 +3,7 @@ package com.fabbe50.fabsbnb.world.block.entity;
 import com.fabbe50.fabsbnb.Utilities;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.protocol.Packet;
@@ -42,16 +43,16 @@ public class BlockDetectorBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void load(CompoundTag compoundTag) {
-        super.load(compoundTag);
+    public void loadAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
+        super.loadAdditional(compoundTag, provider);
         if (compoundTag.contains("stateToCheckFor")) {
             this.stateTag = compoundTag.getCompound("stateToCheckFor");
         }
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compoundTag) {
-        super.saveAdditional(compoundTag);
+    protected void saveAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
+        super.saveAdditional(compoundTag, provider);
         if (this.stateToCheckFor != null) {
             ResourceLocation location = this.stateToCheckFor.getBlock().arch$registryName();
             if (location != null) {
@@ -62,8 +63,8 @@ public class BlockDetectorBlockEntity extends BlockEntity {
     }
 
     @Override
-    public @NotNull CompoundTag getUpdateTag() {
-        CompoundTag compoundTag = new CompoundTag();
+    public @NotNull CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+        CompoundTag compoundTag = super.getUpdateTag(provider);
         if (this.stateToCheckFor != null) {
             compoundTag.put("stateToCheckFor", NbtUtils.writeBlockState(this.stateToCheckFor));
         }

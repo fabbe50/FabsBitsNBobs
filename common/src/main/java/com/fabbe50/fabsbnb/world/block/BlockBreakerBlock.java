@@ -1,6 +1,7 @@
 package com.fabbe50.fabsbnb.world.block;
 
 import com.fabbe50.fabsbnb.world.block.entity.BlockBreakerBlockEntity;
+import com.mojang.serialization.MapCodec;
 import dev.architectury.registry.menu.MenuRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -12,6 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -19,11 +21,19 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class BlockBreakerBlock extends AbstractDispenserLikeBlock {
+    public static final MapCodec<BlockBreakerBlock> CODEC = simpleCodec(BlockBreakerBlock::new);
+
     public BlockBreakerBlock(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 
     @Override
@@ -40,7 +50,7 @@ public class BlockBreakerBlock extends AbstractDispenserLikeBlock {
                     if (toolStack.getItem() instanceof DiggerItem) {
                         toolStack.setDamageValue(toolStack.getDamageValue() + 1);
                     }
-                } else if (toolStack.getItem() instanceof DiggerItem diggerItem && diggerItem.isCorrectToolForDrops(stateInFront)) {
+                } else if (toolStack.getItem() instanceof DiggerItem diggerItem && diggerItem.isCorrectToolForDrops(toolStack, stateInFront)) {
                     breakBlock(level, posInFront, stateInFront, toolStack);
                     toolStack.setDamageValue(toolStack.getDamageValue() + 1);
                 } else {
@@ -61,7 +71,7 @@ public class BlockBreakerBlock extends AbstractDispenserLikeBlock {
         blockToBreak.spawnAfterBreak(level, pos, tool, true);
         if (level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState())) {
             level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(null, blockToBreak));
-            level.playSound(null, pos, blockToBreak.getBlock().getSoundType(blockToBreak).getBreakSound(), SoundSource.BLOCKS);
+            level.playSound(null, pos, blockToBreak.getSoundType().getBreakSound(), SoundSource.BLOCKS);
         }
     }
 
@@ -71,13 +81,6 @@ public class BlockBreakerBlock extends AbstractDispenserLikeBlock {
             if (player instanceof ServerPlayer serverPlayer) {
                 MenuRegistry.openMenu(serverPlayer, breakerBlockEntity);
             }
-        }
-    }
-
-    @Override
-    protected void setPlacedBy(BlockEntity blockEntity, ItemStack stack) {
-        if (blockEntity instanceof BlockBreakerBlockEntity breakerBlockEntity) {
-            breakerBlockEntity.setCustomName(stack.getHoverName());
         }
     }
 

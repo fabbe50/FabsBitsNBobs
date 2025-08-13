@@ -38,10 +38,10 @@ public final class FabsBnB {
     }
 
     public static ResourceLocation location(String owner, String name) {
-        return new ResourceLocation(owner, name);
+        return ResourceLocation.fromNamespaceAndPath(owner, name);
     }
 
     public static ResourceLocation location(String name) {
-        return new ResourceLocation(MOD_ID, name);
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, name);
     }
 }

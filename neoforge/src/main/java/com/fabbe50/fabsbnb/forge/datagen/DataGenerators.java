@@ -1,6 +1,7 @@
 package com.fabbe50.fabsbnb.forge.datagen;
 
 import com.fabbe50.fabsbnb.FabsBnB;
+import com.fabbe50.fabsbnb.forge.datagen.registrysets.RegistrySets;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
@@ -20,6 +21,10 @@ public class DataGenerators {
         PackOutput packOutput = generator.getPackOutput();
 
         generator.addProvider(event.includeServer(), new Recipes(packOutput, event.getLookupProvider()));
-        generator.addProvider(event.includeServer(), new LootTableProvider(packOutput, Collections.emptySet(), List.of(new LootTableProvider.SubProviderEntry(BlockDrops::new, LootContextParamSets.BLOCK)), event.getLookupProvider()));
+        generator.addProvider(event.includeServer(), new LootTableProvider(packOutput, Collections.emptySet(),
+                List.of(
+                        new LootTableProvider.SubProviderEntry(BlockDrops::new, LootContextParamSets.BLOCK)
+                ), event.getLookupProvider()));
+        generator.addProvider(event.includeServer(), new RegistrySets(packOutput, event.getLookupProvider()));
     }
 }

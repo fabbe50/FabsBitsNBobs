@@ -9,14 +9,14 @@ import net.minecraft.world.level.Level;
 
 public class ChocolateNecklaceItem extends Item {
     public ChocolateNecklaceItem(Properties properties) {
-        super(properties.stacksTo(1).defaultDurability(256));
+        super(properties.stacksTo(1).durability(256));
     }
 
     @Override
     public void inventoryTick(ItemStack itemStack, Level level, Entity entity, int i, boolean bl) {
         if (entity instanceof LivingEntity livingEntity) {
             if (Utilities.clearMobEffects(livingEntity, false)) {
-                itemStack.hurtAndBreak(1, livingEntity, livingEntity1 -> livingEntity1.broadcastBreakEvent(LivingEntity.getEquipmentSlotForItem(itemStack)));
+                itemStack.hurtAndBreak(1, livingEntity, livingEntity.getEquipmentSlotForItem(itemStack));
             }
         }
     }

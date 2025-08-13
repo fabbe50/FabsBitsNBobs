@@ -3,6 +3,7 @@ package com.fabbe50.fabsbnb.world.block;
 import com.fabbe50.fabsbnb.FabsBnB;
 import com.fabbe50.fabsbnb.world.block.base.ExtBaseEntityBlock;
 import com.fabbe50.fabsbnb.world.block.entity.BlockDetectorBlockEntity;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -32,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class BlockDetectorBlock extends ExtBaseEntityBlock {
+    public static final MapCodec<BlockDetectorBlock> CODEC = simpleCodec(BlockDetectorBlock::new);
     public static final DirectionProperty FACING = DirectionalBlock.FACING;
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
@@ -41,11 +43,16 @@ public class BlockDetectorBlock extends ExtBaseEntityBlock {
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
+    }
+
+    @Override
+    public @NotNull InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult blockHitResult) {
         if (level.isClientSide()) {
             return InteractionResult.SUCCESS;
         } else {
-            ItemStack heldItem = player.getItemInHand(interactionHand);
+            ItemStack heldItem = player.getItemInHand(player.getUsedItemHand());
             BlockEntity blockEntity = level.getBlockEntity(blockPos);
             if (blockEntity instanceof BlockDetectorBlockEntity detectorBlockEntity && player instanceof ServerPlayer serverPlayer) {
                 if (heldItem.is(Items.REDSTONE_TORCH)) {

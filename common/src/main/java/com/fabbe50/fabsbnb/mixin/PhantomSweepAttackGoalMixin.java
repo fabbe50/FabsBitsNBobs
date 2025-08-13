@@ -27,7 +27,7 @@ public class PhantomSweepAttackGoalMixin {
     private void injectCanContinueToUse(CallbackInfoReturnable<Boolean> cir) {
         LivingEntity target = fabsbnb$phantom.getTarget();
         if (target != null) {
-            if (target.hasEffect(ModRegistries.FELINE_AURA.get())) {
+            if (target.hasEffect(ModRegistries.FELINE_AURA)) {
                 if (target.level() instanceof ServerLevel serverLevel) {
                     serverLevel.playSound(null, target.blockPosition(), SoundEvents.CAT_HISS, SoundSource.NEUTRAL);
                 }

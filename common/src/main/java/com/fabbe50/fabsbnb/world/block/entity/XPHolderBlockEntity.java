@@ -3,6 +3,7 @@ package com.fabbe50.fabsbnb.world.block.entity;
 import com.fabbe50.fabsbnb.Utilities;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -38,24 +39,24 @@ public class XPHolderBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compoundTag) {
-        super.saveAdditional(compoundTag);
+    protected void saveAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
+        super.saveAdditional(compoundTag, provider);
         compoundTag.putInt("xp", this.xp);
         compoundTag.putInt("range", this.range);
         compoundTag.putBoolean("collect", this.collectXP);
     }
 
     @Override
-    public void load(CompoundTag compoundTag) {
-        super.load(compoundTag);
+    protected void loadAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
+        super.loadAdditional(compoundTag, provider);
         this.xp = compoundTag.getInt("xp");
         this.range = compoundTag.getInt("range");
         this.collectXP = compoundTag.getBoolean("collect");
     }
 
     @Override
-    public @NotNull CompoundTag getUpdateTag() {
-        CompoundTag tag = super.getUpdateTag();
+    public @NotNull CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+        CompoundTag tag = super.getUpdateTag(provider);
         tag.putInt("xp", this.xp);
         return tag;
     }
@@ -203,7 +204,7 @@ public class XPHolderBlockEntity extends BlockEntity {
         range = 5;
 
         BlockPos pos = this.getBlockPos();
-        AABB area = new AABB(pos.offset(-range, -range, -range), pos.offset(range, range, range));
+        AABB area = new AABB(pos.getCenter().add(-range, -range, -range), pos.getCenter().add(range, range, range));
 
         List<ExperienceOrb> orbs = this.level.getEntitiesOfClass(ExperienceOrb.class, area, experienceOrb -> true);
         if (orbs.isEmpty()) {

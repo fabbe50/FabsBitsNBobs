@@ -59,7 +59,7 @@ public abstract class AbstractDispenserLikeBlock extends ExtBaseEntityBlock {
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
+    protected @NotNull InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult blockHitResult) {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
@@ -70,16 +70,6 @@ public abstract class AbstractDispenserLikeBlock extends ExtBaseEntityBlock {
     }
 
     protected abstract void use(Player player, BlockEntity blockEntity);
-
-    @Override
-    public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, ItemStack itemStack) {
-        if (itemStack.hasCustomHoverName()) {
-            BlockEntity blockEntity = level.getBlockEntity(blockPos);
-            this.setPlacedBy(blockEntity, itemStack);
-        }
-    }
-
-    protected abstract void setPlacedBy(BlockEntity blockEntity, ItemStack stack);
 
     @Override
     public void onRemove(BlockState blockState, Level level, BlockPos blockPos, BlockState blockState2, boolean bl) {

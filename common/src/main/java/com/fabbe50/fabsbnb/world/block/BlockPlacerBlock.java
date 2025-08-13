@@ -1,6 +1,7 @@
 package com.fabbe50.fabsbnb.world.block;
 
 import com.fabbe50.fabsbnb.world.block.entity.BlockPlacerBlockEntity;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.*;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -9,15 +10,24 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class BlockPlacerBlock extends AbstractDispenserLikeBlock {
+    public static final MapCodec<BlockPlacerBlock> CODEC = simpleCodec(BlockPlacerBlock::new);
+
     public BlockPlacerBlock(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 
     @Override
@@ -36,7 +46,7 @@ public class BlockPlacerBlock extends AbstractDispenserLikeBlock {
                     BlockState blockState = block.defaultBlockState();
                     if (level.setBlock(posInFront, blockState, 11)) {
                         level.gameEvent(GameEvent.BLOCK_PLACE, pos, GameEvent.Context.of(blockState));
-                        level.playSound(null, pos, block.getSoundType(blockState).getPlaceSound(), SoundSource.BLOCKS);
+                        level.playSound(null, pos, blockState.getSoundType().getPlaceSound(), SoundSource.BLOCKS);
                     }
                 }
             } else {
@@ -50,13 +60,6 @@ public class BlockPlacerBlock extends AbstractDispenserLikeBlock {
     protected void use(Player player, BlockEntity blockEntity) {
         if (blockEntity instanceof BlockPlacerBlockEntity placerBlockEntity) {
             player.openMenu(placerBlockEntity);
-        }
-    }
-
-    @Override
-    protected void setPlacedBy(BlockEntity blockEntity, ItemStack stack) {
-        if (blockEntity instanceof BlockPlacerBlockEntity placerBlockEntity) {
-            placerBlockEntity.setCustomName(stack.getHoverName());
         }
     }
 
