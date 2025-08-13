@@ -1,4 +1,4 @@
-package com.fabbe50.fabsbnb.forge.datagen;
+package com.fabbe50.fabsbnb.neoforge.datagen;
 
 import com.fabbe50.fabsbnb.FabsBnB;
 import com.fabbe50.fabsbnb.datagen.BlockDrops;

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "group": "fabsbnbpowered_thin_light",
+  "ingredients": [
+    {
+      "item": "minecraft:redstone_torch"
+    },
+    {
+      "item": "fabsbnb:thin_light"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "fabsbnb:powered_thin_light"
+  }
+}

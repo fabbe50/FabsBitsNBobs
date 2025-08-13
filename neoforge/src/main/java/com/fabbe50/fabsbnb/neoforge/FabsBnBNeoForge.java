@@ -4,38 +4,28 @@ import com.fabbe50.fabsbnb.FabsBnB;
 import com.fabbe50.fabsbnb.Platform;
 import com.fabbe50.fabsbnb.neoforge.integration.Curios;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
-import dev.architectury.platform.forge.EventBuses;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 
 @Mod(FabsBnB.MOD_ID)
-public final class FabsBnBForge {
-    public FabsBnBForge() {
-        // Submit our event bus to let Architectury API register our content on the right time.
-        EventBuses.registerModEventBus(FabsBnB.MOD_ID, FMLJavaModLoadingContext.get().getModEventBus());
-
+public final class FabsBnBNeoForge {
+    public FabsBnBNeoForge(IEventBus eventBus) {
         // Run our common setup.
         FabsBnB.init();
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCommonSetup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onPopulateCreativeTab);
+        eventBus.addListener(this::onCommonSetup);
+        eventBus.addListener(this::onPopulateCreativeTab);
     }
 
     public void onCommonSetup(FMLCommonSetupEvent event) {
         if (Platform.isModLoaded("curios")) {
             Curios.registerCurios();
         }
-    }
-
-    public void onClientSetup(FMLClientSetupEvent event) {
-        FabsBnBForgeClient.init();
     }
 
     public void onPopulateCreativeTab(BuildCreativeModeTabContentsEvent event) {

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "fabsbnbwrench",
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    "I I",
+    " I ",
+    " I "
+  ],
+  "result": {
+    "count": 1,
+    "id": "fabsbnb:wrench"
+  }
+}

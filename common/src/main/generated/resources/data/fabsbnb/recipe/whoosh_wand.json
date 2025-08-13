@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "fabsbnbwhoosh_wand",
+  "key": {
+    "C": {
+      "item": "minecraft:coal_block"
+    },
+    "F": {
+      "item": "minecraft:firework_rocket"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "  F",
+    " C ",
+    "S  "
+  ],
+  "result": {
+    "count": 1,
+    "id": "fabsbnb:whoosh_wand"
+  }
+}

@@ -1,4 +1,4 @@
-package com.fabbe50.fabsbnb.forge;
+package com.fabbe50.fabsbnb.neoforge;
 
 import com.fabbe50.fabsbnb.ClothScreen;
 import com.fabbe50.fabsbnb.FabsBnBClient;

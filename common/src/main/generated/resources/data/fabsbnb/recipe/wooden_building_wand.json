@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "fabsbnb_building_wands",
+  "key": {
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "P  ",
+    " S ",
+    "  S"
+  ],
+  "result": {
+    "count": 1,
+    "id": "fabsbnb:wooden_building_wand"
+  }
+}

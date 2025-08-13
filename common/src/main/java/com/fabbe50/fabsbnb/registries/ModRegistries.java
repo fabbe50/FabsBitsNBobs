@@ -57,8 +57,6 @@ public class ModRegistries {
     public  static final Registrar<Block>                       BLOCKS                                                  = FabsBnB.MANAGER.get().get(Registries.BLOCK);
     private static final Registrar<BlockEntityType<?>>          BLOCK_ENTITIES                                          = FabsBnB.MANAGER.get().get(Registries.BLOCK_ENTITY_TYPE);
     public  static final Registrar<Item>                        ITEMS                                                   = FabsBnB.MANAGER.get().get(Registries.ITEM);
-    private static final Registrar<Enchantment>                 ENCHANTMENTS                                            = FabsBnB.MANAGER.get().get(Registries.ENCHANTMENT);
-    private static final Registrar<DataComponentType<?>>        DATA_COMPONENT_TYPES                                    = FabsBnB.MANAGER.get().get(Registries.DATA_COMPONENT_TYPE);
     private static final Registrar<MobEffect>                   MOB_EFFECTS                                             = FabsBnB.MANAGER.get().get(Registries.MOB_EFFECT);
     private static final Registrar<Potion>                      POTIONS                                                 = FabsBnB.MANAGER.get().get(Registries.POTION);
     private static final Registrar<MenuType<?>>                 MENU_TYPES                                              = FabsBnB.MANAGER.get().get(Registries.MENU);

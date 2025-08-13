@@ -1,5 +1,6 @@
 package com.fabbe50.fabsbnb.world.item.enchantments;
 
+import com.fabbe50.fabsbnb.FabsBnB;
 import com.fabbe50.fabsbnb.Utilities;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
 import net.minecraft.core.BlockPos;
@@ -50,11 +51,9 @@ public class VeinMinerEnchant implements IEnchantment {
         return Enchantment.definition(itemHolder.getOrThrow(supportedTools), itemHolder.getOrThrow(primaryTools), 1, 1, Enchantment.constantCost(15), Enchantment.constantCost(65), 10, EquipmentSlotGroup.HAND);
     }
 
-
-
     public boolean handleEvent(Level level, BlockPos blockPos, BlockState blockState, ServerPlayer serverPlayer) {
         ItemStack stack = serverPlayer.getItemInHand(InteractionHand.MAIN_HAND);
-        if (stack.is(supportedTools)) {
+        if (stack.is(primaryTools) || stack.is(supportedTools)) {
             Holder<Enchantment> enchantmentHolder = Utilities.getHolder(level, enchantmentKey);
             if (EnchantmentHelper.getItemEnchantmentLevel(enchantmentHolder, stack) > 0) {
                 if (!blockState.is(blockFilter)) {
