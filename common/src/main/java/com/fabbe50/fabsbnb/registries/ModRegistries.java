@@ -19,15 +19,17 @@ import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.menu.MenuRegistry;
 import dev.architectury.registry.registries.Registrar;
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
@@ -56,6 +58,7 @@ public class ModRegistries {
     private static final Registrar<BlockEntityType<?>>          BLOCK_ENTITIES                                          = FabsBnB.MANAGER.get().get(Registries.BLOCK_ENTITY_TYPE);
     public  static final Registrar<Item>                        ITEMS                                                   = FabsBnB.MANAGER.get().get(Registries.ITEM);
     private static final Registrar<Enchantment>                 ENCHANTMENTS                                            = FabsBnB.MANAGER.get().get(Registries.ENCHANTMENT);
+    private static final Registrar<DataComponentType<?>>        DATA_COMPONENT_TYPES                                    = FabsBnB.MANAGER.get().get(Registries.DATA_COMPONENT_TYPE);
     private static final Registrar<MobEffect>                   MOB_EFFECTS                                             = FabsBnB.MANAGER.get().get(Registries.MOB_EFFECT);
     private static final Registrar<Potion>                      POTIONS                                                 = FabsBnB.MANAGER.get().get(Registries.POTION);
     private static final Registrar<MenuType<?>>                 MENU_TYPES                                              = FabsBnB.MANAGER.get().get(Registries.MENU);
@@ -121,7 +124,10 @@ public class ModRegistries {
     }
 
     // Enchantments
-    public static final RegistrySupplier<Enchantment> VEIN_MINER                                                        = ENCHANTMENTS.register(FabsBnB.location("vein_miner"), () -> new VeinMinerEnchant(Enchantment.Rarity.VERY_RARE, EquipmentSlot.MAINHAND));
+//    public static final RegistrySupplier<Enchantment> VEIN_MINER                                                        = ENCHANTMENTS.register(FabsBnB.location("vein_miner"), () -> new VeinMinerEnchant(Enchantment.Rarity.VERY_RARE, EquipmentSlot.MAINHAND));
+//    public static final RegistrySupplier<Enchantment> VEIN_MINER                                                        = ENCHANTMENTS.register(FabsBnB.location("vein_miner"), () -> Enchantment.enchantment(Enchantment.definition()));
+    public static final ResourceKey<Enchantment> VEIN_MINER                                                             = ResourceKey.create(Registries.ENCHANTMENT, FabsBnB.location("vein_miner"));
+    public static final ResourceKey<Enchantment> TREE_CHOPPER                                                           = ResourceKey.create(Registries.ENCHANTMENT, FabsBnB.location("tree_chopper"));
 
     // Mob Effects
     public static final RegistrySupplier<MobEffect> FELINE_AURA                                                         = MOB_EFFECTS.register(FabsBnB.location("feline_aura"), () -> new MobEffectExt(MobEffectCategory.BENEFICIAL, 0x939918));
@@ -131,7 +137,7 @@ public class ModRegistries {
     public static final RegistrySupplier<Potion> FELINE_AURA_POTION_LONG                                                = registerPotion("feline_aura_long", FELINE_AURA, LONG_DURATION_POTION);
 
     private static RegistrySupplier<Potion> registerPotion(String name, RegistrySupplier<MobEffect> effect, int duration) {
-        return POTIONS.register(FabsBnB.location(name), () -> new Potion(new MobEffectInstance(effect.get(), duration)));
+        return POTIONS.register(FabsBnB.location(name), () -> new Potion(new MobEffectInstance(effect, duration)));
     }
 
     // Creative Tabs
@@ -145,6 +151,10 @@ public class ModRegistries {
     public static final TagKey<Block> BLOCK_YOINKER_BLACKLIST                                                           = TagKey.create(Registries.BLOCK, FabsBnB.location("block_yoinker_blacklist"));
     public static final TagKey<Block> SPIDER_NOT_CLIMBABLE                                                              = TagKey.create(Registries.BLOCK, FabsBnB.location("spider_not_climbable"));
     public static final TagKey<Block> ORE_MINER_WHITELIST                                                               = TagKey.create(Registries.BLOCK, FabsBnB.location("ore_miner_whitelist"));
+    public static final TagKey<Block> TREE_CHOPPER_WHITELIST                                                            = TagKey.create(Registries.BLOCK, FabsBnB.location("tree_chopper_whitelist"));
+
+    public static final VeinMinerEnchant VEIN_MINER_ENCHANT                                                             = new VeinMinerEnchant(VEIN_MINER, ORE_MINER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.PICKAXES);
+    public static final VeinMinerEnchant TREE_CHOPPER_ENCHANT                                                           = new VeinMinerEnchant(TREE_CHOPPER, TREE_CHOPPER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.AXES);
 
     public static void init() {}
 }

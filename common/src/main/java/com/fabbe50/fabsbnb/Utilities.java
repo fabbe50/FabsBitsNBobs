@@ -4,16 +4,22 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -24,21 +30,15 @@ import java.util.function.ToIntFunction;
 
 public class Utilities {
     public static int getRadiusFromTier(Tier tier) {
-        if (tier.equals(Tiers.WOOD)) {
-            return ModConfig.INSTANCE.woodenBuildingWandRadius;
-        } else if (tier.equals(Tiers.STONE)) {
-            return ModConfig.INSTANCE.stoneBuildingWandRadius;
-        } else if (tier.equals(Tiers.IRON)) {
-            return ModConfig.INSTANCE.ironBuildingWandRadius;
-        } else if (tier.equals(Tiers.GOLD)) {
-            return ModConfig.INSTANCE.goldBuildingWandRadius;
-        } else if (tier.equals(Tiers.DIAMOND)) {
-            return ModConfig.INSTANCE.diamondBuildingWandRadius;
-        } else if (tier.equals(Tiers.NETHERITE)) {
-            return ModConfig.INSTANCE.netheriteBuildingWandRadius;
-        } else {
-            return 1;
-        }
+        return switch (tier) {
+            case Tiers.WOOD -> ModConfig.INSTANCE.woodenBuildingWandRadius;
+            case Tiers.STONE -> ModConfig.INSTANCE.stoneBuildingWandRadius;
+            case Tiers.IRON -> ModConfig.INSTANCE.ironBuildingWandRadius;
+            case Tiers.GOLD -> ModConfig.INSTANCE.goldBuildingWandRadius;
+            case Tiers.DIAMOND -> ModConfig.INSTANCE.diamondBuildingWandRadius;
+            case Tiers.NETHERITE -> ModConfig.INSTANCE.netheriteBuildingWandRadius;
+            default -> 1;
+        };
     }
 
     public static int square(int value) {
@@ -52,7 +52,7 @@ public class Utilities {
      * @return Returns a reference of the block in the registry, or null if the block doesn't exist or is invalid.
      */
     public static Holder.Reference<Block> parseBlockReference(RegistryAccess registryAccess, ItemStack stack, String key) {
-        CompoundTag tag = stack.getOrCreateTag();
+        CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         if (tag.contains(key)) {
             String sLocation = tag.getString(key);
             ResourceLocation location = ResourceLocation.tryParse(sLocation);
@@ -140,12 +140,23 @@ public class Utilities {
     public static boolean clearMobEffects(LivingEntity livingEntity, boolean clearBeneficial) {
         boolean hasCleared = false;
         for (MobEffectInstance effect : new ArrayList<>(livingEntity.getActiveEffects())) {
-            if (clearBeneficial || !effect.getEffect().isBeneficial()) {
+            if (clearBeneficial || !effect.getEffect().value().isBeneficial()) {
                 if (livingEntity.removeEffect(effect.getEffect())) {
                     hasCleared = true;
                 }
             }
         }
         return hasCleared;
+    }
+
+    public static EquipmentSlot convertInteractionHandToEquipmentSlot(InteractionHand hand) {
+        if (hand == null) {
+            return null;
+        }
+        return hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+    }
+
+    public static Holder<Enchantment> getHolder(Level level, ResourceKey<Enchantment> enchantment) {
+        return level.holderLookup(enchantment.registryKey()).getOrThrow(enchantment);
     }
 }

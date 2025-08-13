@@ -1,0 +1,35 @@
+modLoader = "javafml"
+loaderVersion = "${loader_version_range}"
+#issueTrackerURL = ""
+license = "LGPLv3"
+
+[[mods]]
+modId = "fabsbnb"
+version = "${version}"
+displayName = "Fab's Bits & Bobs"
+authors = "fabbe50"
+description = '''
+Adds my random ideas.
+'''
+logoFile = "assets/fabsbnb/icon.png"
+
+[[dependencies.fabsbnb]]
+modId = "neoforge"
+mandatory = true
+versionRange = "[21,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.fabsbnb]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.21,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.fabsbnb]]
+modId = "architectury"
+mandatory = true
+versionRange = "[13,)"
+ordering = "AFTER"
+side = "BOTH"

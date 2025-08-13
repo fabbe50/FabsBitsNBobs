@@ -1,23 +1,25 @@
-package com.fabbe50.fabsbnb.datagen;
+package com.fabbe50.fabsbnb.forge.datagen;
 
 import com.fabbe50.fabsbnb.FabsBnB;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
 
 public class Recipes extends RecipeProvider {
-    public Recipes(PackOutput packOutput) {
-        super(packOutput);
+    public Recipes(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> completableFuture) {
+        super(packOutput, completableFuture);
     }
 
     @Override
-    protected void buildRecipes(Consumer<FinishedRecipe> recipeOutput) {
+    protected void buildRecipes(@NotNull RecipeOutput recipeOutput) {
         smithingNoTemplate(ModRegistries.ITEM_LAVA_SPONGE.get(), Items.SPONGE, Items.LAVA_BUCKET)
                 .unlocks("has_sponge", has(Items.SPONGE))
                 .save(recipeOutput, FabsBnB.location(ModRegistries.ITEM_LAVA_SPONGE.getId().getPath() + "-smithing_upgrade"));

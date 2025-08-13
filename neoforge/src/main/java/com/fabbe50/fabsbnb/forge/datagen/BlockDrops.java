@@ -1,18 +1,24 @@
-package com.fabbe50.fabsbnb.datagen;
+package com.fabbe50.fabsbnb.forge.datagen;
 
 import com.fabbe50.fabsbnb.registries.ModRegistries;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.loot.packs.VanillaBlockLoot;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 public class BlockDrops extends VanillaBlockLoot {
+    public BlockDrops(HolderLookup.Provider provider) {
+        super(provider);
+    }
+
     @Override
     protected void generate() {
         dropSelf(ModRegistries.LAVA_SPONGE.get());
@@ -27,19 +33,19 @@ public class BlockDrops extends VanillaBlockLoot {
     }
 
     @Override
-    public void generate(BiConsumer<ResourceLocation, LootTable.Builder> biConsumer) {
+    public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> biConsumer) {
         this.generate();
-        Set<ResourceLocation> set = new HashSet<>();
+        Set<ResourceKey<LootTable>> set = new HashSet<>();
 
         for(Block block : this.getKnownBlocks()) {
             if (block.isEnabled(this.enabledFeatures)) {
-                ResourceLocation resourcelocation = block.getLootTable();
-                if (resourcelocation != BuiltInLootTables.EMPTY && set.add(resourcelocation)) {
-                    LootTable.Builder loottable$builder = this.map.remove(resourcelocation);
+                ResourceKey<LootTable> lootTableKey = block.getLootTable();
+                if (lootTableKey != BuiltInLootTables.EMPTY && set.add(lootTableKey)) {
+                    LootTable.Builder loottable$builder = this.map.remove(lootTableKey);
                     if (loottable$builder == null) {
-                        throw new IllegalStateException(String.format(Locale.ROOT, "Missing loot-table '%s' for '%s'", resourcelocation, BuiltInRegistries.BLOCK.getKey(block)));
+                        throw new IllegalStateException(String.format(Locale.ROOT, "Missing loot-table '%s' for '%s'", lootTableKey, BuiltInRegistries.BLOCK.getKey(block)));
                     }
-                    biConsumer.accept(resourcelocation, loottable$builder);
+                    biConsumer.accept(lootTableKey, loottable$builder);
                 }
             }
         }
@@ -49,7 +55,7 @@ public class BlockDrops extends VanillaBlockLoot {
         }
     }
 
-    protected Iterable<Block> getKnownBlocks() {
+    protected @NotNull Iterable<Block> getKnownBlocks() {
         return ModRegistries.BLOCK_LIST.stream().map(Supplier::get).toList();
     }
 }

@@ -1,16 +1,14 @@
 package com.fabbe50.fabsbnb.data;
 
 import com.fabbe50.fabsbnb.Utilities;
-import net.minecraft.Util;
 import net.minecraft.core.*;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.datafix.fixes.BlockStateData;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;

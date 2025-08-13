@@ -78,7 +78,7 @@ public class BlockYoinkerItem extends ModItem {
                 }
             }
             if (YoinkerData.hasBlockEntityData(yoinker)) {
-                level.setBlockEntity(BlockEntity.loadStatic(pos.relative(face), savedState, YoinkerData.getBlockEntityData(yoinker)));
+                level.setBlockEntity(BlockEntity.loadStatic(pos.relative(face), savedState, YoinkerData.getBlockEntityData(yoinker), level.registryAccess()));
             }
             YoinkerData.clearData(yoinker);
         }
@@ -121,9 +121,14 @@ public class BlockYoinkerItem extends ModItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
-        super.appendHoverText(itemStack, level, list, tooltipFlag);
-        if (level != null) {
+    public void appendHoverText(ItemStack itemStack, TooltipContext tooltipContext, List<Component> list, TooltipFlag tooltipFlag) {
+        super.appendHoverText(itemStack, tooltipContext, list, tooltipFlag);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack itemStack, TooltipContext tooltipContext, List<Component> list, TooltipFlag tooltipFlag) {
+        super.appendHoverText(itemStack, tooltipContext, list, tooltipFlag);
+        if ( != null) {
             BlockState blockState = YoinkerData.getBlockState(level.registryAccess(), itemStack);
             if (blockState.getBlock() != Blocks.AIR) {
                 list.add(Component.translatable("item.fabsbnb.block_yoinker.contains", blockState.getBlock().arch$registryName()).withStyle(ChatFormatting.GRAY));
