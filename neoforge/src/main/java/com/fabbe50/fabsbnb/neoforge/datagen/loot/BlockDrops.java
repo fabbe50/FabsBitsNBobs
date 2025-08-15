@@ -1,4 +1,4 @@
-package com.fabbe50.fabsbnb.neoforge.datagen;
+package com.fabbe50.fabsbnb.neoforge.datagen.loot;
 
 import com.fabbe50.fabsbnb.registries.ModRegistries;
 import net.minecraft.core.HolderLookup;

@@ -19,7 +19,7 @@ import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.menu.MenuRegistry;
 import dev.architectury.registry.registries.Registrar;
 import dev.architectury.registry.registries.RegistrySupplier;
-import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -130,12 +130,22 @@ public class ModRegistries {
     // Mob Effects
     public static final RegistrySupplier<MobEffect> FELINE_AURA                                                         = MOB_EFFECTS.register(FabsBnB.location("feline_aura"), () -> new MobEffectExt(MobEffectCategory.BENEFICIAL, 0x939918));
 
+    // Wrapper to fix RegistrySupplier not being able to save effects. Thanks to fzzyhamstrs on GitHub.
+    public static Holder<MobEffect> getMobEffectReference(RegistrySupplier<MobEffect> input) {
+        return MOB_EFFECTS.getHolder(input.getId());
+    }
+
     // Potions
     public static final RegistrySupplier<Potion> FELINE_AURA_POTION_SHORT                                               = registerPotion("feline_aura_short", FELINE_AURA, SHORT_DURATION_POTION);
     public static final RegistrySupplier<Potion> FELINE_AURA_POTION_LONG                                                = registerPotion("feline_aura_long", FELINE_AURA, LONG_DURATION_POTION);
 
     private static RegistrySupplier<Potion> registerPotion(String name, RegistrySupplier<MobEffect> effect, int duration) {
-        return POTIONS.register(FabsBnB.location(name), () -> new Potion(new MobEffectInstance(effect, duration)));
+        return POTIONS.register(FabsBnB.location(name), () -> new Potion(new MobEffectInstance(getMobEffectReference(effect), duration)));
+    }
+
+    // Wrapper to fix RegistrySupplier not being able to save potions. Thanks to fzzyhamstrs on GitHub.
+    public static Holder<Potion> getPotionReference(RegistrySupplier<Potion> input) {
+        return POTIONS.getHolder(input.getId());
     }
 
     // Creative Tabs
@@ -151,8 +161,8 @@ public class ModRegistries {
     public static final TagKey<Block> ORE_MINER_WHITELIST                                                               = TagKey.create(Registries.BLOCK, FabsBnB.location("ore_miner_whitelist"));
     public static final TagKey<Block> TREE_CHOPPER_WHITELIST                                                            = TagKey.create(Registries.BLOCK, FabsBnB.location("tree_chopper_whitelist"));
 
-    public static final VeinMinerEnchant VEIN_MINER_ENCHANT                                                             = new VeinMinerEnchant(VEIN_MINER, ORE_MINER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.PICKAXES);
-    public static final VeinMinerEnchant TREE_CHOPPER_ENCHANT                                                           = new VeinMinerEnchant(TREE_CHOPPER, TREE_CHOPPER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.AXES);
+    public static final VeinMinerEnchant VEIN_MINER_ENCHANT                                                             = new VeinMinerEnchant(VEIN_MINER, ORE_MINER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.PICKAXES, ModConfig.oreMinerMiningLimit.getValue());
+    public static final VeinMinerEnchant TREE_CHOPPER_ENCHANT                                                           = new VeinMinerEnchant(TREE_CHOPPER, TREE_CHOPPER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.AXES, ModConfig.treeChopperMiningLimit.getValue(), TREE_CHOPPER_ATTACHMENTS);
 
     public static void init() {}
 }
