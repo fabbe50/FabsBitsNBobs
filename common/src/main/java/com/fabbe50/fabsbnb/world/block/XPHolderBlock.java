@@ -1,7 +1,7 @@
 package com.fabbe50.fabsbnb.world.block;
 
 import com.fabbe50.fabsbnb.FabsBnB;
-import com.fabbe50.fabsbnb.Utilities;
+import com.fabbe50.fabsbnb.util.Utilities;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
 import com.fabbe50.fabsbnb.world.block.base.ExtBaseEntityBlock;
 import com.fabbe50.fabsbnb.world.block.entity.XPHolderBlockEntity;

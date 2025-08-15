@@ -61,7 +61,7 @@ public class PusherBlock extends ExtHorizontalDirectionalBlock {
     public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
         if (!entity.isCrouching()) {
             Direction facing = blockState.getValue(FACING);
-            double speedMultiplier = ModConfig.INSTANCE.entityMoverBlockSpeed;
+            double speedMultiplier = ModConfig.entityMoverBlockSpeed.getValue();
             entity.setDeltaMovement(entity.getDeltaMovement().add(speedMultiplier * (facing.getStepX() * 1.5), 0, speedMultiplier * (facing.getStepZ() * 1.5)));
         }
     }

@@ -2,6 +2,7 @@ package com.fabbe50.fabsbnb.world.block.entity;
 
 import com.fabbe50.fabsbnb.FabsBnB;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
+import com.fabbe50.fabsbnb.util.LangUtils;
 import com.fabbe50.fabsbnb.world.inventory.BlockBreakerMenu;
 import dev.architectury.registry.menu.MenuRegistry;
 import net.minecraft.core.BlockPos;

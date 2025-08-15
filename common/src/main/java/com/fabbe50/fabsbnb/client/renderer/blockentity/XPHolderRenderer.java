@@ -1,6 +1,6 @@
 package com.fabbe50.fabsbnb.client.renderer.blockentity;
 
-import com.fabbe50.fabsbnb.Utilities;
+import com.fabbe50.fabsbnb.util.Utilities;
 import com.fabbe50.fabsbnb.world.block.entity.XPHolderBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;

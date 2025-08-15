@@ -1,7 +1,7 @@
 package com.fabbe50.fabsbnb.world.item;
 
 import com.fabbe50.fabsbnb.ModConfig;
-import com.fabbe50.fabsbnb.Utilities;
+import com.fabbe50.fabsbnb.util.Utilities;
 import com.fabbe50.fabsbnb.world.item.base.ModItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -33,7 +33,7 @@ public class WhooshWandItem extends ModItem {
                 serverPlayer.getItemInHand(interactionHand).hurtAndBreak(1, serverPlayer, Utilities.convertInteractionHandToEquipmentSlot(interactionHand));
             }
             Vec3 direction = player.getViewVector(1);
-            double deltaMultiplier = 1.5 + ModConfig.INSTANCE.whooshWandMultiplier;
+            double deltaMultiplier = 1.5 + ModConfig.whooshWandMultiplier.getValue();
             player.setDeltaMovement(direction.x() * deltaMultiplier, direction.y() * deltaMultiplier, direction.z() * deltaMultiplier);
             serverPlayer.connection.send(new ClientboundSetEntityMotionPacket(player));
             player.resetFallDistance();

@@ -2,9 +2,11 @@ package com.fabbe50.fabsbnb.fabric;
 
 import com.fabbe50.fabsbnb.FabsBnB;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
+import com.fabbe50.fabsbnb.registries.PotionBrewingRecipes;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistryBuilder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -31,5 +33,6 @@ public final class FabsBnBFabric implements ModInitializer {
                 }
             }
         });
+        FabricBrewingRecipeRegistryBuilder.BUILD.register(PotionBrewingRecipes::register);
     }
 }

@@ -38,4 +38,12 @@ public final class FabsBnBNeoForge {
             }
         }
     }
+
+    @EventBusSubscriber(modid = FabsBnB.MOD_ID)
+    public static class Events {
+        @SubscribeEvent
+        public static void registerBrewingRecipes(RegisterBrewingRecipesEvent event) {
+            PotionBrewingRecipes.register(event.getBuilder());
+        }
+    }
 }

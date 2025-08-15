@@ -1,5 +1,6 @@
 package com.fabbe50.fabsbnb.world.item;
 
+import com.fabbe50.fabsbnb.util.LangUtils;
 import com.fabbe50.fabsbnb.world.item.base.ModItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;

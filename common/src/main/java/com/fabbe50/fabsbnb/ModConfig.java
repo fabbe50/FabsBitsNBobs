@@ -1,40 +1,39 @@
 package com.fabbe50.fabsbnb;
 
+import com.fabbe50.fabsbnb.config.*;
 import dev.architectury.platform.Platform;
+import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class ModConfig {
-    public static ModConfig INSTANCE = new ModConfig();
     private static File configFile;
 
-    public boolean lavaSpongeEnabled = true;
-    public boolean lightEnabled = true;
-    public boolean pusherBlockEnabled = true;
-    public boolean felineAuraPotionEnabled = true;
-    public boolean felineAuraAffectsCreeper = true;
-    public boolean felineAuraAffectsPhantom = true;
-    public boolean veinMinerEnchantEnabled = true;
-    public boolean blockYoinkerEnabled = true;
-    public boolean buildingWandsEnabled = true;
-    public boolean whooshWandEnabled = true;
-    public boolean spiderClimbTagsEnabled = true;
+    private static final Map<String, IConfigOption<?, ?>> configOptions = new HashMap<>();
 
-    public int woodenBuildingWandRadius = 1;
-    public int stoneBuildingWandRadius = 2;
-    public int ironBuildingWandRadius = 7;
-    public int goldBuildingWandRadius = 5;
-    public int diamondBuildingWandRadius = 9;
-    public int netheriteBuildingWandRadius = 15;
+    public static BooleanOption debugMode = addConfig(new BooleanOption("debugMode", true));
 
-    public double whooshWandMultiplier = 3;
+    public static IntegerSliderOption woodenBuildingWandRadius = addConfig(new IntegerSliderOption("woodenBuildingWandRadius", 1, 1, 30));
+    public static IntegerSliderOption stoneBuildingWandRadius = addConfig(new IntegerSliderOption("stoneBuildingWandRadius", 2, 1, 30));
+    public static IntegerSliderOption ironBuildingWandRadius = addConfig(new IntegerSliderOption("ironBuildingWandRadius", 7, 1, 30));
+    public static IntegerSliderOption goldBuildingWandRadius = addConfig(new IntegerSliderOption("goldBuildingWandRadius", 5, 1, 30));
+    public static IntegerSliderOption diamondBuildingWandRadius = addConfig(new IntegerSliderOption("diamondBuildingWandRadius", 9, 1, 30));
+    public static IntegerSliderOption netheriteBuildingWandRadius = addConfig(new IntegerSliderOption("netheriteBuildingWandRadius", 15, 1, 30));
 
-    public double entityMoverBlockSpeed = 0.3;
+    public static DoubleOption whooshWandMultiplier = addConfig(new DoubleOption("whooshWandMultiplier", 3d, 1d, 50d));
+    public static IntegerOption whooshWandCooldown = addConfig(new IntegerOption("whooshWandCooldown", 5, 0, Integer.MAX_VALUE));
 
+    public static DoubleOption entityMoverBlockSpeed = addConfig(new DoubleOption("entityMoverBlockSpeed", 0.3d));
+
+    public static IntegerOption oreMinerMiningLimit = addConfig(new IntegerOption("oreMinerMiningLimit", 256, 1, Integer.MAX_VALUE));
+    public static IntegerOption treeChopperMiningLimit = addConfig(new IntegerOption("treeChopperMiningLimit", 256, 1, Integer.MAX_VALUE));
+    public static IntegerOption oneInNChanceToDropSpawnEgg = addConfig(new IntegerOption("oneInNChanceToDropSpawnEgg", 100, 1, Integer.MAX_VALUE));
 
     public static void register() {
         configFile = new File(Platform.getConfigFolder().toFile(), FabsBnB.MOD_ID + ".properties");
@@ -52,16 +51,11 @@ public class ModConfig {
             properties.load(fis);
             fis.close();
 
-            INSTANCE.woodenBuildingWandRadius = readInt(properties, "woodenBuildingWandRadius", 1);
-            INSTANCE.stoneBuildingWandRadius = readInt(properties, "stoneBuildingWandRadius", 2);
-            INSTANCE.ironBuildingWandRadius = readInt(properties, "ironBuildingWandRadius", 7);
-            INSTANCE.goldBuildingWandRadius = readInt(properties, "goldBuildingWandRadius", 5);
-            INSTANCE.diamondBuildingWandRadius = readInt(properties, "diamondBuildingWandRadius", 9);
-            INSTANCE.netheriteBuildingWandRadius = readInt(properties, "netheriteBuildingWandRadius", 15);
+            for (String key : configOptions.keySet()) {
+                IConfigOption<?, ?> config = configOptions.get(key);
+                config.readData(properties);
+            }
 
-            INSTANCE.whooshWandMultiplier = readDouble(properties, "whooshWandMultiplier", 3);
-
-            INSTANCE.entityMoverBlockSpeed = readDouble(properties, "entityMoverBlockSpeed", 0.3);
         } catch (IOException e) {
             try {
                 save(file);
@@ -75,42 +69,24 @@ public class ModConfig {
     public static void save(File file) throws IOException {
         FileOutputStream fos = new FileOutputStream(file, false);
 
-        writeData(fos, "woodenBuildingWandRadius", String.valueOf(INSTANCE.woodenBuildingWandRadius));
-        writeData(fos, "stoneBuildingWandRadius", String.valueOf(INSTANCE.stoneBuildingWandRadius));
-        writeData(fos, "ironBuildingWandRadius", String.valueOf(INSTANCE.ironBuildingWandRadius));
-        writeData(fos, "goldBuildingWandRadius", String.valueOf(INSTANCE.goldBuildingWandRadius));
-        writeData(fos, "diamondBuildingWandRadius", String.valueOf(INSTANCE.diamondBuildingWandRadius));
-        writeData(fos, "netheriteBuildingWandRadius", String.valueOf(INSTANCE.netheriteBuildingWandRadius));
-
-        writeData(fos, "whooshWandMultiplier", String.valueOf(INSTANCE.whooshWandMultiplier));
-
-        writeData(fos, "entityMoverBlockSpeed", String.valueOf(INSTANCE.entityMoverBlockSpeed));
+        for (String key : configOptions.keySet()) {
+            IConfigOption<?, ?> config = configOptions.get(key);
+            config.writeData(fos);
+        }
 
         fos.close();
     }
 
-    public static void writeData(FileOutputStream fos, String key, String value) throws IOException {
-        fos.write((key + "=" + value).getBytes());
-        fos.write("\n".getBytes());
+    private static <T, R extends AbstractConfigListEntry<T>, V extends IConfigOption<T, R>> V addConfig(V configOption) {
+        configOptions.put(configOption.getKey(), configOption);
+        return configOption;
     }
 
-    public static boolean readBoolean(Properties properties, String key, boolean defaultValue) {
-        return ((String)properties.computeIfAbsent(key, object -> String.valueOf(defaultValue))).equalsIgnoreCase("true");
+    public static <T> T getValue(String key) {
+        return ((IConfigOption<T, ?>) configOptions.get(key)).getValue();
     }
 
-    public static float readFloat(Properties properties, String key, float defaultValue) {
-        return Float.parseFloat((String) properties.computeIfAbsent(key, object -> String.valueOf(defaultValue)));
-    }
-
-    public static double readDouble(Properties properties, String key, double defaultValue) {
-        return Double.parseDouble((String) properties.computeIfAbsent(key, object -> String.valueOf(defaultValue)));
-    }
-
-    public static int readInt(Properties properties, String key, int defaultValue) {
-        return Integer.parseInt((String) properties.computeIfAbsent(key, object -> String.valueOf(defaultValue)));
-    }
-
-    public static String readString(Properties properties, String key, String defaultValue) {
-        return (String) properties.computeIfAbsent(key, object -> defaultValue);
+    public static Map<String, IConfigOption<?, ?>> getConfigOptions() {
+        return configOptions;
     }
 }

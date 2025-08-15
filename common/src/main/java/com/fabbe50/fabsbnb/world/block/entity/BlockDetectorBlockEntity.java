@@ -1,6 +1,6 @@
 package com.fabbe50.fabsbnb.world.block.entity;
 
-import com.fabbe50.fabsbnb.Utilities;
+import com.fabbe50.fabsbnb.util.Utilities;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;

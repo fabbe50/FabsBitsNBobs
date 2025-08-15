@@ -1,6 +1,6 @@
 package com.fabbe50.fabsbnb.neoforge.integration;
 
-import com.fabbe50.fabsbnb.Utilities;
+import com.fabbe50.fabsbnb.util.Utilities;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -25,9 +25,11 @@ public class Curios {
 
         @Override
         public void curioTick(SlotContext slotContext, ItemStack stack) {
-            LivingEntity livingEntity = slotContext.entity();
-            if (livingEntity != null) {
-                Utilities.clearMobEffects(livingEntity, false);
+            LivingEntity entity = slotContext.entity();
+            if (entity != null) {
+                if (Utilities.clearMobEffects(entity, false)) {
+                    Utilities.hurtItem(entity, stack);
+                }
             }
         }
     }

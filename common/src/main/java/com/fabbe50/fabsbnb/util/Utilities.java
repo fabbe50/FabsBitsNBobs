@@ -1,9 +1,8 @@
-package com.fabbe50.fabsbnb;
+package com.fabbe50.fabsbnb.util;
 
+import com.fabbe50.fabsbnb.ModConfig;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -31,12 +30,12 @@ import java.util.function.ToIntFunction;
 public class Utilities {
     public static int getRadiusFromTier(Tier tier) {
         return switch (tier) {
-            case Tiers.WOOD -> ModConfig.INSTANCE.woodenBuildingWandRadius;
-            case Tiers.STONE -> ModConfig.INSTANCE.stoneBuildingWandRadius;
-            case Tiers.IRON -> ModConfig.INSTANCE.ironBuildingWandRadius;
-            case Tiers.GOLD -> ModConfig.INSTANCE.goldBuildingWandRadius;
-            case Tiers.DIAMOND -> ModConfig.INSTANCE.diamondBuildingWandRadius;
-            case Tiers.NETHERITE -> ModConfig.INSTANCE.netheriteBuildingWandRadius;
+            case Tiers.WOOD -> ModConfig.woodenBuildingWandRadius.getValue();
+            case Tiers.STONE -> ModConfig.stoneBuildingWandRadius.getValue();
+            case Tiers.IRON -> ModConfig.ironBuildingWandRadius.getValue();
+            case Tiers.GOLD -> ModConfig.goldBuildingWandRadius.getValue();
+            case Tiers.DIAMOND -> ModConfig.diamondBuildingWandRadius.getValue();
+            case Tiers.NETHERITE -> ModConfig.netheriteBuildingWandRadius.getValue();
             default -> 1;
         };
     }
@@ -158,5 +157,9 @@ public class Utilities {
 
     public static Holder<Enchantment> getHolder(Level level, ResourceKey<Enchantment> enchantment) {
         return level.holderLookup(enchantment.registryKey()).getOrThrow(enchantment);
+    }
+
+    public static void hurtItem(LivingEntity entity, ItemStack stack) {
+        stack.hurtAndBreak(1, entity, entity.getEquipmentSlotForItem(stack));
     }
 }
