@@ -124,8 +124,6 @@ public class ModRegistries {
     }
 
     // Enchantments
-//    public static final RegistrySupplier<Enchantment> VEIN_MINER                                                        = ENCHANTMENTS.register(FabsBnB.location("vein_miner"), () -> new VeinMinerEnchant(Enchantment.Rarity.VERY_RARE, EquipmentSlot.MAINHAND));
-//    public static final RegistrySupplier<Enchantment> VEIN_MINER                                                        = ENCHANTMENTS.register(FabsBnB.location("vein_miner"), () -> Enchantment.enchantment(Enchantment.definition()));
     public static final ResourceKey<Enchantment> VEIN_MINER                                                             = ResourceKey.create(Registries.ENCHANTMENT, FabsBnB.location("vein_miner"));
     public static final ResourceKey<Enchantment> TREE_CHOPPER                                                           = ResourceKey.create(Registries.ENCHANTMENT, FabsBnB.location("tree_chopper"));
 
@@ -167,5 +165,7 @@ public class ModRegistries {
     public static final VeinMinerEnchant VEIN_MINER_ENCHANT                                                             = new VeinMinerEnchant(VEIN_MINER, ORE_MINER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.PICKAXES, ModConfig.oreMinerMiningLimit.getValue());
     public static final VeinMinerEnchant TREE_CHOPPER_ENCHANT                                                           = new VeinMinerEnchant(TREE_CHOPPER, TREE_CHOPPER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.AXES, ModConfig.treeChopperMiningLimit.getValue(), TREE_CHOPPER_ATTACHMENTS);
 
-    public static void init() {}
+    public static void init() {
+        FabsBnB.log("Setting up registry...");
+    }
 }

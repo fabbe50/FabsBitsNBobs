@@ -25,6 +25,8 @@ public class ModEmiPlugin implements EmiPlugin {
 
     @Override
     public void register(EmiRegistry emiRegistry) {
+        FabsBnB.log("EMI is loaded! Registering plugin...");
+
         emiRegistry.addCategory(CAULDRON_CONVERSION);
         emiRegistry.addWorkstation(CAULDRON_CONVERSION, CAULDRON);
 

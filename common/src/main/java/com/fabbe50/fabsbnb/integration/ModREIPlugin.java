@@ -30,6 +30,7 @@ public class ModREIPlugin implements REIClientPlugin {
 
     @Override
     public void registerDisplays(DisplayRegistry registry) {
+        FabsBnB.log("REI is loaded! Registering plugin displays...");
         Map<Item, Item> conversionMap = CauldronConversionData.getConversionMap();
         for (Item input : conversionMap.keySet()) {
             registry.add(new CauldronConversionDisplay(List.of(EntryIngredients.of(input)), List.of(EntryIngredients.of(conversionMap.get(input)))));
@@ -38,11 +39,13 @@ public class ModREIPlugin implements REIClientPlugin {
 
     @Override
     public void registerCategories(CategoryRegistry registry) {
+        FabsBnB.log("REI is loaded! Registering plugin categories...");
         registry.add(new CauldronConversionCategory());
     }
 
     @Override
     public void registerBasicEntryFiltering(BasicFilteringRule<?> rule) {
+        FabsBnB.log("REI is loaded! Registering plugin entry filtering...");
         rule.hide(() -> List.of(EntryStacks.of(ModRegistries.FULL_WATER_CAULDRON.get())));
     }
 

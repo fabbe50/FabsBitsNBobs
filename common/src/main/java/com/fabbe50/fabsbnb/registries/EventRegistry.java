@@ -16,6 +16,7 @@ import net.minecraft.world.level.Level;
 
 public class EventRegistry {
     public static void register() {
+        FabsBnB.log("Setting up events...");
         InteractionEvent.INTERACT_ENTITY.register((player, entity, interactionHand) -> {
             ItemStack usedStack = player.getItemInHand(interactionHand);
             if (entity instanceof Cat cat && usedStack.is(Items.SHEARS)) {

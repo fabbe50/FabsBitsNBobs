@@ -37,11 +37,13 @@ public class ModJEIPlugin implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
+        FabsBnB.log("JEI is loaded! Registering plugin categories...");
         registration.addRecipeCategories(cauldronRecipeCategory);
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
+        FabsBnB.log("JEI is loaded! Registering plugin recipes...");
         List<CauldronRecipe> cauldronRecipes = new ArrayList<>();
         Map<Item, Item> cauldronConversionMap = CauldronConversionData.getConversionMap();
         for (Item input : cauldronConversionMap.keySet()) {

@@ -36,8 +36,10 @@ public class ModConfig {
     public static IntegerOption oneInNChanceToDropSpawnEgg = addConfig(new IntegerOption("oneInNChanceToDropSpawnEgg", 100, 1, Integer.MAX_VALUE));
 
     public static void register() {
+        FabsBnB.log("Registering config...");
         configFile = new File(Platform.getConfigFolder().toFile(), FabsBnB.MOD_ID + ".properties");
         load(configFile);
+        FabsBnB.log("Config registered!");
     }
 
     public static File getConfigFile() {
@@ -46,6 +48,7 @@ public class ModConfig {
 
     public static void load(File file) {
         try {
+            FabsBnB.log("Loading config...");
             FileInputStream fis = new FileInputStream(file);
             Properties properties = new Properties();
             properties.load(fis);
@@ -56,6 +59,7 @@ public class ModConfig {
                 config.readData(properties);
             }
 
+            FabsBnB.log("Config loaded!");
         } catch (IOException e) {
             try {
                 save(file);
@@ -67,6 +71,7 @@ public class ModConfig {
     }
 
     public static void save(File file) throws IOException {
+        FabsBnB.log("Saving config...");
         FileOutputStream fos = new FileOutputStream(file, false);
 
         for (String key : configOptions.keySet()) {
@@ -75,6 +80,7 @@ public class ModConfig {
         }
 
         fos.close();
+        FabsBnB.log("Config saved!");
     }
 
     private static <T, R extends AbstractConfigListEntry<T>, V extends IConfigOption<T, R>> V addConfig(V configOption) {

@@ -1,9 +1,8 @@
 package com.fabbe50.fabsbnb;
 
 import com.fabbe50.fabsbnb.config.IConfigOption;
+import com.fabbe50.fabsbnb.util.LangUtils;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
-import me.shedaniel.clothconfig2.gui.entries.DoubleListEntry;
-import me.shedaniel.clothconfig2.gui.entries.IntegerSliderEntry;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
@@ -11,7 +10,7 @@ import java.io.IOException;
 
 public class ClothScreen {
     public static Screen getConfigScreen(Screen parent) {
-        Component title = Component.literal("Fab's Bits & Bobs");
+        Component title = LangUtils.MOD_NAME_C;
 
         var builder = ConfigBuilder.create()
                 .setParentScreen(parent)

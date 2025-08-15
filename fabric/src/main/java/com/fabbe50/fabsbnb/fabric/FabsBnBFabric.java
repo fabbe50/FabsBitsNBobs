@@ -10,9 +10,6 @@ import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistryBuilder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.Comparator;
-import java.util.List;
-
 public final class FabsBnBFabric implements ModInitializer {
     @Override
     public void onInitialize() {
@@ -25,6 +22,7 @@ public final class FabsBnBFabric implements ModInitializer {
 
         ItemGroupEvents.MODIFY_ENTRIES_ALL.register((creativeModeTab, fabricItemGroupEntries) -> {
             if (creativeModeTab.equals(ModRegistries.TAB.get())) {
+                FabsBnB.log("Setting up creative tab...");
                 for (RegistrySupplier<Item> item : ModRegistries.ITEM_LIST) {
                     ItemStack stack = new ItemStack(item.get());
                     if (!stack.isEmpty()) {
