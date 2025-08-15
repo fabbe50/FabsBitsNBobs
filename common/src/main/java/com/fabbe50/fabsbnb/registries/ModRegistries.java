@@ -14,6 +14,7 @@ import com.fabbe50.fabsbnb.world.inventory.BlockBreakerMenu;
 import com.fabbe50.fabsbnb.world.item.*;
 import com.fabbe50.fabsbnb.world.item.base.ModBlockItem;
 import com.fabbe50.fabsbnb.world.item.base.ModItem;
+import com.fabbe50.fabsbnb.world.item.enchantments.CapturingEnchant;
 import com.fabbe50.fabsbnb.world.item.enchantments.VeinMinerEnchant;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
@@ -126,6 +127,7 @@ public class ModRegistries {
     // Enchantments
     public static final ResourceKey<Enchantment> VEIN_MINER                                                             = ResourceKey.create(Registries.ENCHANTMENT, FabsBnB.location("vein_miner"));
     public static final ResourceKey<Enchantment> TREE_CHOPPER                                                           = ResourceKey.create(Registries.ENCHANTMENT, FabsBnB.location("tree_chopper"));
+    public static final ResourceKey<Enchantment> CAPTURING                                                              = ResourceKey.create(Registries.ENCHANTMENT, FabsBnB.location("capturing"));
 
     // Mob Effects
     public static final RegistrySupplier<MobEffect> FELINE_AURA                                                         = MOB_EFFECTS.register(FabsBnB.location("feline_aura"), () -> new MobEffectExt(MobEffectCategory.BENEFICIAL, 0x939918));
@@ -164,6 +166,7 @@ public class ModRegistries {
 
     public static final VeinMinerEnchant VEIN_MINER_ENCHANT                                                             = new VeinMinerEnchant(VEIN_MINER, ORE_MINER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.PICKAXES, ModConfig.oreMinerMiningLimit.getValue());
     public static final VeinMinerEnchant TREE_CHOPPER_ENCHANT                                                           = new VeinMinerEnchant(TREE_CHOPPER, TREE_CHOPPER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.AXES, ModConfig.treeChopperMiningLimit.getValue(), TREE_CHOPPER_ATTACHMENTS);
+    public static final CapturingEnchant CAPTURING_ENCHANT                                                              = new CapturingEnchant(CAPTURING, ItemTags.SWORD_ENCHANTABLE, ItemTags.SWORDS);
 
     public static void init() {
         FabsBnB.log("Setting up registry...");

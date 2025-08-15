@@ -58,6 +58,8 @@
   "enchantment.fabsbnb.vein_miner.desc": "Mines the entire ore vein and drops the items at the original block.",
   "enchantment.fabsbnb.tree_chopper": "Tree Chopper",
   "enchantment.fabsbnb.tree_chopper.desc": "Mines the entire tree stem and drops the items at the original block.",
+  "enchantment.fabsbnb.capturing": "Capturing",
+  "enchantment.fabsbnb.capturing.desc": "Adds a chance for mobs to drop their spawn eggs.",
 
   "fabsbnb.config.debug-mode": "Debug Mode",
   "fabsbnb.config.debug-mode.tooltip": "Shows more information in the log. NOTE: CAN BE SPAMMY",

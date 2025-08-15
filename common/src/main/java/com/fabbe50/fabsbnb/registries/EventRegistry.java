@@ -55,6 +55,16 @@ public class EventRegistry {
             }
             return EventResult.pass();
         });
+        EntityEvent.LIVING_DEATH.register((livingEntity, damageSource) -> {
+            if (damageSource.is(DamageTypes.PLAYER_ATTACK)) {
+                ItemStack stack = damageSource.getWeaponItem();
+                if (stack == null) {
+                    return EventResult.pass();
+                }
+                ModRegistries.CAPTURING_ENCHANT.handleEvent(livingEntity, stack);
+            }
+            return EventResult.pass();
+        });
         BlockEvent.BREAK.register((level, blockPos, blockState, serverPlayer, intValue) -> {
             if (ModRegistries.VEIN_MINER_ENCHANT.handleEvent(level, blockPos, blockState, serverPlayer)) {
                 return EventResult.interruptTrue();
