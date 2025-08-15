@@ -1,6 +1,8 @@
 package com.fabbe50.fabsbnb.fabric;
 
 import com.fabbe50.fabsbnb.FabsBnB;
+import com.fabbe50.fabsbnb.Platform;
+import com.fabbe50.fabsbnb.fabric.integration.Trinkets;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
 import com.fabbe50.fabsbnb.registries.PotionBrewingRecipes;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -32,5 +34,14 @@ public final class FabsBnBFabric implements ModInitializer {
             }
         });
         FabricBrewingRecipeRegistryBuilder.BUILD.register(PotionBrewingRecipes::register);
+
+        initIntegrations();
+    }
+
+    private void initIntegrations() {
+        if (Platform.isModLoaded("trinkets")) {
+            FabsBnB.log("Trinkets loaded! Registering trinkets...");
+            Trinkets.registerTrinkets();
+        }
     }
 }

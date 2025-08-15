@@ -65,6 +65,10 @@ subprojects {
             name = "Illusive Soulworks maven"
             url = "https://maven.theillusivec4.top/"
         }
+        maven {
+            name = "Ladysnake Libs"
+            url = 'https://maven.ladysnake.org/releases'
+        }
     }
 
     dependencies {
