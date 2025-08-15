@@ -1,6 +1,8 @@
 package com.fabbe50.fabsbnb.world.item;
 
+import com.fabbe50.fabsbnb.FabsBnB;
 import com.fabbe50.fabsbnb.ModConfig;
+import com.fabbe50.fabsbnb.util.LangUtils;
 import com.fabbe50.fabsbnb.util.Utilities;
 import com.fabbe50.fabsbnb.world.item.base.ModItem;
 import net.minecraft.ChatFormatting;
@@ -17,7 +19,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class WhooshWandItem extends ModItem {
 
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
+        FabsBnB.log(String.valueOf(ModConfig.debugMode.getValue()));
         if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
             if (!serverPlayer.getAbilities().instabuild) {
                 serverPlayer.getItemInHand(interactionHand).hurtAndBreak(1, serverPlayer, Utilities.convertInteractionHandToEquipmentSlot(interactionHand));
@@ -38,7 +40,10 @@ public class WhooshWandItem extends ModItem {
             serverPlayer.connection.send(new ClientboundSetEntityMotionPacket(player));
             player.resetFallDistance();
             level.playSound(null, player.blockPosition(), SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 0.5f, 0.125f);
-            player.getCooldowns().addCooldown(this, 5);
+            int cooldown = ModConfig.whooshWandCooldown.getValue();
+            if (cooldown > 0) {
+                player.getCooldowns().addCooldown(this, cooldown);
+            }
             return InteractionResultHolder.success(serverPlayer.getItemInHand(interactionHand));
         }
         return super.use(level, player, interactionHand);
@@ -47,7 +52,7 @@ public class WhooshWandItem extends ModItem {
     @Override
     public void appendHoverText(ItemStack itemStack, TooltipContext tooltipContext, List<Component> list, TooltipFlag tooltipFlag) {
         super.appendHoverText(itemStack, tooltipContext, list, tooltipFlag);
-        list.add(Component.translatable("item.fabsbnb.whoosh_wand.desc").withStyle(ChatFormatting.GRAY));
+        list.add(LangUtils.getDescription(this));
     }
 
     @Override

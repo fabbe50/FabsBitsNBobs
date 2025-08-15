@@ -1,8 +1,8 @@
 package com.fabbe50.fabsbnb.registries;
 
-import com.fabbe50.fabsbnb.Utilities;
+import com.fabbe50.fabsbnb.FabsBnB;
+import com.fabbe50.fabsbnb.util.Utilities;
 import com.fabbe50.fabsbnb.world.block.interfaces.ILeftClickable;
-import com.fabbe50.fabsbnb.world.item.enchantments.VeinMinerEnchant;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.*;
 import net.minecraft.world.InteractionHand;
@@ -64,6 +64,4 @@ public class EventRegistry {
             return EventResult.pass();
         });
     }
-
-
 }

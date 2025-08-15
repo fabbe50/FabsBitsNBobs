@@ -2,6 +2,7 @@ package com.fabbe50.fabsbnb.world.item;
 
 import com.fabbe50.fabsbnb.data.YoinkerData;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
+import com.fabbe50.fabsbnb.util.LangUtils;
 import com.fabbe50.fabsbnb.world.item.base.ModItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -126,12 +127,12 @@ public class BlockYoinkerItem extends ModItem {
         if (tooltipContext != null) {
             BlockState blockState = YoinkerData.getBlockState(tooltipContext.registries(), itemStack);
             if (blockState.getBlock() != Blocks.AIR) {
-                list.add(Component.translatable("item.fabsbnb.block_yoinker.contains", blockState.getBlock().arch$registryName()).withStyle(ChatFormatting.GRAY));
+                list.add(LangUtils.withValue(LangUtils.CONTAINS, LangUtils.getComponent(blockState)));
             } else {
-                list.add(Component.translatable("item.fabsbnb.block_yoinker.contains", Component.translatable("item.fabsbnb.block_yoinker.empty")).withStyle(ChatFormatting.GRAY));
+                list.add(LangUtils.withValue(LangUtils.CONTAINS, LangUtils.EMPTY_C));
             }
             list.add(Component.empty());
-            list.add(Component.translatable("item.fabsbnb.block_yoinker.desc").withStyle(ChatFormatting.DARK_PURPLE));
+            list.add(LangUtils.getDescription(this));
         }
     }
 

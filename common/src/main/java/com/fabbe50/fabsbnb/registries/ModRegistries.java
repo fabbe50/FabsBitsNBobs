@@ -1,7 +1,9 @@
 package com.fabbe50.fabsbnb.registries;
 
 import com.fabbe50.fabsbnb.FabsBnB;
-import com.fabbe50.fabsbnb.Utilities;
+import com.fabbe50.fabsbnb.ModConfig;
+import com.fabbe50.fabsbnb.util.LangUtils;
+import com.fabbe50.fabsbnb.util.Utilities;
 import com.fabbe50.fabsbnb.world.block.*;
 import com.fabbe50.fabsbnb.world.block.entity.BlockBreakerBlockEntity;
 import com.fabbe50.fabsbnb.world.block.entity.BlockDetectorBlockEntity;
@@ -149,7 +151,7 @@ public class ModRegistries {
     }
 
     // Creative Tabs
-    public static final RegistrySupplier<CreativeModeTab> TAB                                                           = TABS.register(FabsBnB.location("tab"), () -> CreativeTabRegistry.create(Component.translatable("category.fabsbnb.tab"), () -> new ItemStack(DIAMOND_BUILDING_WAND.get())));
+    public static final RegistrySupplier<CreativeModeTab> TAB                                                           = TABS.register(FabsBnB.location("tab"), () -> CreativeTabRegistry.create(LangUtils.MOD_NAME_C, () -> new ItemStack(DIAMOND_BUILDING_WAND.get())));
 
     // Menu Types
     public static final RegistrySupplier<MenuType<BlockBreakerMenu>> BLOCK_BREAKER_MENU                                 = MENU_TYPES.register(FabsBnB.location("block_breaker_menu"), () -> MenuRegistry.of(BlockBreakerMenu::new));
@@ -160,6 +162,7 @@ public class ModRegistries {
     public static final TagKey<Block> SPIDER_NOT_CLIMBABLE                                                              = TagKey.create(Registries.BLOCK, FabsBnB.location("spider_not_climbable"));
     public static final TagKey<Block> ORE_MINER_WHITELIST                                                               = TagKey.create(Registries.BLOCK, FabsBnB.location("ore_miner_whitelist"));
     public static final TagKey<Block> TREE_CHOPPER_WHITELIST                                                            = TagKey.create(Registries.BLOCK, FabsBnB.location("tree_chopper_whitelist"));
+    public static final TagKey<Block> TREE_CHOPPER_ATTACHMENTS                                                          = TagKey.create(Registries.BLOCK, FabsBnB.location("tree_chopper_attachments"));
 
     public static final VeinMinerEnchant VEIN_MINER_ENCHANT                                                             = new VeinMinerEnchant(VEIN_MINER, ORE_MINER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.PICKAXES, ModConfig.oreMinerMiningLimit.getValue());
     public static final VeinMinerEnchant TREE_CHOPPER_ENCHANT                                                           = new VeinMinerEnchant(TREE_CHOPPER, TREE_CHOPPER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.AXES, ModConfig.treeChopperMiningLimit.getValue(), TREE_CHOPPER_ATTACHMENTS);

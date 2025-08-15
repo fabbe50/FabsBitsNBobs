@@ -2,6 +2,7 @@ package com.fabbe50.fabsbnb.world.block.entity;
 
 import com.fabbe50.fabsbnb.FabsBnB;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
+import com.fabbe50.fabsbnb.util.LangUtils;
 import com.fabbe50.fabsbnb.world.inventory.BlockPlacerMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -64,7 +65,7 @@ public class BlockPlacerBlockEntity extends RandomizableContainerBlockEntity {
 
     @Override
     protected @NotNull Component getDefaultName() {
-        return Component.translatable(FabsBnB.translation("container.block_placer"));
+        return LangUtils.getContainerComponent("block_placer");
     }
 
     @Override

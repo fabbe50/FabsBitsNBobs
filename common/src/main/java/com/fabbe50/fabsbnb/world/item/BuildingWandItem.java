@@ -1,5 +1,6 @@
 package com.fabbe50.fabsbnb.world.item;
 
+import com.fabbe50.fabsbnb.util.LangUtils;
 import com.fabbe50.fabsbnb.util.Utilities;
 import com.fabbe50.fabsbnb.world.item.base.ModTieredItem;
 import net.minecraft.ChatFormatting;
@@ -66,7 +67,7 @@ public class BuildingWandItem extends ModTieredItem {
                         tag.putString("setBlock", blockKey.location().toString());
                         stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
                         player.setItemInHand(useOnContext.getHand(), stack);
-                        ((ServerPlayer)player).sendSystemMessage(Component.translatable("item.fabsbnb.building-wand.set-block", Component.literal(blockKey.location().toString()).withStyle(ChatFormatting.GOLD)), true);
+                        ((ServerPlayer)player).sendSystemMessage(LangUtils.withValue(SET_BLOCK_KEY, LangUtils.getComponent(state)), true);
                         return InteractionResult.SUCCESS;
                     }
                 }
@@ -109,7 +110,7 @@ public class BuildingWandItem extends ModTieredItem {
                                     int slot = player.getInventory().findSlotMatchingItem(new ItemStack(blockToPlace.asItem()));
                                     player.getInventory().removeItem(slot, 1);
                                 } else {
-                                    ((ServerPlayer) player).sendSystemMessage(Component.translatable("item.fabsbnb.building-wand.not-enough-blocks").withStyle(ChatFormatting.RED), true);
+                                    ((ServerPlayer) player).sendSystemMessage(LangUtils.error(NOT_ENOUGH_BLOCKS_ABORT), true);
                                     return;
                                 }
                             }
@@ -149,7 +150,7 @@ public class BuildingWandItem extends ModTieredItem {
                     fuzzy = true;
                 }
                 tag.putBoolean("fuzzy", fuzzy);
-                ((ServerPlayer) player).sendSystemMessage(Component.translatable("text.fabsbnb.building_wand.fuzzy-toggle", fuzzy ? Component.translatable("text.true").withStyle(ChatFormatting.GREEN) : Component.translatable("text.false").withStyle(ChatFormatting.RED)), true);
+                ((ServerPlayer) player).sendSystemMessage(LangUtils.conditionWithStyle(FUZZY_TOGGLE, fuzzy), true);
 
                 stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
                 player.setItemInHand(interactionHand, stack);
@@ -164,7 +165,7 @@ public class BuildingWandItem extends ModTieredItem {
         super.appendHoverText(itemStack, tooltipContext, list, tooltipFlag);
 
         CompoundTag tag = itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-        String blockSelected = "EMPTY";
+        String blockSelected = LangUtils.EMPTY;
         if (tag.contains("setBlock")) {
             blockSelected = tag.getString("setBlock");
         }
@@ -173,7 +174,13 @@ public class BuildingWandItem extends ModTieredItem {
             fuzzy = tag.getBoolean("fuzzy");
         }
 
-        list.add(Component.translatable("item.fabsbnb.building_wand.tooltip.block", Component.literal(blockSelected).withStyle(ChatFormatting.GOLD)).withStyle(ChatFormatting.GRAY));
-        list.add(Component.translatable("text.fabsbnb.building_wand.fuzzy-toggle", fuzzy ? Component.translatable("text.true").withStyle(ChatFormatting.GREEN) : Component.translatable("text.false").withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.GRAY));
+        list.add(LangUtils.withValue(SELECTED_BLOCK_KEY, blockSelected));
+        list.add(LangUtils.conditionWithStyle(FUZZY_TOGGLE, fuzzy));
     }
+
+    public static final String SELECTED_BLOCK_KEY = LangUtils.getTextKey("building_wand.selected_block");
+    public static final String SET_BLOCK_KEY = LangUtils.getTextKey("building_wand.set_block");
+    public static final String NOT_ENOUGH_BLOCKS_ABORT = LangUtils.getTextKey("building_wand.not_enough_blocks.abort");
+    public static final String NOT_ENOUGH_BLOCKS_INVENTORY = LangUtils.getTextKey("building_wand.not_enough_blocks.inventory");
+    public static final String FUZZY_TOGGLE = LangUtils.getTextKey("building_wand.fuzzy_toggle");
 }

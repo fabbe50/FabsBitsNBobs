@@ -1,6 +1,7 @@
 package com.fabbe50.fabsbnb.world.block;
 
 import com.fabbe50.fabsbnb.FabsBnB;
+import com.fabbe50.fabsbnb.util.LangUtils;
 import com.fabbe50.fabsbnb.world.block.base.ExtBaseEntityBlock;
 import com.fabbe50.fabsbnb.world.block.entity.BlockDetectorBlockEntity;
 import com.mojang.serialization.MapCodec;
@@ -62,7 +63,7 @@ public class BlockDetectorBlock extends ExtBaseEntityBlock {
                         detectorBlockEntity.setStateToCheckFor(blockInFront);
                         ResourceLocation location = blockInFront.getBlock().arch$registryName();
                         if (location != null) {
-                            serverPlayer.sendSystemMessage(Component.translatable(FabsBnB.translation("detector.set"), Component.literal(location.toString())), true);
+                            serverPlayer.sendSystemMessage(LangUtils.withValue(LangUtils.getTextKey("detector.set"), LangUtils.getBlockKey(blockInFront)), true);
                         }
                         this.checkConditionsAndUpdate(blockState, level, blockPos);
                         return InteractionResult.SUCCESS;
@@ -70,11 +71,11 @@ public class BlockDetectorBlock extends ExtBaseEntityBlock {
                 } else {
                     BlockState stateToCheckFor = detectorBlockEntity.getStateToCheckFor();
                     if (stateToCheckFor == null) {
-                        serverPlayer.sendSystemMessage(Component.translatable(FabsBnB.translation("detector.info"), Component.translatable("item.fabsbnb.block_yoinker.empty")), true);
+                        serverPlayer.sendSystemMessage(LangUtils.withValue(LangUtils.getTextKey("detector.info"), LangUtils.EMPTY), true);
                     } else {
                         ResourceLocation location = stateToCheckFor.getBlock().arch$registryName();
                         if (location != null) {
-                            serverPlayer.sendSystemMessage(Component.translatable(FabsBnB.translation("detector.info"), Component.literal(location.toString())), true);
+                            serverPlayer.sendSystemMessage(LangUtils.withValue(LangUtils.getTextKey("detector.info"), LangUtils.getComponent(stateToCheckFor)), true);
                         }
                     }
                 }

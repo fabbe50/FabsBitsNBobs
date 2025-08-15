@@ -21,24 +21,16 @@ public final class FabsBnB {
         EventRegistry.register();
     }
 
-    public static Component translatable(String key) {
-        return Component.translatable(translation(key));
     public static ResourceLocation location(String owner, String name) {
         return ResourceLocation.fromNamespaceAndPath(owner, name);
     }
 
-    public static Component translatable(String key, Object value) {
-        return Component.translatable(translation(key), value);
     public static ResourceLocation location(String name) {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, name);
     }
 
-    public static Component translatable(String key, Object value, ChatFormatting formatting) {
-        return Component.translatable(translation(key), value).withStyle(formatting);
     }
 
-    public static String translation(String key) {
-        return MOD_ID + "." + key;
     }
 
     }

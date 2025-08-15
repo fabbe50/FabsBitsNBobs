@@ -1,6 +1,7 @@
 package com.fabbe50.fabsbnb.world.block;
 
 import com.fabbe50.fabsbnb.registries.ModRegistries;
+import com.fabbe50.fabsbnb.util.LangUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -51,6 +52,6 @@ public class LavaUsedSpongeBlock extends CustomUsedSpongeBlock {
     @Override
     public void appendHoverText(ItemStack itemStack, Item.TooltipContext tooltipContext, List<Component> list, TooltipFlag tooltipFlag) {
         super.appendHoverText(itemStack, tooltipContext, list, tooltipFlag);
-        list.add(Component.translatable("block.fabsbnb.lava_sponge_used.tooltip").withStyle(ChatFormatting.DARK_PURPLE));
+        list.add(LangUtils.getDescription(this));
     }
 }

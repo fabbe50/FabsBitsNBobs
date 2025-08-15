@@ -1,6 +1,7 @@
 package com.fabbe50.fabsbnb.world.block;
 
 import com.fabbe50.fabsbnb.FabsBnB;
+import com.fabbe50.fabsbnb.util.LangUtils;
 import com.fabbe50.fabsbnb.util.Utilities;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
 import com.fabbe50.fabsbnb.world.block.base.ExtBaseEntityBlock;
@@ -83,7 +84,7 @@ public class XPHolderBlock extends ExtBaseEntityBlock implements ILeftClickable 
             if (blockEntity instanceof XPHolderBlockEntity xpHolder) {
                 if (player.getItemInHand(interactionHand).is(Items.REDSTONE_TORCH)) {
                     boolean collectXP = xpHolder.toggleCollectXP();
-                    ((ServerPlayer) player).sendSystemMessage(FabsBnB.translatable("xp_holder.collect", collectXP ? Component.translatable("text.true") : Component.translatable("text.false")), true);
+                    ((ServerPlayer) player).sendSystemMessage(LangUtils.conditionWithStyle(LangUtils.getTextKey("xp_holder.collect"), collectXP), true);
                     return ItemInteractionResult.SUCCESS;
                 }
             }
@@ -189,7 +190,7 @@ public class XPHolderBlock extends ExtBaseEntityBlock implements ILeftClickable 
         if (!blockEntityData.isEmpty()) {
             CompoundTag tag = blockEntityData.copyTag();
             if (tag.contains("xp")) {
-                list.add(FabsBnB.translatable("xp_holder.stored_level", Utilities.getLevelFromTotalExperience(tag.getInt("xp")), ChatFormatting.GRAY));
+                list.add(LangUtils.withValue(LangUtils.getTextKey("xp_holder.stored_level"), String.valueOf(Utilities.getLevelFromTotalExperience(tag.getInt("xp")))));
             }
         }
     }

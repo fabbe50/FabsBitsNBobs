@@ -41,7 +41,7 @@ public class BlockBreakerBlockEntity extends RandomizableContainerBlockEntity {
 
     @Override
     protected @NotNull Component getDefaultName() {
-        return Component.translatable(FabsBnB.translation("container.block_breaker"));
+        return LangUtils.getContainerComponent("block_breaker");
     }
 
     @Override
