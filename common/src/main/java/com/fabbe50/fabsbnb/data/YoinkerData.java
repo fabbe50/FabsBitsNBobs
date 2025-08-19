@@ -20,7 +20,6 @@ public class YoinkerData {
     private static final String YOINKED_BLOCK_DATA_KEY = "yoinkBlockData";
 
     public static void clearData(ItemStack yoinker) {
-        setBlockState(yoinker, Blocks.AIR.defaultBlockState());
         CompoundTag tag = getCompoundTag(yoinker);
         if (tag.contains(YOINKED_BLOCK_KEY)) {
             tag.remove(YOINKED_BLOCK_KEY);
@@ -31,6 +30,8 @@ public class YoinkerData {
         if (tag.contains("blockEntity")) {
             tag.remove("blockEntity");
         }
+        saveCompoundTag(yoinker, tag);
+        setBlockState(yoinker, Blocks.AIR.defaultBlockState());
     }
 
     public static void setBlockState(ItemStack yoinker, BlockState blockState) {
@@ -53,6 +54,14 @@ public class YoinkerData {
             }
         }
         return Blocks.AIR.defaultBlockState();
+    }
+
+    public static boolean doesYoinkerContainBlock(ItemStack yoinker) {
+        CompoundTag tag = getCompoundTag(yoinker);
+        if (tag.contains(YOINKED_BLOCK_KEY)) {
+            return tag.getString(YOINKED_BLOCK_KEY).equals("minecraft:air");
+        }
+        return false;
     }
 
     public static boolean hasData(ItemStack yoinker) {

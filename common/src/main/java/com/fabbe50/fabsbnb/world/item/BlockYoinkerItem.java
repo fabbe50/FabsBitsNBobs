@@ -4,7 +4,6 @@ import com.fabbe50.fabsbnb.data.YoinkerData;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
 import com.fabbe50.fabsbnb.util.LangUtils;
 import com.fabbe50.fabsbnb.world.item.base.ModItem;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -13,8 +12,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.Container;
-import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -23,10 +20,8 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -118,7 +113,7 @@ public class BlockYoinkerItem extends ModItem {
 
     @Override
     public boolean isFoil(ItemStack itemStack) {
-        return YoinkerData.hasData(itemStack);
+        return !YoinkerData.doesYoinkerContainBlock(itemStack);
     }
 
     @Override
