@@ -71,7 +71,8 @@ public class ModBlockTags extends BlockTagsProvider {
 
         tag(BlockTags.MINEABLE_WITH_HOE)
                 .add(ModRegistries.LAVA_SPONGE.get())
-                .add(ModRegistries.LAVA_SPONGE_USED.get());
+                .add(ModRegistries.LAVA_SPONGE_USED.get())
+                .add(Blocks.CACTUS);
 
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(ModRegistries.PUSHER_BLOCK.get())
@@ -80,6 +81,7 @@ public class ModBlockTags extends BlockTagsProvider {
                 .add(ModRegistries.BLOCK_BREAKER.get())
                 .add(ModRegistries.BLOCK_PLACER.get())
                 .add(ModRegistries.BLOCK_DETECTOR.get())
-                .add(ModRegistries.XP_HOLDER.get());
+                .add(ModRegistries.XP_HOLDER.get())
+                .add(Blocks.GLOWSTONE);
     }
 }
