@@ -198,6 +198,18 @@ public class Recipes extends RecipeProvider {
                 .unlockedBy("has_chocolate_milk", has(ModRegistries.CHOCOLATE_MILK_BOTTLE.get()))
                 .group(FabsBnB.MOD_ID + "chocolate_necklace")
                 .save(recipeOutput);
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.PITCHER_POD, 2)
+                .requires(Items.PITCHER_PLANT)
+                .requires(Items.SAND)
+                .unlockedBy("has_pitcher_plant", has(Items.PITCHER_PLANT))
+                .group(FabsBnB.MOD_ID + "pitcher_pod_from_plant")
+                .save(recipeOutput);
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.TORCHFLOWER_SEEDS, 2)
+                .requires(Items.TORCHFLOWER)
+                .requires(Items.SAND)
+                .unlockedBy("has_torch_flower", has(Items.TORCHFLOWER))
+                .group(FabsBnB.MOD_ID + "torch_flower_seeds_from_plant")
+                .save(recipeOutput);
     }
 
     private SmithingTransformRecipeBuilder smithingNoTemplate(Item output, Item base, Item addition) {
