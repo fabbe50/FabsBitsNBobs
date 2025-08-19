@@ -1,5 +1,6 @@
 package com.fabbe50.fabsbnb.world.item.enchantments;
 
+import com.fabbe50.fabsbnb.FabsBnB;
 import com.fabbe50.fabsbnb.util.Utilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -7,11 +8,13 @@ import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -25,6 +28,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -64,15 +68,19 @@ public class VeinMinerEnchant implements IEnchantment {
         return Enchantment.definition(itemHolder.getOrThrow(supportedTools), itemHolder.getOrThrow(primaryTools), 1, 1, Enchantment.constantCost(15), Enchantment.constantCost(65), 10, EquipmentSlotGroup.HAND);
     }
 
-    public boolean handleEvent(Level level, BlockPos blockPos, BlockState blockState, ServerPlayer serverPlayer) {
-        if (serverPlayer.isShiftKeyDown()) {
-            return false;
+    public boolean handleEvent(Level level, BlockPos blockPos, BlockState blockState, @Nullable ServerPlayer serverPlayer, ItemStack stack) {
+        FabsBnB.debug("Running Vein-miner of type: " + enchantmentKey);
+        if (serverPlayer != null) {
+            if (serverPlayer.isShiftKeyDown()) {
+                FabsBnB.debug("Playing is holding shift key, aborting event.");
+                return false;
+            }
         }
-        ItemStack stack = serverPlayer.getItemInHand(InteractionHand.MAIN_HAND);
         if (stack.is(primaryTools) || stack.is(supportedTools)) {
             Holder<Enchantment> enchantmentHolder = Utilities.getHolder(level, enchantmentKey);
             if (EnchantmentHelper.getItemEnchantmentLevel(enchantmentHolder, stack) > 0) {
                 if (!blockState.is(blockFilter)) {
+                    FabsBnB.debug("Block isn't on vein-miner whitelist. Aborting...");
                     return false;
                 }
                 int range = 2;
@@ -92,8 +100,10 @@ public class VeinMinerEnchant implements IEnchantment {
                     Set<BlockPos> matched = BlockPos.betweenClosedStream(pos.offset(-range, -range, -range), pos.offset(range, range, range))
                             .filter(aPos -> {
                                 BlockState state = level.getBlockState(aPos);
-                                if (state.is(this.requiredAttachments)) {
-                                    valid.set(true);
+                                if (hasRequiredAttachments) {
+                                    if (state.is(this.requiredAttachments)) {
+                                        valid.set(true);
+                                    }
                                 }
                                 if (this.fuzzy) {
                                     return state.is(blockFilter);
@@ -111,7 +121,9 @@ public class VeinMinerEnchant implements IEnchantment {
                                 toCheck.add(match);
                             }
                         } else {
+                            FabsBnB.debug("Reached vein-mining limit.");
                             if (valid.get()) {
+                                FabsBnB.debug("Vein-mining conditions valid. Attempting to break blocks...");
                                 breakBlocks(level, blockPos, found, serverPlayer, stack);
                                 return true;
                             }
@@ -119,11 +131,13 @@ public class VeinMinerEnchant implements IEnchantment {
                     }
                 }
                 if (valid.get()) {
+                    FabsBnB.debug("Vein-mining conditions valid. Attempting to break blocks...");
                     breakBlocks(level, blockPos, found, serverPlayer, stack);
                     return true;
                 }
             }
         }
+        FabsBnB.debug("Incorrect tool for vein-mining. Aborting...");
         return false;
     }
 
@@ -131,19 +145,18 @@ public class VeinMinerEnchant implements IEnchantment {
         List<ItemStack> drops = new ArrayList<>();
         for (BlockPos pos : positions) {
             BlockState state = level.getBlockState(pos);
-            GameType type = player.getAbilities().instabuild ? GameType.CREATIVE : GameType.SURVIVAL;
             BlockEntity blockEntity = level.getBlockEntity(pos);
             Block block = state.getBlock();
-            if (block instanceof GameMasterBlock && !player.canUseGameMasterBlocks()) {
+            if (checkGameMasterCondition(block, player)) {
                 level.sendBlockUpdated(pos, state, state, 3);
                 continue;
             }
-            if (player.blockActionRestricted(level, pos, type)) {
+            if (checkGameTypeCondition(player, level, pos)) {
                 continue;
             }
-            if (!player.getAbilities().instabuild) {
+            if (!isPlayerInstaBuild(player)) {
                 drops.addAll(state.getDrops(new LootParams.Builder((ServerLevel) level).withParameter(LootContextParams.TOOL, stack).withParameter(LootContextParams.ORIGIN, pos.getCenter())));
-                stack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
+                Utilities.hurtItem(1, (ServerLevel) level, stack, pos);
             }
             if (blockEntity != null) {
                 level.removeBlockEntity(pos);
@@ -158,5 +171,28 @@ public class VeinMinerEnchant implements IEnchantment {
         }
     }
 
+    private boolean checkGameMasterCondition(Block block, ServerPlayer player) {
+        if (block instanceof GameMasterBlock) {
+            if (player == null) {
+                return false;
+            }
+            return !player.canUseGameMasterBlocks();
+        }
+        return false;
+    }
 
+    private boolean checkGameTypeCondition(ServerPlayer player, Level level, BlockPos pos) {
+        if (player == null) {
+            return false;
+        }
+        GameType type = isPlayerInstaBuild(player) ? GameType.CREATIVE : GameType.SURVIVAL;
+        return player.blockActionRestricted(level, pos, type);
+    }
+
+    private boolean isPlayerInstaBuild(ServerPlayer player) {
+        if (player == null) {
+            return false;
+        }
+        return player.getAbilities().instabuild;
+    }
 }

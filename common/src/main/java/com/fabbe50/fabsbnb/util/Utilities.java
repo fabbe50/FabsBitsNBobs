@@ -1,6 +1,7 @@
 package com.fabbe50.fabsbnb.util;
 
 import com.fabbe50.fabsbnb.ModConfig;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
@@ -8,6 +9,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -159,7 +162,15 @@ public class Utilities {
         return level.holderLookup(enchantment.registryKey()).getOrThrow(enchantment);
     }
 
+    public static void hurtItem(int i, ServerLevel level, ItemStack stack, BlockPos pos) {
+        stack.hurtAndBreak(i, level, null, item -> level.playSeededSound(null, pos.getX(), pos.getY(), pos.getZ(), item.getBreakingSound(), SoundSource.BLOCKS, 1, 0.5f, 1));
+    }
+
     public static void hurtItem(LivingEntity entity, ItemStack stack) {
-        stack.hurtAndBreak(1, entity, entity.getEquipmentSlotForItem(stack));
+        hurtItem(1, entity, stack);
+    }
+
+    public static void hurtItem(int i, LivingEntity entity, ItemStack stack) {
+        stack.hurtAndBreak(i, entity, entity.getEquipmentSlotForItem(stack));
     }
 }

@@ -66,13 +66,22 @@ public class EventRegistry {
             return EventResult.pass();
         });
         BlockEvent.BREAK.register((level, blockPos, blockState, serverPlayer, intValue) -> {
-            if (ModRegistries.VEIN_MINER_ENCHANT.handleEvent(level, blockPos, blockState, serverPlayer)) {
-                return EventResult.interruptTrue();
-            }
-            if (ModRegistries.TREE_CHOPPER_ENCHANT.handleEvent(level, blockPos, blockState, serverPlayer)) {
+            if (handleCustomMiningEnchantments(level, blockPos, blockState, serverPlayer)) {
                 return EventResult.interruptTrue();
             }
             return EventResult.pass();
         });
+
+    public static boolean handleCustomMiningEnchantments(Level level, BlockPos blockPos, BlockState blockState, ServerPlayer serverPlayer) {
+        ItemStack stack = serverPlayer.getItemInHand(InteractionHand.MAIN_HAND);
+        return handleCustomMiningEnchantments(level, blockPos, blockState, serverPlayer, stack);
+    }
+
+    public static boolean handleCustomMiningEnchantments(Level level, BlockPos blockPos, BlockState blockState, ItemStack stack) {
+        return handleCustomMiningEnchantments(level, blockPos, blockState, null, stack);
+    }
+
+    public static boolean handleCustomMiningEnchantments(Level level, BlockPos blockPos, BlockState blockState, ServerPlayer serverPlayer, ItemStack stack) {
+        return ModRegistries.TREE_CHOPPER_ENCHANT.handleEvent(level, blockPos, blockState, serverPlayer, stack) || ModRegistries.VEIN_MINER_ENCHANT.handleEvent(level, blockPos, blockState, serverPlayer, stack);
     }
 }
