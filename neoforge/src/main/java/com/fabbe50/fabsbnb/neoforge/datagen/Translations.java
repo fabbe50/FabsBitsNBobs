@@ -1,6 +1,8 @@
 package com.fabbe50.fabsbnb.neoforge.datagen;
 
 import com.fabbe50.fabsbnb.FabsBnB;
+import com.fabbe50.fabsbnb.ModConfig;
+import com.fabbe50.fabsbnb.config.IConfigOption;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
 import com.fabbe50.fabsbnb.util.LangUtils;
 import com.mojang.datafixers.util.Pair;
@@ -64,6 +66,7 @@ public class Translations extends LanguageProvider {
         addText("detector.info", "Right click with a redstone torch when the block you want to target is in front of the detector. Current Target: %s");
         addText("xp_holder.collect", "Collect XP Mode: %s");
         addText("xp_holder.stored_level", "Stored Levels: %s");
+        addText("value.blocks", "%s Blocks");
 
         // Effects & Potions
         add(ModRegistries.FELINE_AURA.get(), "Feline Aura");
@@ -77,7 +80,31 @@ public class Translations extends LanguageProvider {
         addEnchantment("capturing", "Capturing", "Adds a chance for mobs to drop their spawn eggs.");
 
         // Config
+        addConfig(ModConfig.debugMode, "Debug Mode", "Shows more information in the log. NOTE: CAN BE SPAMMY");
+        addConfig(ModConfig.woodenBuildingWandRadius, "Wooden Building Wand Radius", "The radius of which the building wand will place block in.");
+        addConfig(ModConfig.stoneBuildingWandRadius, "Stone Building Wand Radius", "The radius of which the building wand will place block in.");
+        addConfig(ModConfig.ironBuildingWandRadius, "Iron Building Wand Radius", "The radius of which the building wand will place block in.");
+        addConfig(ModConfig.goldBuildingWandRadius, "Golden Building Wand Radius", "The radius of which the building wand will place block in.");
+        addConfig(ModConfig.diamondBuildingWandRadius, "Diamond Building Wand Radius", "The radius of which the building wand will place block in.");
+        addConfig(ModConfig.netheriteBuildingWandRadius, "Netherite Building Wand Radius", "The radius of which the building wand will place block in.");
+        addConfig(ModConfig.whooshWandMultiplier, "Whoosh Wand Movement Multiplier", "The multiplier for the boost the whoosh wand gives you.");
+        addConfig(ModConfig.whooshWandCooldown, "Whoosh Wand Cooldown", "The cooldown applied to the wand after each use.");
+        addConfig(ModConfig.entityMoverBlockSpeed, "Pusher Block Speed Multiplier", "The multiplier for the speed addon calculation. [{current speed} + ({multiplier} * 1.5)]");
+        addConfig(ModConfig.oreMinerMiningLimit, "Ore Miner Limit", "The amount of blocks the ore miner enchantment is allowed to mine. NOTE: LARGE NUMBERS CAN CAUSE LAG");
+        addConfig(ModConfig.treeChopperMiningLimit, "Tree Chopper Limit", "The amount of blocks the tree chopper enchantment is allowed to harvest. NOTE: LARGE NUMBERS CAN CAUSE LAG");
+        addConfig(ModConfig.oneInNChanceToDropSpawnEgg, "1 in n chance to drop spawn egg",
+                "The 1 in n chance for a spawn egg to drop when killed with capturing enchantment.",
+                "Note: n is divided by the level of the enchantment. For example 'n=100' would result in a 1/33 chance at level 3."
+        );
 
+        // Misc
+        add("emi.category.fabsbnb.cauldron_conversion", "Cauldron Conversation");
+        add("tag.item.fabsbnb.building_wands", "Building Wands");
+        add("tag.item.c.netherite_items", "Netherite Items");
+        add("tag.item.curios.necklace", "Necklace");
+        add("tag.item.fabsbnb.immune_to_cactus", "Immune to Cactus");
+        add("jei.category.fabsbnb.cauldron_conversion", "Cauldron Conversation");
+        add("fabsbnb.cauldron_conversion", "Cauldron Conversation");
     }
 
     public void addText(String simpleKey, String translation) {
@@ -125,5 +152,16 @@ public class Translations extends LanguageProvider {
     public void addEnchantment(String name, String translation, String description) {
         add("enchantment." + FabsBnB.MOD_ID + "." + name, translation);
         add("enchantment." + FabsBnB.MOD_ID + "." + name + ".desc", description);
+    }
+
+    public <V extends IConfigOption<?, ?>> void addConfig(V config, String translation, String... description) {
+        addConfig(config.getKey(), translation, description);
+    }
+
+    public void addConfig(String name, String translation, String... description) {
+        add(LangUtils.getConfigKey(name), translation);
+        for (int i = 0; i < description.length; i++) {
+            add(LangUtils.getConfigTooltipKey(name, i), description[i]);
+        }
     }
 }
