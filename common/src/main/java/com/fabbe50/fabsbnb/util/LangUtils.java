@@ -14,6 +14,7 @@ public class LangUtils {
     public static final String TRUE = LangUtils.getTextKey("true");
     public static final String FALSE = LangUtils.getTextKey("false");
     public static final String CONTAINS = LangUtils.getTextKey("contains");
+    public static final String VALUE_BLOCKS = LangUtils.getTextKey("value.blocks");
 
     public static final Component MOD_NAME_C = Component.translatable(MOD_NAME);
     public static final Component EMPTY_C = Component.translatable(EMPTY);

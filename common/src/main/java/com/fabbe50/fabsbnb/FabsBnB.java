@@ -20,6 +20,7 @@ public final class FabsBnB {
 
     public static void init() {
         log("Initializing Fab's Bits & Bobs...");
+
         // Write common init code here.
         ModConfig.register();
         ModRegistries.init();
@@ -40,7 +41,7 @@ public final class FabsBnB {
 
     public static void debug(String msg) {
         if (ModConfig.debugMode.getValue()) {
-            LOGGER.debug(msg);
+            LOGGER.info("[DEBUG] {}", msg);
         }
     }
 

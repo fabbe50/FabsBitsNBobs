@@ -3,6 +3,7 @@ package com.fabbe50.fabsbnb.integration;
 import com.fabbe50.fabsbnb.FabsBnB;
 import com.fabbe50.fabsbnb.data.CauldronConversionData;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
+import com.fabbe50.fabsbnb.util.LangUtils;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.entry.filtering.base.BasicFilteringRule;
@@ -57,7 +58,7 @@ public class ModREIPlugin implements REIClientPlugin {
 
         @Override
         public Component getTitle() {
-            return FabsBnB.translatable("cauldron_conversion");
+            return LangUtils.getTextComponent("cauldron_conversion");
         }
 
         @Override

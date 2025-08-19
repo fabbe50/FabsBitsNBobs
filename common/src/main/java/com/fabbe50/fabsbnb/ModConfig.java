@@ -1,6 +1,7 @@
 package com.fabbe50.fabsbnb;
 
 import com.fabbe50.fabsbnb.config.*;
+import com.fabbe50.fabsbnb.util.LangUtils;
 import dev.architectury.platform.Platform;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 
@@ -19,12 +20,12 @@ public class ModConfig {
 
     public static BooleanOption debugMode = addConfig(new BooleanOption("debugMode", true));
 
-    public static IntegerSliderOption woodenBuildingWandRadius = addConfig(new IntegerSliderOption("woodenBuildingWandRadius", 1, 1, 30));
-    public static IntegerSliderOption stoneBuildingWandRadius = addConfig(new IntegerSliderOption("stoneBuildingWandRadius", 2, 1, 30));
-    public static IntegerSliderOption ironBuildingWandRadius = addConfig(new IntegerSliderOption("ironBuildingWandRadius", 7, 1, 30));
-    public static IntegerSliderOption goldBuildingWandRadius = addConfig(new IntegerSliderOption("goldBuildingWandRadius", 5, 1, 30));
-    public static IntegerSliderOption diamondBuildingWandRadius = addConfig(new IntegerSliderOption("diamondBuildingWandRadius", 9, 1, 30));
-    public static IntegerSliderOption netheriteBuildingWandRadius = addConfig(new IntegerSliderOption("netheriteBuildingWandRadius", 15, 1, 30));
+    public static IntegerSliderOption woodenBuildingWandRadius = addConfig(new IntegerSliderOption("woodenBuildingWandRadius", 1, 1, 30, LangUtils.VALUE_BLOCKS));
+    public static IntegerSliderOption stoneBuildingWandRadius = addConfig(new IntegerSliderOption("stoneBuildingWandRadius", 2, 1, 30, LangUtils.VALUE_BLOCKS));
+    public static IntegerSliderOption ironBuildingWandRadius = addConfig(new IntegerSliderOption("ironBuildingWandRadius", 7, 1, 30, LangUtils.VALUE_BLOCKS));
+    public static IntegerSliderOption goldBuildingWandRadius = addConfig(new IntegerSliderOption("goldBuildingWandRadius", 5, 1, 30, LangUtils.VALUE_BLOCKS));
+    public static IntegerSliderOption diamondBuildingWandRadius = addConfig(new IntegerSliderOption("diamondBuildingWandRadius", 9, 1, 30, LangUtils.VALUE_BLOCKS));
+    public static IntegerSliderOption netheriteBuildingWandRadius = addConfig(new IntegerSliderOption("netheriteBuildingWandRadius", 15, 1, 30, LangUtils.VALUE_BLOCKS));
 
     public static DoubleOption whooshWandMultiplier = addConfig(new DoubleOption("whooshWandMultiplier", 3d, 1d, 50d));
     public static IntegerOption whooshWandCooldown = addConfig(new IntegerOption("whooshWandCooldown", 5, 0, Integer.MAX_VALUE));
@@ -86,10 +87,6 @@ public class ModConfig {
     private static <T, R extends AbstractConfigListEntry<T>, V extends IConfigOption<T, R>> V addConfig(V configOption) {
         configOptions.put(configOption.getKey(), configOption);
         return configOption;
-    }
-
-    public static <T> T getValue(String key) {
-        return ((IConfigOption<T, ?>) configOptions.get(key)).getValue();
     }
 
     public static Map<String, IConfigOption<?, ?>> getConfigOptions() {
