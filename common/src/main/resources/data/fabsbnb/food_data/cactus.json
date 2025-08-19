@@ -1,0 +1,13 @@
+{
+  "location": "minecraft:cactus",
+  "nutrition": 4,
+  "saturation": 0.8,
+  "alwaysEdible": false,
+  "mobEffects": [
+    {
+      "location": "minecraft:nausea",
+      "duration": 150,
+      "power": 1
+    }
+  ]
+}

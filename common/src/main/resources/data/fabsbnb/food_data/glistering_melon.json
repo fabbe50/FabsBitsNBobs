@@ -1,0 +1,13 @@
+{
+  "location": "minecraft:glistering_melon_slice",
+  "nutrition": 3,
+  "saturation": 0.6,
+  "alwaysEdible": true,
+  "mobEffects": [
+    {
+      "location": "minecraft:regeneration",
+      "duration": 100,
+      "power": 1
+    }
+  ]
+}

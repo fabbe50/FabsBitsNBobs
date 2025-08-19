@@ -9,6 +9,7 @@
     "CactusBlockMixin",
     "ComposterBlockMixin",
     "CreeperMixin",
+    "ItemStackMixin",
     "LayeredCauldronBlockMixin",
     "PhantomSweepAttackGoalMixin",
     "SpiderMixin"
