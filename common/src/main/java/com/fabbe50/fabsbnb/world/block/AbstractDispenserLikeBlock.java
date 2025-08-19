@@ -64,12 +64,14 @@ public abstract class AbstractDispenserLikeBlock extends ExtBaseEntityBlock {
             return InteractionResult.SUCCESS;
         } else {
             BlockEntity blockEntity = level.getBlockEntity(blockPos);
-            this.use(player, blockEntity);
+            if (this.use(player, blockState, level, blockPos) != InteractionResult.PASS) {
+
+            }
             return InteractionResult.CONSUME;
         }
     }
 
-    protected abstract void use(Player player, BlockEntity blockEntity);
+    protected abstract InteractionResult use(Player player, BlockState state, Level level, BlockPos pos);
 
     @Override
     public void onRemove(BlockState blockState, Level level, BlockPos blockPos, BlockState blockState2, boolean bl) {

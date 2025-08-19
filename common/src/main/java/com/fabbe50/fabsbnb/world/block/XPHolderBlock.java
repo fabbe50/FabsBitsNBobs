@@ -185,7 +185,6 @@ public class XPHolderBlock extends ExtBaseEntityBlock implements ILeftClickable 
 
     @Override
     public void appendHoverText(ItemStack itemStack, Item.TooltipContext tooltipContext, List<Component> list, TooltipFlag tooltipFlag) {
-        super.appendHoverText(itemStack, tooltipContext, list, tooltipFlag);
         CustomData blockEntityData = itemStack.getOrDefault(DataComponents.BLOCK_ENTITY_DATA, CustomData.EMPTY);
         if (!blockEntityData.isEmpty()) {
             CompoundTag tag = blockEntityData.copyTag();

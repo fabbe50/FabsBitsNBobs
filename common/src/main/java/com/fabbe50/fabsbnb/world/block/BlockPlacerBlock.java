@@ -6,6 +6,7 @@ import net.minecraft.core.*;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -57,10 +58,13 @@ public class BlockPlacerBlock extends AbstractDispenserLikeBlock {
     }
 
     @Override
-    protected void use(Player player, BlockEntity blockEntity) {
+    protected InteractionResult use(Player player, BlockState state, Level level, BlockPos pos) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof BlockPlacerBlockEntity placerBlockEntity) {
             player.openMenu(placerBlockEntity);
+            return InteractionResult.SUCCESS;
         }
+        return InteractionResult.PASS;
     }
 
     @Override

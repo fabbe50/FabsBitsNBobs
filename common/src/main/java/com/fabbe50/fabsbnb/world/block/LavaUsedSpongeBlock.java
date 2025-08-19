@@ -51,7 +51,6 @@ public class LavaUsedSpongeBlock extends CustomUsedSpongeBlock {
 
     @Override
     public void appendHoverText(ItemStack itemStack, Item.TooltipContext tooltipContext, List<Component> list, TooltipFlag tooltipFlag) {
-        super.appendHoverText(itemStack, tooltipContext, list, tooltipFlag);
         list.add(LangUtils.getDescription(this));
     }
 }
