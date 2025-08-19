@@ -1,6 +1,7 @@
 package com.fabbe50.fabsbnb.world.inventory;
 
 import com.fabbe50.fabsbnb.registries.ModRegistries;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -16,15 +17,16 @@ public class BlockBreakerMenu extends AbstractContainerMenu {
     private static final int SLOT_COUNT = 1;
     private final Container container;
 
-    public BlockBreakerMenu(int i, Inventory inventory) {
+    public BlockBreakerMenu(int i, Inventory inventory, FriendlyByteBuf buf) {
         this(i, inventory, new SimpleContainer(SLOT_COUNT));
     }
 
     public BlockBreakerMenu(int i, Inventory inventory, Container container) {
         super(ModRegistries.BLOCK_BREAKER_MENU.get(), i);
+
         checkContainerSize(container, SLOT_COUNT);
         this.container = container;
-        container.startOpen(inventory.player);
+
         this.addSlot(new ToolSlot(container, 0, 62 + 18, 17 + 18));
 
         for(int j = 0; j < 3; j++) {
