@@ -24,7 +24,6 @@ import dev.architectury.registry.registries.Registrar;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
@@ -33,6 +32,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
@@ -154,10 +155,12 @@ public class ModRegistries {
     public static final RegistrySupplier<CreativeModeTab> TAB                                                           = TABS.register(FabsBnB.location("tab"), () -> CreativeTabRegistry.create(LangUtils.MOD_NAME_C, () -> new ItemStack(DIAMOND_BUILDING_WAND.get())));
 
     // Menu Types
-    public static final RegistrySupplier<MenuType<BlockBreakerMenu>> BLOCK_BREAKER_MENU                                 = MENU_TYPES.register(FabsBnB.location("block_breaker_menu"), () -> MenuRegistry.of(BlockBreakerMenu::new));
+    public static final RegistrySupplier<MenuType<BlockBreakerMenu>> BLOCK_BREAKER_MENU                                 = MENU_TYPES.register(FabsBnB.location("block_breaker_menu"), () -> MenuRegistry.ofExtended(BlockBreakerMenu::new));
 
     // Tags
     public static final TagKey<Item> BUILDING_WANDS                                                                     = TagKey.create(Registries.ITEM, FabsBnB.location("building_wands"));
+    public static final TagKey<Item> IMMUNE_TO_CACTUS_DAMAGE                                                            = TagKey.create(Registries.ITEM, FabsBnB.location("immune_to_cactus"));
+    public static final TagKey<Item> NETHERITE_ITEMS                                                                    = TagKey.create(Registries.ITEM, FabsBnB.location("c", "netherite_items"));
     public static final TagKey<Block> BLOCK_YOINKER_BLACKLIST                                                           = TagKey.create(Registries.BLOCK, FabsBnB.location("block_yoinker_blacklist"));
     public static final TagKey<Block> SPIDER_NOT_CLIMBABLE                                                              = TagKey.create(Registries.BLOCK, FabsBnB.location("spider_not_climbable"));
     public static final TagKey<Block> ORE_MINER_WHITELIST                                                               = TagKey.create(Registries.BLOCK, FabsBnB.location("ore_miner_whitelist"));

@@ -6,6 +6,7 @@
   "client": [
   ],
   "mixins": [
+    "CactusBlockMixin",
     "CreeperMixin",
     "LayeredCauldronBlockMixin",
     "PhantomSweepAttackGoalMixin",
