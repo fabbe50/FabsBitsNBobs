@@ -2,6 +2,7 @@ package com.fabbe50.fabsbnb.client.renderer.blockentity;
 
 import com.fabbe50.fabsbnb.util.Utilities;
 import com.fabbe50.fabsbnb.world.block.entity.XPHolderBlockEntity;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.gui.Font;
@@ -66,7 +67,7 @@ public class XPHolderRenderer implements BlockEntityRenderer<XPHolderBlockEntity
         ItemStack stack = new ItemStack(Items.EXPERIENCE_BOTTLE);
         BakedModel xpBottleModel = itemRenderer.getModel(stack, blockEntity.getLevel(), null, 0);
         poseStack.translate(((1f / 16f) * 0.5), 0, 0);
-        this.itemRenderer.render(stack, ItemDisplayContext.FIXED, false, poseStack, multiBufferSource, 0xFFFFFF, OverlayTexture.NO_OVERLAY, xpBottleModel);
+        this.itemRenderer.render(stack, ItemDisplayContext.FIXED, false, poseStack, multiBufferSource, i, OverlayTexture.NO_OVERLAY, xpBottleModel);
         poseStack.popPose();
     }
 }
