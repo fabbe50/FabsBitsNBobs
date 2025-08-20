@@ -10,13 +10,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 
 public class ModConfig {
     private static File configFile;
 
-    private static final Map<String, IConfigOption<?, ?>> configOptions = new HashMap<>();
+    private static final Map<String, IConfigOption<?, ?>> configOptions = new LinkedHashMap<>();
 
     public static BooleanOption debugMode = addConfig(new BooleanOption("debugMode", true));
 

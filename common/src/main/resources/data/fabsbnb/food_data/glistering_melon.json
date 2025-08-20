@@ -1,7 +1,7 @@
 {
   "location": "minecraft:glistering_melon_slice",
   "nutrition": 3,
-  "saturation": 0.6,
+  "saturation": 0.8,
   "alwaysEdible": true,
   "mobEffects": [
     {

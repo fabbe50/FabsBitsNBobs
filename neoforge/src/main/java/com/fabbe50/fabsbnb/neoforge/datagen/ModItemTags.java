@@ -1,10 +1,16 @@
 package com.fabbe50.fabsbnb.neoforge.datagen;
 
 import com.fabbe50.fabsbnb.FabsBnB;
+import com.fabbe50.fabsbnb.loaders.CustomFoodDataLoader;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -43,6 +49,11 @@ public class ModItemTags extends ItemTagsProvider {
                         Items.NETHERITE_HOE,
                         Items.NETHERITE_SCRAP
                 );
+
+        tag(TagKey.create(Registries.ITEM, FabsBnB.location("c", "foods")))
+                .add(Items.CACTUS)
+                .add(Items.GLISTERING_MELON_SLICE);
+
 
         tag(ModRegistries.IMMUNE_TO_CACTUS_DAMAGE)
                 .add(Items.CACTUS)

@@ -3,8 +3,6 @@ package com.fabbe50.fabsbnb;
 import com.fabbe50.fabsbnb.registries.*;
 import com.google.common.base.Suppliers;
 import dev.architectury.registry.registries.RegistrarManager;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
