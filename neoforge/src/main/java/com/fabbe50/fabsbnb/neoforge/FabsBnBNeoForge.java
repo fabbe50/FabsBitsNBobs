@@ -5,9 +5,18 @@ import com.fabbe50.fabsbnb.Platform;
 import com.fabbe50.fabsbnb.neoforge.integration.Curios;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
 import com.fabbe50.fabsbnb.registries.PotionBrewingRecipes;
+import com.fabbe50.fabsbnb.registries.TabList;
+import com.fabbe50.fabsbnb.util.Utilities;
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.enchantment.EnchantmentInstance;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -35,13 +44,9 @@ public final class FabsBnBNeoForge {
 
     public void onPopulateCreativeTab(BuildCreativeModeTabContentsEvent event) {
         if (event.getTab().equals(ModRegistries.TAB.get())) {
-            FabsBnB.log("Setting up creative tab...");
-            for (RegistrySupplier<Item> item : ModRegistries.ITEM_LIST) {
-                ItemStack stack = new ItemStack(item.get());
-                if (!stack.isEmpty()) {
-                    event.accept(stack);
-                }
-            }
+            TabData data = new TabData(event);
+            TabList<BuildCreativeModeTabContentsEvent, TabData> tabList = new TabList<>();
+            tabList.registerTab(data, event.getParameters().holders());
         }
     }
 
@@ -50,6 +55,17 @@ public final class FabsBnBNeoForge {
         @SubscribeEvent
         public static void registerBrewingRecipes(RegisterBrewingRecipesEvent event) {
             PotionBrewingRecipes.register(event.getBuilder());
+        }
+    }
+
+    public static class TabData extends TabList.TabReg<BuildCreativeModeTabContentsEvent> {
+        public TabData(BuildCreativeModeTabContentsEvent regHandler) {
+            super(regHandler);
+        }
+
+        @Override
+        public void accept(ItemStack stack) {
+            getRegHandler().accept(stack);
         }
     }
 }

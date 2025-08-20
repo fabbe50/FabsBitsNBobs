@@ -5,8 +5,10 @@ import com.fabbe50.fabsbnb.Platform;
 import com.fabbe50.fabsbnb.fabric.integration.Trinkets;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
 import com.fabbe50.fabsbnb.registries.PotionBrewingRecipes;
+import com.fabbe50.fabsbnb.registries.TabList;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistryBuilder;
 import net.minecraft.world.item.Item;
@@ -22,16 +24,10 @@ public final class FabsBnBFabric implements ModInitializer {
         // Run our common setup.
         FabsBnB.init();
 
-        ItemGroupEvents.MODIFY_ENTRIES_ALL.register((creativeModeTab, fabricItemGroupEntries) -> {
-            if (creativeModeTab.equals(ModRegistries.TAB.get())) {
-                FabsBnB.log("Setting up creative tab...");
-                for (RegistrySupplier<Item> item : ModRegistries.ITEM_LIST) {
-                    ItemStack stack = new ItemStack(item.get());
-                    if (!stack.isEmpty()) {
-                        fabricItemGroupEntries.accept(stack);
-                    }
-                }
-            }
+        ItemGroupEvents.MODIFY_ENTRIES_ALL.register((creativeModeTab, event) -> {
+            TabData data = new TabData(event);
+            TabList<FabricItemGroupEntries, TabData> tabList = new TabList<>();
+            tabList.registerTab(data, event.getContext().holders());
         });
         FabricBrewingRecipeRegistryBuilder.BUILD.register(PotionBrewingRecipes::register);
 
@@ -42,6 +38,17 @@ public final class FabsBnBFabric implements ModInitializer {
         if (Platform.isModLoaded("trinkets")) {
             FabsBnB.log("Trinkets loaded! Registering trinkets...");
             Trinkets.registerTrinkets();
+        }
+    }
+
+    public static class TabData extends TabList.TabReg<FabricItemGroupEntries> {
+        public TabData(FabricItemGroupEntries regHandler) {
+            super(regHandler);
+        }
+
+        @Override
+        public void accept(ItemStack stack) {
+            getRegHandler().accept(stack);
         }
     }
 }
