@@ -81,8 +81,13 @@
   "item.minecraft.potion.effect.feline_aura_short": "Potion of Feline Aura",
   "item.minecraft.splash_potion.effect.feline_aura_long": "Splash Potion of Feline Aura",
   "item.minecraft.splash_potion.effect.feline_aura_short": "Splash Potion of Feline Aura",
+  "item.minecraft.tipped_arrow.effect.feline_aura_long": "Arrow of Feline Aura",
+  "item.minecraft.tipped_arrow.effect.feline_aura_short": "Arrow of Feline Aura",
   "jei.category.fabsbnb.cauldron_conversion": "Cauldron Conversation",
+  "tag.item.c.netherite_items": "Netherite Items",
+  "tag.item.curios.necklace": "Necklace",
   "tag.item.fabsbnb.building_wands": "Building Wands",
+  "tag.item.fabsbnb.immune_to_cactus": "Immune to Cactus",
   "text.fabsbnb.building_wand.fuzzy_toggle": "Fuzzy Mode: %s",
   "text.fabsbnb.building_wand.not_enough_blocks.abort": "Not enough blocks to complete placement.",
   "text.fabsbnb.building_wand.not_enough_blocks.inventory": "Not enough blocks in inventory to place.",
@@ -98,4 +103,5 @@
   "text.fabsbnb.value.blocks": "%s Blocks",
   "text.fabsbnb.xp_holder.collect": "Collect XP Mode: %s",
   "text.fabsbnb.xp_holder.stored_level": "Stored Levels: %s"
+  "text.fabsbnb.xp_holder.stored_level": "Stored Levels: %s",
 }

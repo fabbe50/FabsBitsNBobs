@@ -18,6 +18,7 @@ public class Enchantments {
 
         context.register(ModRegistries.VEIN_MINER, ModRegistries.VEIN_MINER_ENCHANT.getEnchantment("vein_miner", damageTypeHolder, enchantmentHolder, itemHolder, blockHolder));
         context.register(ModRegistries.TREE_CHOPPER, ModRegistries.TREE_CHOPPER_ENCHANT.getEnchantment("tree_chopper", damageTypeHolder, enchantmentHolder, itemHolder, blockHolder));
+        context.register(ModRegistries.LEAF_BREAKER, ModRegistries.LEAF_BREAKER_ENCHANT.getEnchantment("leaf_breaker", damageTypeHolder, enchantmentHolder, itemHolder, blockHolder));
         context.register(ModRegistries.CAPTURING, ModRegistries.CAPTURING_ENCHANT.getEnchantment("capturing", damageTypeHolder, enchantmentHolder, itemHolder, blockHolder));
     }
 }

@@ -40,27 +40,35 @@ public class VeinMinerEnchant implements IEnchantment {
     private final TagKey<Item> supportedTools;
     private final TagKey<Item> primaryTools;
     private final int miningLimit;
+    private final int scanRange;
     private final boolean hasRequiredAttachments;
     private final TagKey<Block> requiredAttachments;
     private final boolean fuzzy;
+    private final boolean breakAttachments;
 
-    public VeinMinerEnchant(ResourceKey<Enchantment> enchantmentKey, TagKey<Block> blockFilter, TagKey<Item> supportedTools, TagKey<Item> primaryTools, int miningLimit) {
-        this(enchantmentKey, blockFilter, supportedTools, primaryTools, miningLimit, null);
+    public VeinMinerEnchant(ResourceKey<Enchantment> enchantmentKey, TagKey<Block> blockFilter, TagKey<Item> supportedTools, TagKey<Item> primaryTools, int miningLimit, int scanRange) {
+        this(enchantmentKey, blockFilter, supportedTools, primaryTools, miningLimit, scanRange, null);
     }
 
-    public VeinMinerEnchant(ResourceKey<Enchantment> enchantmentKey, TagKey<Block> blockFilter, TagKey<Item> supportedTools, TagKey<Item> primaryTools, int miningLimit, TagKey<Block> requiredAttachments) {
-        this(enchantmentKey, blockFilter, supportedTools, primaryTools, miningLimit, requiredAttachments, false);
+    public VeinMinerEnchant(ResourceKey<Enchantment> enchantmentKey, TagKey<Block> blockFilter, TagKey<Item> supportedTools, TagKey<Item> primaryTools, int miningLimit, int scanRange, TagKey<Block> requiredAttachments) {
+        this(enchantmentKey, blockFilter, supportedTools, primaryTools, miningLimit, scanRange, requiredAttachments, false);
     }
 
-    public VeinMinerEnchant(ResourceKey<Enchantment> enchantmentKey, TagKey<Block> blockFilter, TagKey<Item> supportedTools, TagKey<Item> primaryTools, int miningLimit, TagKey<Block> requiredAttachments, boolean fuzzy) {
+    public VeinMinerEnchant(ResourceKey<Enchantment> enchantmentKey, TagKey<Block> blockFilter, TagKey<Item> supportedTools, TagKey<Item> primaryTools, int miningLimit, int scanRange, TagKey<Block> requiredAttachments, boolean fuzzy) {
+        this(enchantmentKey, blockFilter, supportedTools, primaryTools, miningLimit, scanRange, requiredAttachments, fuzzy, false);
+    }
+
+    public VeinMinerEnchant(ResourceKey<Enchantment> enchantmentKey, TagKey<Block> blockFilter, TagKey<Item> supportedTools, TagKey<Item> primaryTools, int miningLimit, int scanRange, TagKey<Block> requiredAttachments, boolean fuzzy, boolean breakAttachments) {
         this.enchantmentKey = enchantmentKey;
         this.blockFilter = blockFilter;
         this.supportedTools = supportedTools;
         this.primaryTools = primaryTools;
         this.miningLimit = miningLimit;
+        this.scanRange = scanRange;
         this.requiredAttachments = requiredAttachments;
         this.hasRequiredAttachments = this.requiredAttachments != null;
         this.fuzzy = fuzzy;
+        this.breakAttachments = breakAttachments;
     }
 
     @Override
@@ -72,7 +80,7 @@ public class VeinMinerEnchant implements IEnchantment {
         FabsBnB.debug("Running Vein-miner of type: " + enchantmentKey);
         if (serverPlayer != null) {
             if (serverPlayer.isShiftKeyDown()) {
-                FabsBnB.debug("Playing is holding shift key, aborting event.");
+                FabsBnB.debug("Player is holding shift key, aborting event.");
                 return false;
             }
         }
@@ -83,7 +91,7 @@ public class VeinMinerEnchant implements IEnchantment {
                     FabsBnB.debug("Block isn't on vein-miner whitelist. Aborting...");
                     return false;
                 }
-                int range = 2;
+                int range = scanRange;
                 Set<BlockPos> found = new HashSet<>();
                 Set<BlockPos> checked = new HashSet<>();
                 Queue<BlockPos> toCheck = new LinkedList<>();
@@ -103,6 +111,9 @@ public class VeinMinerEnchant implements IEnchantment {
                                 if (hasRequiredAttachments) {
                                     if (state.is(this.requiredAttachments)) {
                                         valid.set(true);
+                                        if (this.breakAttachments) {
+                                            return true;
+                                        }
                                     }
                                 }
                                 if (this.fuzzy) {

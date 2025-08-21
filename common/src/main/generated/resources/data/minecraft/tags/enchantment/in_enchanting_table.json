@@ -9,6 +9,10 @@
       "required": false
     },
     {
+      "id": "fabsbnb:leaf_breaker",
+      "required": false
+    },
+    {
       "id": "fabsbnb:capturing",
       "required": false
     }

@@ -38,12 +38,17 @@ public class ModBlockTags extends BlockTagsProvider {
         tag(ModRegistries.TREE_CHOPPER_WHITELIST)
                 .addTag(BlockTags.LOGS)
                 .add(Blocks.MUSHROOM_STEM)
-                .add(Blocks.MANGROVE_ROOTS);
+                .add(Blocks.MANGROVE_ROOTS)
+                .add(Blocks.RED_MUSHROOM_BLOCK)
+                .add(Blocks.BROWN_MUSHROOM_BLOCK);
 
         tag(ModRegistries.TREE_CHOPPER_ATTACHMENTS)
                 .addTag(BlockTags.LEAVES)
                 .add(Blocks.RED_MUSHROOM_BLOCK)
                 .add(Blocks.BROWN_MUSHROOM_BLOCK);
+
+        tag(ModRegistries.LEAF_BREAKER_WHITELIST)
+                .addTag(BlockTags.LEAVES);
 
         tag(ModRegistries.SPIDER_NOT_CLIMBABLE)
                 .addTag(BlockTags.ICE)

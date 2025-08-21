@@ -77,6 +77,7 @@ public class Translations extends LanguageProvider {
         // Enchantments
         addEnchantment("vein_miner", "Ore Miner", "Mines the entire ore vein and drops the items at the original block.");
         addEnchantment("tree_chopper", "Tree Chopper", "Mines the entire tree stem and drops the items at the original block.");
+        addEnchantment("leaf_breaker", "Leaf Breaker", "Mines the all leaves within range and drops the items at the original block.");
         addEnchantment("capturing", "Capturing", "Adds a chance for mobs to drop their spawn eggs.");
 
         // Config
@@ -91,7 +92,11 @@ public class Translations extends LanguageProvider {
         addConfig(ModConfig.whooshWandCooldown, "Whoosh Wand Cooldown", "The cooldown applied to the wand after each use.");
         addConfig(ModConfig.entityMoverBlockSpeed, "Pusher Block Speed Multiplier", "The multiplier for the speed addon calculation. [{current speed} + ({multiplier} * 1.5)]");
         addConfig(ModConfig.oreMinerMiningLimit, "Ore Miner Limit", "The amount of blocks the ore miner enchantment is allowed to mine. NOTE: LARGE NUMBERS CAN CAUSE LAG");
+        addConfig(ModConfig.oreMinerScanRange, "Ore Miner Scan Range", "How far away from each block it should scan. This is not the originally mined block, but rather next block in the scan queue.");
         addConfig(ModConfig.treeChopperMiningLimit, "Tree Chopper Limit", "The amount of blocks the tree chopper enchantment is allowed to harvest. NOTE: LARGE NUMBERS CAN CAUSE LAG");
+        addConfig(ModConfig.treeChopperScanRange, "Tree Chopper Scan Range", "How far away from each block it should scan. This is not the originally mined block, but rather next block in the scan queue.");
+        addConfig(ModConfig.leafBreakerMiningLimit, "Leaf Breaker Limit", "The amount of blocks the leaf breaker enchantment is allowed to harvest. NOTE: LARGE NUMBERS CAN CAUSE LAG");
+        addConfig(ModConfig.leafBreakerScanRange, "Leaf Breaker Scan Range", "How far away from each block it should scan. This is not the originally mined block, but rather next block in the scan queue.");
         addConfig(ModConfig.oneInNChanceToDropSpawnEgg, "1 in n chance to drop spawn egg",
                 "The 1 in n chance for a spawn egg to drop when killed with capturing enchantment.",
                 "Note: n is divided by the level of the enchantment. For example 'n=100' would result in a 1/33 chance at level 3."
@@ -147,6 +152,7 @@ public class Translations extends LanguageProvider {
         add("item.minecraft.potion.effect." + name, "Potion of " + translation);
         add("item.minecraft.splash_potion.effect." + name, "Splash Potion of " + translation);
         add("item.minecraft.lingering_potion.effect." + name, "Lingering Potion of " + translation);
+        add("item.minecraft.tipped_arrow.effect." + name, "Arrow of " + translation);
     }
 
     public void addEnchantment(String name, String translation, String description) {
