@@ -138,6 +138,7 @@
   "text.fabsbnb.name": "Fab's Bits & Bobs",
   "text.fabsbnb.ore_miner.desc_screen": "Mines the entire ore vein at once. Only works on blocks with the #fabsbnb:ore_miner_whitelist tag.",
   "text.fabsbnb.pusher_plate.desc_screen": "Pushes entities that land on the block. The direction is shown by the arrow on top of it. Must be supported underneath. It gets placed facing away from the player in the direction the player is looking.",
+  "text.fabsbnb.spider_no_climb.desc_screen": "Blocks that spiders can't climb.",
   "text.fabsbnb.tree_chopper.desc_screen": "Chops down the entire tree at once. Only works on blocks with the #fabsbnb:tree_chopper_whitelist tag.",
   "text.fabsbnb.true": "True",
   "text.fabsbnb.value.blocks": "%s Blocks",

@@ -20,7 +20,7 @@ public class ItemInformations {
     private static final Map<String, Pair<List<Item>, List<Component>>> itemComponentsMap = new LinkedHashMap<>();
     private static final Map<IEnchantment, List<Component>> enchantmentComponents = new LinkedHashMap<>();
     private static final Map<String, Pair<List<ItemStack>, List<Component>>> itemStackComponents = new LinkedHashMap<>();
-    private static final Map<String, Pair<TagKey<Item>, List<Component>>> tagKeyComponents = new LinkedHashMap<>();
+    private static final Map<String, Pair<TagKey<?>, List<Component>>> tagKeyComponents = new LinkedHashMap<>();
 
     static {
         addComponent("cactus", 3, Items.CACTUS);
@@ -41,6 +41,7 @@ public class ItemInformations {
 
         addComponent("building_wand", 9, ModRegistries.BUILDING_WANDS);
         addComponent("immune_to_cactus", ModRegistries.IMMUNE_TO_CACTUS_DAMAGE);
+        addComponent("spider_no_climb", ModRegistries.SPIDER_NOT_CLIMBABLE);
 
         for (IEnchantment enchantment : ModRegistries.ENCHANTMENT_LIST) {
             addComponent(enchantment.getResourceKey().location().getPath(), enchantment);
@@ -72,7 +73,7 @@ public class ItemInformations {
         return itemStackComponents;
     }
 
-    public static Map<String, Pair<TagKey<Item>, List<Component>>> getTagKeyComponents() {
+    public static Map<String, Pair<TagKey<?>, List<Component>>> getTagKeyComponents() {
         return tagKeyComponents;
     }
 
@@ -107,11 +108,11 @@ public class ItemInformations {
         }
     }
 
-    private static void addComponent(String name, TagKey<Item> tagKey) {
+    private static void addComponent(String name, TagKey<?> tagKey) {
         addComponent(name, 1, tagKey);
     }
 
-    private static void addComponent(String name, int rows, TagKey<Item> tagKey) {
+    private static void addComponent(String name, int rows, TagKey<?> tagKey) {
         tagKeyComponents.put(name, new Pair<>(tagKey, createComponents(name, rows)));
     }
 

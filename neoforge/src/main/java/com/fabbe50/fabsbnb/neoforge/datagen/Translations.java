@@ -94,6 +94,7 @@ public class Translations extends LanguageProvider {
         addText("block_detector.desc_screen[3]", "Set the block by placing it in front of the detector and right clicking the detector with a redstone torch.");
         addText("xp_holder.desc_screen", "Holds XP for use later. Right Click to insert 1 level. Shift + Right Click to insert all levels. Left Click to take 1 level. Shift + Left Click to take 10 levels. Retains levels when broken with a pickaxe.");
         addText("immune_to_cactus.desc_screen", "Items that don't break when they land on a cactus block.");
+        addText("spider_no_climb.desc_screen", "Blocks that spiders can't climb.");
         addText("ore_miner.desc_screen", "Mines the entire ore vein at once. Only works on blocks with the #fabsbnb:ore_miner_whitelist tag.");
         addText("tree_chopper.desc_screen", "Chops down the entire tree at once. Only works on blocks with the #fabsbnb:tree_chopper_whitelist tag.");
         addText("leaf_breaker.desc_screen", "Breaks all leaves within range. Only works on blocks with the #fabsbnb:leaf_breaker_whitelist tag.");

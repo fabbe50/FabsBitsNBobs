@@ -53,10 +53,10 @@ public class ModEmiPlugin implements EmiPlugin {
             ));
         }
 
-        Map<String, Pair<TagKey<Item>, List<Component>>> tagComponents = ItemInformations.getTagKeyComponents();
+        Map<String, Pair<TagKey<?>, List<Component>>> tagComponents = ItemInformations.getTagKeyComponents();
         for (String name : tagComponents.keySet()) {
             emiRegistry.addRecipe(new EmiInfoRecipe(
-                    List.of(EmiIngredient.of(Ingredient.of(tagComponents.get(name).getFirst()))),
+                    List.of(EmiIngredient.of(tagComponents.get(name).getFirst())),
                     tagComponents.get(name).getSecond(),
                     getDynamicLocation(name)
             ));
