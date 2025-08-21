@@ -3,6 +3,7 @@ package com.fabbe50.fabsbnb.world.item.enchantments;
 import com.fabbe50.fabsbnb.FabsBnB;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -23,4 +24,8 @@ public interface IEnchantment {
     default HolderSet<Enchantment> exclusiveWith(HolderGetter<Enchantment> enchantmentHolder) {
         return null;
     }
+
+    int getMaxLevel();
+
+    ResourceKey<Enchantment> getResourceKey();
 }

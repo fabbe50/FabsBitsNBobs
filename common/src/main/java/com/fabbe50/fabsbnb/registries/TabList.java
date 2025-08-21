@@ -1,6 +1,7 @@
 package com.fabbe50.fabsbnb.registries;
 
 import com.fabbe50.fabsbnb.FabsBnB;
+import com.fabbe50.fabsbnb.world.item.enchantments.IEnchantment;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -25,23 +26,13 @@ public class TabList<R, T extends TabList.TabReg<R>> {
         if (provider != null) {
             HolderLookup.RegistryLookup<Enchantment> enchantmentLookup = provider.lookup(Registries.ENCHANTMENT).orElse(null);
             if (enchantmentLookup != null) {
-                Holder.Reference<Enchantment> ore_miner_holder = enchantmentLookup.get(ModRegistries.VEIN_MINER).orElse(null);
-                Holder.Reference<Enchantment> tree_chopper_holder = enchantmentLookup.get(ModRegistries.TREE_CHOPPER).orElse(null);
-                Holder.Reference<Enchantment> leaf_breaker_holder = enchantmentLookup.get(ModRegistries.LEAF_BREAKER).orElse(null);
-                Holder.Reference<Enchantment> capturing_holder = enchantmentLookup.get(ModRegistries.CAPTURING).orElse(null);
-                if (ore_miner_holder != null) {
-                    event.accept(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(ore_miner_holder, 1)));
-                }
-                if (tree_chopper_holder != null) {
-                    event.accept(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(tree_chopper_holder, 1)));
-                }
-                if (leaf_breaker_holder != null) {
-                    event.accept(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(leaf_breaker_holder, 1)));
-                }
-                if (capturing_holder != null) {
-                    event.accept(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(capturing_holder, 1)));
-                    event.accept(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(capturing_holder, 2)));
-                    event.accept(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(capturing_holder, 3)));
+                for (IEnchantment enchantment : ModRegistries.ENCHANTMENT_LIST) {
+                    Holder.Reference<Enchantment> enchantmentReference = enchantmentLookup.get(enchantment.getResourceKey()).orElse(null);
+                    if (enchantmentReference != null) {
+                        for (int i = 1; i <= enchantment.getMaxLevel(); i++) {
+                            event.accept(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(enchantmentReference, i)));
+                        }
+                    }
                 }
             }
         }

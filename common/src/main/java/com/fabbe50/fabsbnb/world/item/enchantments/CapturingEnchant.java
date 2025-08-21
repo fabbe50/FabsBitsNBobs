@@ -27,7 +27,7 @@ public class CapturingEnchant implements IEnchantment {
 
     @Override
     public Enchantment.EnchantmentDefinition getEnchantmentDefinition(HolderGetter<Item> itemHolder) {
-        return Enchantment.definition(itemHolder.getOrThrow(supportedTools), itemHolder.getOrThrow(primaryTools), 1, 3, Enchantment.dynamicCost(15, 9), Enchantment.dynamicCost(65, 9), 4, EquipmentSlotGroup.HAND);
+        return Enchantment.definition(itemHolder.getOrThrow(supportedTools), itemHolder.getOrThrow(primaryTools), 1, getMaxLevel(), Enchantment.dynamicCost(15, 9), Enchantment.dynamicCost(65, 9), 4, EquipmentSlotGroup.HAND);
     }
 
     public void handleEvent(LivingEntity attackedEntity, ItemStack weapon) {
@@ -47,5 +47,15 @@ public class CapturingEnchant implements IEnchantment {
                 attackedEntity.spawnAtLocation(spawnEggStack);
             }
         }
+    }
+
+    @Override
+    public int getMaxLevel() {
+        return 3;
+    }
+
+    @Override
+    public ResourceKey<Enchantment> getResourceKey() {
+        return enchantmentKey;
     }
 }

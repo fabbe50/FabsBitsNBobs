@@ -15,6 +15,7 @@ import com.fabbe50.fabsbnb.world.item.*;
 import com.fabbe50.fabsbnb.world.item.base.ModBlockItem;
 import com.fabbe50.fabsbnb.world.item.base.ModItem;
 import com.fabbe50.fabsbnb.world.item.enchantments.CapturingEnchant;
+import com.fabbe50.fabsbnb.world.item.enchantments.IEnchantment;
 import com.fabbe50.fabsbnb.world.item.enchantments.VeinMinerEnchant;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
@@ -53,6 +54,7 @@ public class ModRegistries {
     // Registry Lists
     public static final List<RegistrySupplier<Item>>  ITEM_LIST = new ArrayList<>();
     public static final List<RegistrySupplier<Block>> BLOCK_LIST = new ArrayList<>();
+    public static final List<IEnchantment> ENCHANTMENT_LIST = new ArrayList<>();
 
     // Registrars
     private static final Registrar<CreativeModeTab>             TABS                                                    = FabsBnB.MANAGER.get().get(Registries.CREATIVE_MODE_TAB);
@@ -172,6 +174,11 @@ public class ModRegistries {
     public static final VeinMinerEnchant TREE_CHOPPER_ENCHANT                                                           = registerEnchantment(new VeinMinerEnchant(TREE_CHOPPER, TREE_CHOPPER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.AXES, ModConfig.treeChopperMiningLimit.getValue(), ModConfig.treeChopperScanRange.getValue(), null, true));
     public static final VeinMinerEnchant LEAF_BREAKER_ENCHANT                                                           = registerEnchantment(new VeinMinerEnchant(LEAF_BREAKER, LEAF_BREAKER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.AXES, ModConfig.leafBreakerMiningLimit.getValue(), ModConfig.leafBreakerScanRange.getValue(), null, true));
     public static final CapturingEnchant CAPTURING_ENCHANT                                                              = registerEnchantment(new CapturingEnchant(CAPTURING, ItemTags.SWORD_ENCHANTABLE, ItemTags.SWORDS));
+
+    private static <T extends IEnchantment> T registerEnchantment(T enchantment) {
+        ENCHANTMENT_LIST.add(enchantment);
+        return enchantment;
+    }
 
 
     public static void init() {

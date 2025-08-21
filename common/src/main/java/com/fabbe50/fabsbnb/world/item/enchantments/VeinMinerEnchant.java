@@ -73,7 +73,7 @@ public class VeinMinerEnchant implements IEnchantment {
 
     @Override
     public Enchantment.EnchantmentDefinition getEnchantmentDefinition(HolderGetter<Item> itemHolder) {
-        return Enchantment.definition(itemHolder.getOrThrow(supportedTools), itemHolder.getOrThrow(primaryTools), 1, 1, Enchantment.constantCost(15), Enchantment.constantCost(65), 10, EquipmentSlotGroup.HAND);
+        return Enchantment.definition(itemHolder.getOrThrow(supportedTools), itemHolder.getOrThrow(primaryTools), 1, getMaxLevel(), Enchantment.constantCost(15), Enchantment.constantCost(65), 10, EquipmentSlotGroup.HAND);
     }
 
     public boolean handleEvent(Level level, BlockPos blockPos, BlockState blockState, @Nullable ServerPlayer serverPlayer, ItemStack stack) {
@@ -205,5 +205,19 @@ public class VeinMinerEnchant implements IEnchantment {
             return false;
         }
         return player.getAbilities().instabuild;
+    }
+
+    @Override
+    public ResourceKey<Enchantment> getResourceKey() {
+        return enchantmentKey;
+    }
+
+    @Override
+    public int getMaxLevel() {
+        return 1;
+    }
+
+    public TagKey<Block> getBlockFilter() {
+        return blockFilter;
     }
 }
