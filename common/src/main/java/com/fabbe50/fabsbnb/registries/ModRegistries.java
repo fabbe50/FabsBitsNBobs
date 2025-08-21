@@ -54,6 +54,7 @@ public class ModRegistries {
     // Registry Lists
     public static final List<RegistrySupplier<Item>>  ITEM_LIST = new ArrayList<>();
     public static final List<RegistrySupplier<Block>> BLOCK_LIST = new ArrayList<>();
+    public static final List<RegistrySupplier<Potion>> POTION_LIST = new ArrayList<>();
     public static final List<IEnchantment> ENCHANTMENT_LIST = new ArrayList<>();
 
     // Registrars
@@ -138,7 +139,9 @@ public class ModRegistries {
     public static final RegistrySupplier<Potion> FELINE_AURA_POTION_LONG                                                = registerPotion("feline_aura_long", FELINE_AURA, LONG_DURATION_POTION);
 
     private static RegistrySupplier<Potion> registerPotion(String name, RegistrySupplier<MobEffect> effect, int duration) {
-        return POTIONS.register(FabsBnB.location(name), () -> new Potion(new MobEffectInstance(getMobEffectReference(effect), duration)));
+        RegistrySupplier<Potion> potion = POTIONS.register(FabsBnB.location(name), () -> new Potion(new MobEffectInstance(getMobEffectReference(effect), duration)));
+        POTION_LIST.add(potion);
+        return potion;
     }
 
     // Wrapper to fix RegistrySupplier not being able to save potions. Thanks to fzzyhamstrs on GitHub.
