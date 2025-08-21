@@ -1,5 +1,6 @@
 package com.fabbe50.fabsbnb.world.item;
 
+import com.fabbe50.fabsbnb.ModConfig;
 import com.fabbe50.fabsbnb.util.Utilities;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,8 +16,10 @@ public class ChocolateNecklaceItem extends Item {
     @Override
     public void inventoryTick(ItemStack itemStack, Level level, Entity entity, int i, boolean bl) {
         if (entity instanceof LivingEntity livingEntity) {
-            if (Utilities.clearMobEffects(livingEntity, false)) {
-                Utilities.hurtItem(livingEntity, itemStack);
+            if (livingEntity.isHolding(stack -> stack.equals(itemStack)) || ModConfig.necklaceWorksInInventory.getValue()) {
+                if (Utilities.clearMobEffects(livingEntity, false)) {
+                    Utilities.hurtItem(livingEntity, itemStack);
+                }
             }
         }
     }

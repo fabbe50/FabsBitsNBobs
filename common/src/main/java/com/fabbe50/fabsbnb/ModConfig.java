@@ -31,6 +31,8 @@ public class ModConfig {
     public static DoubleOption whooshWandMultiplier = addConfig(new DoubleOption("whooshWandMultiplier", 3d, 1d, 50d));
     public static IntegerOption whooshWandCooldown = addConfig(new IntegerOption("whooshWandCooldown", 5, 0, Integer.MAX_VALUE));
 
+    public static BooleanOption necklaceWorksInInventory = addConfig(new BooleanOption("necklaceWorksInInventory", true));
+
     public static DoubleOption entityMoverBlockSpeed = addConfig(new DoubleOption("entityMoverBlockSpeed", 0.3d));
 
     public static IntegerOption oreMinerMiningLimit = addConfig(new IntegerOption.Builder("oreMinerMiningLimit", 256, 1, Integer.MAX_VALUE).requiresRestart().build());

@@ -24,6 +24,8 @@
   "config.fabsbnb.leafBreakerMiningLimit.tooltip[0]": "The amount of blocks the leaf breaker enchantment is allowed to harvest. NOTE: LARGE NUMBERS CAN CAUSE LAG",
   "config.fabsbnb.leafBreakerScanRange": "Leaf Breaker Scan Range",
   "config.fabsbnb.leafBreakerScanRange.tooltip[0]": "How far away from each block it should scan. This is not the originally mined block, but rather next block in the scan queue.",
+  "config.fabsbnb.necklaceWorksInInventory": "Necklace Works in Inventory",
+  "config.fabsbnb.necklaceWorksInInventory.tooltip[0]": "If the chocolate necklace should work anywhere in the inventory. Otherwise it will only work while it's being held or in curio/trinket slot.",
   "config.fabsbnb.netheriteBuildingWandRadius": "Netherite Building Wand Radius",
   "config.fabsbnb.netheriteBuildingWandRadius.tooltip[0]": "The radius of which the building wand will place block in.",
   "config.fabsbnb.oneInNChanceToDropSpawnEgg": "1 in n chance to drop spawn egg",
@@ -102,6 +104,5 @@
   "text.fabsbnb.true": "True",
   "text.fabsbnb.value.blocks": "%s Blocks",
   "text.fabsbnb.xp_holder.collect": "Collect XP Mode: %s",
-  "text.fabsbnb.xp_holder.stored_level": "Stored Levels: %s"
   "text.fabsbnb.xp_holder.stored_level": "Stored Levels: %s",
 }

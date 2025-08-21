@@ -90,6 +90,7 @@ public class Translations extends LanguageProvider {
         addConfig(ModConfig.netheriteBuildingWandRadius, "Netherite Building Wand Radius", "The radius of which the building wand will place block in.");
         addConfig(ModConfig.whooshWandMultiplier, "Whoosh Wand Movement Multiplier", "The multiplier for the boost the whoosh wand gives you.");
         addConfig(ModConfig.whooshWandCooldown, "Whoosh Wand Cooldown", "The cooldown applied to the wand after each use.");
+        addConfig(ModConfig.necklaceWorksInInventory, "Necklace Works in Inventory", "If the chocolate necklace should work anywhere in the inventory. Otherwise it will only work while it's being held or in curio/trinket slot.");
         addConfig(ModConfig.entityMoverBlockSpeed, "Pusher Block Speed Multiplier", "The multiplier for the speed addon calculation. [{current speed} + ({multiplier} * 1.5)]");
         addConfig(ModConfig.oreMinerMiningLimit, "Ore Miner Limit", "The amount of blocks the ore miner enchantment is allowed to mine. NOTE: LARGE NUMBERS CAN CAUSE LAG");
         addConfig(ModConfig.oreMinerScanRange, "Ore Miner Scan Range", "How far away from each block it should scan. This is not the originally mined block, but rather next block in the scan queue.");
