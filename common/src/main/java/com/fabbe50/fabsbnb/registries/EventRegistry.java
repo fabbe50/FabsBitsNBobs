@@ -118,7 +118,17 @@ public class EventRegistry {
         return handleCustomMiningEnchantments(level, blockPos, blockState, null, stack);
     }
 
+    @SuppressWarnings("RedundantIfStatement")
     public static boolean handleCustomMiningEnchantments(Level level, BlockPos blockPos, BlockState blockState, ServerPlayer serverPlayer, ItemStack stack) {
-        return ModRegistries.TREE_CHOPPER_ENCHANT.handleEvent(level, blockPos, blockState, serverPlayer, stack) || ModRegistries.VEIN_MINER_ENCHANT.handleEvent(level, blockPos, blockState, serverPlayer, stack);
+        if (ModRegistries.TREE_CHOPPER_ENCHANT.handleEvent(level, blockPos, blockState, serverPlayer, stack)) {
+            return true;
+        }
+        if (ModRegistries.VEIN_MINER_ENCHANT.handleEvent(level, blockPos, blockState, serverPlayer, stack)) {
+            return true;
+        }
+        if (ModRegistries.LEAF_BREAKER_ENCHANT.handleEvent(level, blockPos, blockState, serverPlayer, stack)) {
+            return true;
+        }
+        return false;
     }
 }

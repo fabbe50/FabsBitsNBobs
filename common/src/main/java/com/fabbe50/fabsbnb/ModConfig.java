@@ -33,8 +33,12 @@ public class ModConfig {
 
     public static DoubleOption entityMoverBlockSpeed = addConfig(new DoubleOption("entityMoverBlockSpeed", 0.3d));
 
-    public static IntegerOption oreMinerMiningLimit = addConfig(new IntegerOption("oreMinerMiningLimit", 256, 1, Integer.MAX_VALUE));
-    public static IntegerOption treeChopperMiningLimit = addConfig(new IntegerOption("treeChopperMiningLimit", 256, 1, Integer.MAX_VALUE));
+    public static IntegerOption oreMinerMiningLimit = addConfig(new IntegerOption.Builder("oreMinerMiningLimit", 256, 1, Integer.MAX_VALUE).requiresRestart().build());
+    public static IntegerOption oreMinerScanRange = addConfig(new IntegerOption.Builder("oreMinerScanRange", 2, 1, 10).requiresRestart().build());
+    public static IntegerOption treeChopperMiningLimit = addConfig(new IntegerOption.Builder("treeChopperMiningLimit", 256, 1, Integer.MAX_VALUE).requiresRestart().build());
+    public static IntegerOption treeChopperScanRange = addConfig(new IntegerOption.Builder("treeChopperScanRange", 2, 1, 10).requiresRestart().build());
+    public static IntegerOption leafBreakerMiningLimit = addConfig(new IntegerOption.Builder("leafBreakerMiningLimit", 64, 1, Integer.MAX_VALUE).requiresRestart().build());
+    public static IntegerOption leafBreakerScanRange = addConfig(new IntegerOption.Builder("leafBreakerScanRange", 1, 1, 10).requiresRestart().build());
     public static IntegerOption oneInNChanceToDropSpawnEgg = addConfig(new IntegerOption("oneInNChanceToDropSpawnEgg", 100, 1, Integer.MAX_VALUE));
 
     public static void register() {

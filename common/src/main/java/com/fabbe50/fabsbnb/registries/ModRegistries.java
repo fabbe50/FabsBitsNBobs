@@ -128,6 +128,7 @@ public class ModRegistries {
     // Enchantments
     public static final ResourceKey<Enchantment> VEIN_MINER                                                             = ResourceKey.create(Registries.ENCHANTMENT, FabsBnB.location("vein_miner"));
     public static final ResourceKey<Enchantment> TREE_CHOPPER                                                           = ResourceKey.create(Registries.ENCHANTMENT, FabsBnB.location("tree_chopper"));
+    public static final ResourceKey<Enchantment> LEAF_BREAKER                                                           = ResourceKey.create(Registries.ENCHANTMENT, FabsBnB.location("leaf_breaker"));
     public static final ResourceKey<Enchantment> CAPTURING                                                              = ResourceKey.create(Registries.ENCHANTMENT, FabsBnB.location("capturing"));
 
     // Mob Effects
@@ -166,9 +167,11 @@ public class ModRegistries {
     public static final TagKey<Block> ORE_MINER_WHITELIST                                                               = TagKey.create(Registries.BLOCK, FabsBnB.location("ore_miner_whitelist"));
     public static final TagKey<Block> TREE_CHOPPER_WHITELIST                                                            = TagKey.create(Registries.BLOCK, FabsBnB.location("tree_chopper_whitelist"));
     public static final TagKey<Block> TREE_CHOPPER_ATTACHMENTS                                                          = TagKey.create(Registries.BLOCK, FabsBnB.location("tree_chopper_attachments"));
+    public static final TagKey<Block> LEAF_BREAKER_WHITELIST                                                            = TagKey.create(Registries.BLOCK, FabsBnB.location("leaf_breaker_whitelist"));
 
-    public static final VeinMinerEnchant VEIN_MINER_ENCHANT                                                             = new VeinMinerEnchant(VEIN_MINER, ORE_MINER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.PICKAXES, ModConfig.oreMinerMiningLimit.getValue());
-    public static final VeinMinerEnchant TREE_CHOPPER_ENCHANT                                                           = new VeinMinerEnchant(TREE_CHOPPER, TREE_CHOPPER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.AXES, ModConfig.treeChopperMiningLimit.getValue(), TREE_CHOPPER_ATTACHMENTS, true);
+    public static final VeinMinerEnchant VEIN_MINER_ENCHANT                                                             = new VeinMinerEnchant(VEIN_MINER, ORE_MINER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.PICKAXES, ModConfig.oreMinerMiningLimit.getValue(), ModConfig.oreMinerScanRange.getValue());
+    public static final VeinMinerEnchant TREE_CHOPPER_ENCHANT                                                           = new VeinMinerEnchant(TREE_CHOPPER, TREE_CHOPPER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.AXES, ModConfig.treeChopperMiningLimit.getValue(), ModConfig.treeChopperScanRange.getValue(), null, true);
+    public static final VeinMinerEnchant LEAF_BREAKER_ENCHANT                                                           = new VeinMinerEnchant(LEAF_BREAKER, LEAF_BREAKER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.AXES, ModConfig.leafBreakerMiningLimit.getValue(), ModConfig.leafBreakerScanRange.getValue(), null, true);
     public static final CapturingEnchant CAPTURING_ENCHANT                                                              = new CapturingEnchant(CAPTURING, ItemTags.SWORD_ENCHANTABLE, ItemTags.SWORDS);
 
     public static void init() {
