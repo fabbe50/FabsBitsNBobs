@@ -1,1 +1,3 @@
 accessWidener v2 named
+accessible class net/minecraft/tags/TagLoader$SortingEntry
+accessible method net/minecraft/tags/TagLoader$SortingEntry <init> (Ljava/util/List;)V

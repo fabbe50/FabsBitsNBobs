@@ -12,7 +12,8 @@
     "ItemStackMixin",
     "LayeredCauldronBlockMixin",
     "PhantomSweepAttackGoalMixin",
-    "SpiderMixin"
+    "SpiderMixin",
+    "TagLoaderMixin"
   ],
   "injectors": {
     "defaultRequire": 1
