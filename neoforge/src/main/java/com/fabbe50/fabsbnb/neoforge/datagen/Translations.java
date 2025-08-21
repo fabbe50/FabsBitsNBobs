@@ -135,12 +135,16 @@ public class Translations extends LanguageProvider {
         addConfig(ModConfig.whooshWandCooldown, "Whoosh Wand Cooldown", "The cooldown applied to the wand after each use.");
         addConfig(ModConfig.necklaceWorksInInventory, "Necklace Works in Inventory", "If the chocolate necklace should work anywhere in the inventory. Otherwise it will only work while it's being held or in curio/trinket slot.");
         addConfig(ModConfig.entityMoverBlockSpeed, "Pusher Block Speed Multiplier", "The multiplier for the speed addon calculation. [{current speed} + ({multiplier} * 1.5)]");
+        addConfig(ModConfig.oreMinerEnabled, "Ore Miner Enabled", "If the ore miner enchantment should be enabled.");
         addConfig(ModConfig.oreMinerMiningLimit, "Ore Miner Limit", "The amount of blocks the ore miner enchantment is allowed to mine. NOTE: LARGE NUMBERS CAN CAUSE LAG");
         addConfig(ModConfig.oreMinerScanRange, "Ore Miner Scan Range", "How far away from each block it should scan. This is not the originally mined block, but rather next block in the scan queue.");
+        addConfig(ModConfig.treeChopperEnabled, "Tree Chopper Enabled", "If the ore miner enchantment should be enabled.");
         addConfig(ModConfig.treeChopperMiningLimit, "Tree Chopper Limit", "The amount of blocks the tree chopper enchantment is allowed to harvest. NOTE: LARGE NUMBERS CAN CAUSE LAG");
         addConfig(ModConfig.treeChopperScanRange, "Tree Chopper Scan Range", "How far away from each block it should scan. This is not the originally mined block, but rather next block in the scan queue.");
+        addConfig(ModConfig.leafBreakerEnabled, "Leaf Breaker Enabled", "If the ore miner enchantment should be enabled.");
         addConfig(ModConfig.leafBreakerMiningLimit, "Leaf Breaker Limit", "The amount of blocks the leaf breaker enchantment is allowed to harvest. NOTE: LARGE NUMBERS CAN CAUSE LAG");
         addConfig(ModConfig.leafBreakerScanRange, "Leaf Breaker Scan Range", "How far away from each block it should scan. This is not the originally mined block, but rather next block in the scan queue.");
+        addConfig(ModConfig.capturingEnabled, "Capturing Enabled", "If the ore miner enchantment should be enabled.");
         addConfig(ModConfig.oneInNChanceToDropSpawnEgg, "1 in n chance to drop spawn egg",
                 "The 1 in n chance for a spawn egg to drop when killed with capturing enchantment.",
                 "Note: n is divided by the level of the enchantment. For example 'n=100' would result in a 1/33 chance at level 3."

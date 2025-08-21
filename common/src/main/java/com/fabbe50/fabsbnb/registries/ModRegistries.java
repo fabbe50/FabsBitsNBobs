@@ -166,17 +166,50 @@ public class ModRegistries {
     public static final TagKey<Block> TREE_CHOPPER_ATTACHMENTS                                                          = TagKey.create(Registries.BLOCK, FabsBnB.location("tree_chopper_attachments"));
     public static final TagKey<Block> LEAF_BREAKER_WHITELIST                                                            = TagKey.create(Registries.BLOCK, FabsBnB.location("leaf_breaker_whitelist"));
 
-
     // Enchantments
-    public static final ResourceKey<Enchantment> ORE_MINER                                                              = ResourceKey.create(Registries.ENCHANTMENT, FabsBnB.location("ore_miner"));
-    public static final ResourceKey<Enchantment> TREE_CHOPPER                                                           = ResourceKey.create(Registries.ENCHANTMENT, FabsBnB.location("tree_chopper"));
-    public static final ResourceKey<Enchantment> LEAF_BREAKER                                                           = ResourceKey.create(Registries.ENCHANTMENT, FabsBnB.location("leaf_breaker"));
-    public static final ResourceKey<Enchantment> CAPTURING                                                              = ResourceKey.create(Registries.ENCHANTMENT, FabsBnB.location("capturing"));
+    public static final ResourceKey<Enchantment> ORE_MINER;
+    public static final ResourceKey<Enchantment> TREE_CHOPPER;
+    public static final ResourceKey<Enchantment> LEAF_BREAKER;
+    public static final ResourceKey<Enchantment> CAPTURING;
 
-    public static final VeinMinerEnchant ORE_MINER_ENCHANT                                                              = registerEnchantment(new VeinMinerEnchant(ORE_MINER, ORE_MINER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.PICKAXES, ModConfig.oreMinerMiningLimit.getValue(), ModConfig.oreMinerScanRange.getValue()));
-    public static final VeinMinerEnchant TREE_CHOPPER_ENCHANT                                                           = registerEnchantment(new VeinMinerEnchant(TREE_CHOPPER, TREE_CHOPPER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.AXES, ModConfig.treeChopperMiningLimit.getValue(), ModConfig.treeChopperScanRange.getValue(), null, true));
-    public static final VeinMinerEnchant LEAF_BREAKER_ENCHANT                                                           = registerEnchantment(new VeinMinerEnchant(LEAF_BREAKER, LEAF_BREAKER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.AXES, ModConfig.leafBreakerMiningLimit.getValue(), ModConfig.leafBreakerScanRange.getValue(), null, true));
-    public static final CapturingEnchant CAPTURING_ENCHANT                                                              = registerEnchantment(new CapturingEnchant(CAPTURING, ItemTags.SWORD_ENCHANTABLE, ItemTags.SWORDS));
+    public static final VeinMinerEnchant ORE_MINER_ENCHANT;
+    public static final VeinMinerEnchant TREE_CHOPPER_ENCHANT;
+    public static final VeinMinerEnchant LEAF_BREAKER_ENCHANT;
+    public static final CapturingEnchant CAPTURING_ENCHANT;
+
+    static {
+        if (ModConfig.oreMinerEnabled.getValue()) {
+            ORE_MINER = ResourceKey.create(Registries.ENCHANTMENT, FabsBnB.location("ore_miner"));
+            ORE_MINER_ENCHANT = registerEnchantment(new VeinMinerEnchant(ORE_MINER, ORE_MINER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.PICKAXES, ModConfig.oreMinerMiningLimit.getValue(), ModConfig.oreMinerScanRange.getValue()));
+        } else {
+            ORE_MINER = null;
+            ORE_MINER_ENCHANT = null;
+        }
+
+        if (ModConfig.treeChopperEnabled.getValue()) {
+            TREE_CHOPPER = ResourceKey.create(Registries.ENCHANTMENT, FabsBnB.location("tree_chopper"));
+            TREE_CHOPPER_ENCHANT = registerEnchantment(new VeinMinerEnchant(TREE_CHOPPER, TREE_CHOPPER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.AXES, ModConfig.treeChopperMiningLimit.getValue(), ModConfig.treeChopperScanRange.getValue(), null, true));
+        } else {
+            TREE_CHOPPER = null;
+            TREE_CHOPPER_ENCHANT = null;
+        }
+
+        if (ModConfig.leafBreakerEnabled.getValue()) {
+            LEAF_BREAKER = ResourceKey.create(Registries.ENCHANTMENT, FabsBnB.location("leaf_breaker"));
+            LEAF_BREAKER_ENCHANT = registerEnchantment(new VeinMinerEnchant(LEAF_BREAKER, LEAF_BREAKER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.AXES, ModConfig.leafBreakerMiningLimit.getValue(), ModConfig.leafBreakerScanRange.getValue(), null, true));
+        } else {
+            LEAF_BREAKER = null;
+            LEAF_BREAKER_ENCHANT = null;
+        }
+
+        if (ModConfig.capturingEnabled.getValue()) {
+            CAPTURING = ResourceKey.create(Registries.ENCHANTMENT, FabsBnB.location("capturing"));
+            CAPTURING_ENCHANT = registerEnchantment(new CapturingEnchant(CAPTURING, ItemTags.SWORD_ENCHANTABLE, ItemTags.SWORDS));
+        } else {
+            CAPTURING = null;
+            CAPTURING_ENCHANT = null;
+        }
+    }
 
     private static <T extends IEnchantment> T registerEnchantment(T enchantment) {
         ENCHANTMENT_LIST.add(enchantment);

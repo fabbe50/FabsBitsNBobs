@@ -76,7 +76,9 @@ public class EventRegistry {
                 if (stack == null) {
                     return EventResult.pass();
                 }
-                ModRegistries.CAPTURING_ENCHANT.handleEvent(livingEntity, stack);
+                if (ModRegistries.CAPTURING_ENCHANT != null) {
+                    ModRegistries.CAPTURING_ENCHANT.handleEvent(livingEntity, stack);
+                }
             }
             return EventResult.pass();
         });
@@ -120,13 +122,13 @@ public class EventRegistry {
 
     @SuppressWarnings("RedundantIfStatement")
     public static boolean handleCustomMiningEnchantments(Level level, BlockPos blockPos, BlockState blockState, ServerPlayer serverPlayer, ItemStack stack) {
-        if (ModRegistries.ORE_MINER_ENCHANT.handleEvent(level, blockPos, blockState, serverPlayer, stack)) {
+        if (ModRegistries.ORE_MINER_ENCHANT != null && ModRegistries.ORE_MINER_ENCHANT.handleEvent(level, blockPos, blockState, serverPlayer, stack)) {
             return true;
         }
-        if (ModRegistries.TREE_CHOPPER_ENCHANT.handleEvent(level, blockPos, blockState, serverPlayer, stack)) {
+        if (ModRegistries.TREE_CHOPPER_ENCHANT != null && ModRegistries.TREE_CHOPPER_ENCHANT.handleEvent(level, blockPos, blockState, serverPlayer, stack)) {
             return true;
         }
-        if (ModRegistries.LEAF_BREAKER_ENCHANT.handleEvent(level, blockPos, blockState, serverPlayer, stack)) {
+        if (ModRegistries.LEAF_BREAKER_ENCHANT != null && ModRegistries.LEAF_BREAKER_ENCHANT.handleEvent(level, blockPos, blockState, serverPlayer, stack)) {
             return true;
         }
         return false;
