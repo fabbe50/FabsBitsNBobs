@@ -1,7 +1,7 @@
 {
   "anvil_cost": 10,
   "description": {
-    "translate": "enchantment.fabsbnb.vein_miner"
+    "translate": "enchantment.fabsbnb.ore_miner"
   },
   "max_cost": {
     "base": 65,

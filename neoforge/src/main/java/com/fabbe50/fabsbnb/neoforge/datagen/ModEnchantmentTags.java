@@ -20,7 +20,7 @@ public class ModEnchantmentTags extends EnchantmentTagsProvider {
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
         tag(EnchantmentTags.IN_ENCHANTING_TABLE)
-                .addOptional(ModRegistries.VEIN_MINER.location())
+                .addOptional(ModRegistries.ORE_MINER.location())
                 .addOptional(ModRegistries.TREE_CHOPPER.location())
                 .addOptional(ModRegistries.LEAF_BREAKER.location())
                 .addOptional(ModRegistries.CAPTURING.location());

@@ -75,7 +75,7 @@ public class Translations extends LanguageProvider {
         addPotion("feline_aura_long", "Feline Aura");
 
         // Enchantments
-        addEnchantment("vein_miner", "Ore Miner", "Mines the entire ore vein and drops the items at the original block.");
+        addEnchantment("ore_miner", "Ore Miner", "Mines the entire ore vein and drops the items at the original block.");
         addEnchantment("tree_chopper", "Tree Chopper", "Mines the entire tree stem and drops the items at the original block.");
         addEnchantment("leaf_breaker", "Leaf Breaker", "Mines the all leaves within range and drops the items at the original block.");
         addEnchantment("capturing", "Capturing", "Adds a chance for mobs to drop their spawn eggs.");
