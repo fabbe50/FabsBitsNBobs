@@ -27,6 +27,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.ToIntFunction;
 
@@ -172,5 +173,47 @@ public class Utilities {
 
     public static void hurtItem(int i, LivingEntity entity, ItemStack stack) {
         stack.hurtAndBreak(i, entity, entity.getEquipmentSlotForItem(stack));
+    }
+
+    public static List<BlockPos> getBlocksInRadius(BlockPos center, int radius) {
+        List<BlockPos> blocks = new ArrayList<>();
+
+        int cx = center.getX();
+        int cy = center.getY();
+        int cz = center.getZ();
+
+        int rSq = radius * radius;
+
+        for (int x = -radius; x <= radius; x++) {
+            for (int z = -radius; z <= radius; z++) {
+                if (x * x + z * z <= rSq) {
+                    blocks.add(new BlockPos(cx + x, cy, cz + z));
+                }
+            }
+        }
+
+        return blocks;
+    }
+
+    public static List<BlockPos> getBlocksInSphericalRadius(BlockPos center, int radius) {
+        List<BlockPos> blocks = new ArrayList<>();
+
+        int cx = center.getX();
+        int cy = center.getY();
+        int cz = center.getZ();
+
+        int rSq = radius * radius;
+
+        for (int x = -radius; x <= radius; x++) {
+            for (int y = -radius; y <= radius; y++) {
+                for (int z = -radius; z <= radius; z++) {
+                    if (x*x + y*y + z*z <= rSq) {
+                        blocks.add(new BlockPos(cx + x, cy + y, cz + z));
+                    }
+                }
+            }
+        }
+
+        return blocks;
     }
 }

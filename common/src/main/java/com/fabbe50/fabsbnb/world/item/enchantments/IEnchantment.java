@@ -4,7 +4,9 @@ import com.fabbe50.fabsbnb.FabsBnB;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantment.EnchantmentDefinition;
@@ -19,13 +21,27 @@ public interface IEnchantment {
         return Enchantment.enchantment(getEnchantmentDefinition(itemHolder)).exclusiveWith(exclusiveWith(enchantmentHolder)).build(FabsBnB.location(location));
     }
 
-    EnchantmentDefinition getEnchantmentDefinition(HolderGetter<Item> itemHolder);
+    default EnchantmentDefinition getEnchantmentDefinition(HolderGetter<Item> itemHolder) {
+        return Enchantment.definition(itemHolder.getOrThrow(getSupportedItems()), itemHolder.getOrThrow(getPrimaryItems()), getWeight(), getMaxLevel(), getMinCost(), getMaxCost(), getAnvilCost(), getEquipmentSlotGroup());
+    }
 
     default HolderSet<Enchantment> exclusiveWith(HolderGetter<Enchantment> enchantmentHolder) {
         return null;
     }
 
+    int getWeight();
     int getMaxLevel();
 
+    Enchantment.Cost getMinCost();
+    Enchantment.Cost getMaxCost();
+    int getAnvilCost();
+
+    EquipmentSlotGroup getEquipmentSlotGroup();
+
     ResourceKey<Enchantment> getResourceKey();
+
+    TagKey<Item> getSupportedItems();
+    TagKey<Item> getPrimaryItems();
+
+    boolean handleEvent(Object... objects);
 }

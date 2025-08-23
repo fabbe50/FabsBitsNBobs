@@ -3,7 +3,6 @@ package com.fabbe50.fabsbnb.world.item.enchantments;
 import com.fabbe50.fabsbnb.ModConfig;
 import com.fabbe50.fabsbnb.util.Utilities;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -14,39 +13,10 @@ import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 
-public class CapturingEnchant implements IEnchantment {
-    private final ResourceKey<Enchantment> enchantmentKey;
-    private final TagKey<Item> supportedTools;
-    private final TagKey<Item> primaryTools;
-
-    public CapturingEnchant(ResourceKey<Enchantment> enchantmentKey, TagKey<Item> supportedTools, TagKey<Item> primaryTools) {
-        this.enchantmentKey = enchantmentKey;
-        this.supportedTools = supportedTools;
-        this.primaryTools = primaryTools;
-    }
-
+public record CapturingEnchant(ResourceKey<Enchantment> enchantmentKey, TagKey<Item> supportedTools, TagKey<Item> primaryTools) implements IEnchantment {
     @Override
-    public Enchantment.EnchantmentDefinition getEnchantmentDefinition(HolderGetter<Item> itemHolder) {
-        return Enchantment.definition(itemHolder.getOrThrow(supportedTools), itemHolder.getOrThrow(primaryTools), 1, getMaxLevel(), Enchantment.dynamicCost(15, 9), Enchantment.dynamicCost(65, 9), 4, EquipmentSlotGroup.HAND);
-    }
-
-    public void handleEvent(LivingEntity attackedEntity, ItemStack weapon) {
-        Level level = attackedEntity.level();
-        Holder<Enchantment> enchantmentHolder = Utilities.getHolder(level, enchantmentKey);
-        if (weapon.isEmpty()) {
-            return;
-        }
-        int enchantmentLevel = weapon.getEnchantments().getLevel(enchantmentHolder);
-        if (!(enchantmentLevel > 0)) {
-            return;
-        }
-        SpawnEggItem spawnEggItem = SpawnEggItem.byId(attackedEntity.getType());
-        if (spawnEggItem != null) {
-            ItemStack spawnEggStack = new ItemStack(spawnEggItem);
-            if (attackedEntity.getRandom().nextInt(ModConfig.oneInNChanceToDropSpawnEgg.getValue() / enchantmentLevel) == 0) {
-                attackedEntity.spawnAtLocation(spawnEggStack);
-            }
-        }
+    public int getWeight() {
+        return 1;
     }
 
     @Override
@@ -55,7 +25,63 @@ public class CapturingEnchant implements IEnchantment {
     }
 
     @Override
+    public Enchantment.Cost getMinCost() {
+        return Enchantment.dynamicCost(15, 9);
+    }
+
+    @Override
+    public Enchantment.Cost getMaxCost() {
+        return Enchantment.dynamicCost(65, 9);
+    }
+
+    @Override
+    public int getAnvilCost() {
+        return 4;
+    }
+
+    @Override
+    public EquipmentSlotGroup getEquipmentSlotGroup() {
+        return EquipmentSlotGroup.HAND;
+    }
+
+    @Override
     public ResourceKey<Enchantment> getResourceKey() {
         return enchantmentKey;
+    }
+
+    @Override
+    public TagKey<Item> getSupportedItems() {
+        return supportedTools;
+    }
+
+    @Override
+    public TagKey<Item> getPrimaryItems() {
+        return primaryTools;
+    }
+
+    @Override
+    public boolean handleEvent(Object... objects) {
+        return handleEvent((LivingEntity) objects[0], (ItemStack) objects[1]);
+    }
+
+    private boolean handleEvent(LivingEntity attackedEntity, ItemStack weapon) {
+        Level level = attackedEntity.level();
+        Holder<Enchantment> enchantmentHolder = Utilities.getHolder(level, enchantmentKey);
+        if (weapon.isEmpty()) {
+            return false;
+        }
+        int enchantmentLevel = weapon.getEnchantments().getLevel(enchantmentHolder);
+        if (!(enchantmentLevel > 0)) {
+            return false;
+        }
+        SpawnEggItem spawnEggItem = SpawnEggItem.byId(attackedEntity.getType());
+        if (spawnEggItem != null) {
+            ItemStack spawnEggStack = new ItemStack(spawnEggItem);
+            if (attackedEntity.getRandom().nextInt(ModConfig.oneInNChanceToDropSpawnEgg.getValue() / enchantmentLevel) == 0) {
+                attackedEntity.spawnAtLocation(spawnEggStack);
+                return true;
+            }
+        }
+        return false;
     }
 }

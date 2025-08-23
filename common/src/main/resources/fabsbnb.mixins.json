@@ -9,6 +9,8 @@
     "CactusBlockMixin",
     "ComposterBlockMixin",
     "CreeperMixin",
+    "EnchantedBookItemMixin",
+    "EnchantmentHelperMixin",
     "ItemStackMixin",
     "LayeredCauldronBlockMixin",
     "PhantomSweepAttackGoalMixin",

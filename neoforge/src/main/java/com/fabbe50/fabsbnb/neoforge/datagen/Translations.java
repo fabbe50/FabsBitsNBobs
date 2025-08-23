@@ -51,6 +51,7 @@ public class Translations extends LanguageProvider {
         addItem(ModRegistries.MILK_BOTTLE, "Milk Bottle");
         addItem(ModRegistries.CHOCOLATE_MILK_BOTTLE, "Chocolate Milk Bottle");
         addItem(ModRegistries.CHOCOLATE_NECKLACE, "Chocolate Empowered Necklace");
+        addItem(ModRegistries.EXT_ENCHANTED_BOOK, "Enchanted Book");
 
         // Text
         addText("empty", "Empty");
@@ -99,6 +100,9 @@ public class Translations extends LanguageProvider {
         addText("tree_chopper.desc_screen", "Chops down the entire tree at once. Only works on blocks with the #fabsbnb:tree_chopper_whitelist tag.");
         addText("leaf_breaker.desc_screen", "Breaks all leaves within range. Only works on blocks with the #fabsbnb:leaf_breaker_whitelist tag.");
         addText("capturing.desc_screen", "When a mob is killed with capturing, there's a chance that a spawn egg will drop.");
+        addText("harvesting.desc_screen", "When right-clicking a crop with a hoe enchanted with harvesting it will harvest all crops within an area base on the tier of the tool.");
+        addText("tilling.desc_screen", "When right-clicking a dirt type block with a hoe enchanted with tilling it will till all the soil within an area base on the tier of the tool.");
+        addText("scythe.desc_screen", "When breaking a grass or flower block with a hoe enchanted with scythe it will break all the grass and flowers within an area base on the tier of the tool.");
         addText("feline_aura.desc_screen", "Scares away creepers and phantoms.");
         addText("cactus.desc_screen[0]", "Adjusted behaviour:");
         addText("cactus.desc_screen[1]", "Doesn't break when it lands on a cactus block.");
@@ -122,6 +126,9 @@ public class Translations extends LanguageProvider {
         addEnchantment("tree_chopper", "Tree Chopper", "Mines the entire tree stem and drops the items at the original block.");
         addEnchantment("leaf_breaker", "Leaf Breaker", "Mines the all leaves within range and drops the items at the original block.");
         addEnchantment("capturing", "Capturing", "Adds a chance for mobs to drop their spawn eggs.");
+        addEnchantment("harvesting", "Harvesting", "Harvest and replant in an area based on tool tier.");
+        addEnchantment("tilling", "Tilling", "Tills all the soil in an area based on tool tier.");
+        addEnchantment("scythe", "Scythe", "Breaks all the grass and flowers in an area based on tool tier.");
 
         // Config
         addConfig(ModConfig.debugMode, "Debug Mode", "Shows more information in the log. NOTE: CAN BE SPAMMY");
@@ -149,6 +156,19 @@ public class Translations extends LanguageProvider {
                 "The 1 in n chance for a spawn egg to drop when killed with capturing enchantment.",
                 "Note: n is divided by the level of the enchantment. For example 'n=100' would result in a 1/33 chance at level 3."
         );
+        addConfig(ModConfig.harvestingEnabled, "Harvesting Enabled", "If the harvesting enchantment should be enabled.");
+        addConfig(ModConfig.tillingEnabled, "Tilling Enabled", "If the tilling enchantment should be enabled.");
+        addConfig(ModConfig.scytheEnabled, "Scythe Enabled", "If the scythe enchantment should be enabled.");
+        add(LangUtils.getConfigKey("category.general"), "General");
+        add(LangUtils.getConfigKey("subcategory.building_wands"), "Building Wands");
+        add(LangUtils.getConfigKey("category.enchantments"), "Enchantments");
+        add(LangUtils.getConfigKey("subcategory.ore_miner"), "Ore Miner");
+        add(LangUtils.getConfigKey("subcategory.tree_chopper"), "Tree Chopper");
+        add(LangUtils.getConfigKey("subcategory.leaf_breaker"), "Leaf Breaker");
+        add(LangUtils.getConfigKey("subcategory.capturing"), "Capturing");
+        add(LangUtils.getConfigKey("subcategory.harvesting"), "Harvesting");
+        add(LangUtils.getConfigKey("subcategory.tilling"), "Tilling");
+        add(LangUtils.getConfigKey("subcategory.scythe"), "Scythe");
 
         // Misc
         add("emi.category.fabsbnb.cauldron_conversion", "Cauldron Conversation");

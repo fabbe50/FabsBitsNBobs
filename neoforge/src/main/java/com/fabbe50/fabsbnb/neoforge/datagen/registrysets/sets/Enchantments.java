@@ -20,5 +20,8 @@ public class Enchantments {
         context.register(ModRegistries.TREE_CHOPPER, ModRegistries.TREE_CHOPPER_ENCHANT.getEnchantment("tree_chopper", damageTypeHolder, enchantmentHolder, itemHolder, blockHolder));
         context.register(ModRegistries.LEAF_BREAKER, ModRegistries.LEAF_BREAKER_ENCHANT.getEnchantment("leaf_breaker", damageTypeHolder, enchantmentHolder, itemHolder, blockHolder));
         context.register(ModRegistries.CAPTURING, ModRegistries.CAPTURING_ENCHANT.getEnchantment("capturing", damageTypeHolder, enchantmentHolder, itemHolder, blockHolder));
+        context.register(ModRegistries.HARVESTING, ModRegistries.HARVESTING_ENCHANT.getEnchantment("harvesting", damageTypeHolder, enchantmentHolder, itemHolder, blockHolder));
+        context.register(ModRegistries.TILLING, ModRegistries.TILLING_ENCHANT.getEnchantment("tilling", damageTypeHolder, enchantmentHolder, itemHolder, blockHolder));
+        context.register(ModRegistries.SCYTHE, ModRegistries.SCYTHE_ENCHANT.getEnchantment("scythe", damageTypeHolder, enchantmentHolder, itemHolder, blockHolder));
     }
 }

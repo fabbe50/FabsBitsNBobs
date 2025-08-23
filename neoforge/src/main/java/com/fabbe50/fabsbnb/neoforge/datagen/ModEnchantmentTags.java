@@ -23,6 +23,9 @@ public class ModEnchantmentTags extends EnchantmentTagsProvider {
                 .addOptional(ModRegistries.ORE_MINER.location())
                 .addOptional(ModRegistries.TREE_CHOPPER.location())
                 .addOptional(ModRegistries.LEAF_BREAKER.location())
-                .addOptional(ModRegistries.CAPTURING.location());
+                .addOptional(ModRegistries.CAPTURING.location())
+                .addOptional(ModRegistries.HARVESTING.location())
+                .addOptional(ModRegistries.TILLING.location())
+                .addOptional(ModRegistries.SCYTHE.location());
     }
 }

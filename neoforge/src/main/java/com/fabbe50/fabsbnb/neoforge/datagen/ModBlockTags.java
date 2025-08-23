@@ -6,6 +6,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
@@ -49,6 +50,13 @@ public class ModBlockTags extends BlockTagsProvider {
 
         tag(ModRegistries.LEAF_BREAKER_WHITELIST)
                 .addTag(BlockTags.LEAVES);
+
+        tag(ModRegistries.SCYTHE_ABLE)
+                .addTag(BlockTags.FLOWERS)
+                .add(Blocks.SHORT_GRASS)
+                .add(Blocks.TALL_GRASS)
+                .add(Blocks.SEAGRASS)
+                .add(Blocks.TALL_SEAGRASS);
 
         tag(ModRegistries.SPIDER_NOT_CLIMBABLE)
                 .addTag(BlockTags.ICE)

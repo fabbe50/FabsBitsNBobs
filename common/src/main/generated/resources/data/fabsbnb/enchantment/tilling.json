@@ -1,7 +1,7 @@
 {
-  "anvil_cost": 10,
+  "anvil_cost": 4,
   "description": {
-    "translate": "enchantment.fabsbnb.tree_chopper"
+    "translate": "enchantment.fabsbnb.tilling"
   },
   "max_cost": {
     "base": 65,
@@ -12,10 +12,10 @@
     "base": 15,
     "per_level_above_first": 0
   },
-  "primary_items": "#minecraft:axes",
+  "primary_items": "#minecraft:hoes",
   "slots": [
     "hand"
   ],
-  "supported_items": "#minecraft:axes",
+  "supported_items": "#minecraft:hoes",
   "weight": 1
 }

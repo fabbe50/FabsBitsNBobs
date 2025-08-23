@@ -9,6 +9,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -54,6 +55,9 @@ public class ModItemTags extends ItemTagsProvider {
                 .add(Items.CACTUS)
                 .add(Items.GLISTERING_MELON_SLICE);
 
+        tag(ModRegistries.DIGGING_TOOLS)
+                .addTag(ItemTags.SHOVELS)
+                .addTag(ItemTags.PICKAXES);
 
         tag(ModRegistries.IMMUNE_TO_CACTUS_DAMAGE)
                 .add(Items.CACTUS)

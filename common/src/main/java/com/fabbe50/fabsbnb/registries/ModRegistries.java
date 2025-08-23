@@ -14,16 +14,16 @@ import com.fabbe50.fabsbnb.world.inventory.BlockBreakerMenu;
 import com.fabbe50.fabsbnb.world.item.*;
 import com.fabbe50.fabsbnb.world.item.base.ModBlockItem;
 import com.fabbe50.fabsbnb.world.item.base.ModItem;
-import com.fabbe50.fabsbnb.world.item.enchantments.CapturingEnchant;
-import com.fabbe50.fabsbnb.world.item.enchantments.IEnchantment;
-import com.fabbe50.fabsbnb.world.item.enchantments.VeinMinerEnchant;
+import com.fabbe50.fabsbnb.world.item.enchantments.*;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.menu.MenuRegistry;
 import dev.architectury.registry.registries.Registrar;
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.fabricmc.loader.impl.ModContainerImpl;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -37,6 +37,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -113,6 +114,11 @@ public class ModRegistries {
     public static final RegistrySupplier<Item> ITEM_BLOCK_DETECTOR                                                      = registerItem(FabsBnB.location("block_detector"), () -> new ModBlockItem(BLOCK_DETECTOR.get(), new Item.Properties()));
     public static final RegistrySupplier<Item> ITEM_XP_HOLDER                                                           = registerItem(FabsBnB.location("xp_holder"), () -> new ModBlockItem(XP_HOLDER.get(), new Item.Properties()));
     public static final RegistrySupplier<Item> FULL_WATER_CAULDRON                                                      = registerItem(FabsBnB.location("water_cauldron"), () -> new BlockItem(Blocks.WATER_CAULDRON, new Item.Properties()), false);
+    public static final RegistrySupplier<Item> EXT_ENCHANTED_BOOK                                                       = registerItem(FabsBnB.location("enchanted_book"), () -> new EnchantedBookItem(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).component(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)), false);
+    public static final RegistrySupplier<Item> OWN_POTION_ITEM                                                          = registerItem(FabsBnB.location("potion"), () -> new PotionItem(new Item.Properties()), false);
+    public static final RegistrySupplier<Item> OWN_SPLASH_POTION_ITEM                                                   = registerItem(FabsBnB.location("splash_potion"), () -> new SplashPotionItem(new Item.Properties()), false);
+    public static final RegistrySupplier<Item> OWN_LINGERING_POTION_ITEM                                                = registerItem(FabsBnB.location("lingering_potion"), () -> new LingeringPotionItem(new Item.Properties()), false);
+    public static final RegistrySupplier<Item> OWN_TIPPED_ARROW_ITEM                                                    = registerItem(FabsBnB.location("tipped_arrow"), () -> new TippedArrowItem(new Item.Properties()), false);
 
     private static RegistrySupplier<Item> registerItem(ResourceLocation location, Supplier<Item> itemSupplier) {
         return registerItem(location, itemSupplier, true);
@@ -159,29 +165,36 @@ public class ModRegistries {
     public static final TagKey<Item> BUILDING_WANDS                                                                     = TagKey.create(Registries.ITEM, FabsBnB.location("building_wands"));
     public static final TagKey<Item> IMMUNE_TO_CACTUS_DAMAGE                                                            = TagKey.create(Registries.ITEM, FabsBnB.location("immune_to_cactus"));
     public static final TagKey<Item> NETHERITE_ITEMS                                                                    = TagKey.create(Registries.ITEM, FabsBnB.location("c", "netherite_items"));
-    public static final TagKey<Item> SPAWN_EGGS                                                                         = TagKey.create(Registries.ITEM, FabsBnB.location("c", "spawn_eggs"));
+    public static final TagKey<Item> DIGGING_TOOLS                                                                      = TagKey.create(Registries.ITEM, FabsBnB.location("digging_tools"));
     public static final TagKey<Block> BLOCK_YOINKER_BLACKLIST                                                           = TagKey.create(Registries.BLOCK, FabsBnB.location("block_yoinker_blacklist"));
     public static final TagKey<Block> SPIDER_NOT_CLIMBABLE                                                              = TagKey.create(Registries.BLOCK, FabsBnB.location("spider_not_climbable"));
     public static final TagKey<Block> ORE_MINER_WHITELIST                                                               = TagKey.create(Registries.BLOCK, FabsBnB.location("ore_miner_whitelist"));
     public static final TagKey<Block> TREE_CHOPPER_WHITELIST                                                            = TagKey.create(Registries.BLOCK, FabsBnB.location("tree_chopper_whitelist"));
     public static final TagKey<Block> TREE_CHOPPER_ATTACHMENTS                                                          = TagKey.create(Registries.BLOCK, FabsBnB.location("tree_chopper_attachments"));
     public static final TagKey<Block> LEAF_BREAKER_WHITELIST                                                            = TagKey.create(Registries.BLOCK, FabsBnB.location("leaf_breaker_whitelist"));
+    public static final TagKey<Block> SCYTHE_ABLE                                                                       = TagKey.create(Registries.BLOCK, FabsBnB.location("scythe-able"));
 
     // Enchantments
     public static final ResourceKey<Enchantment> ORE_MINER;
     public static final ResourceKey<Enchantment> TREE_CHOPPER;
     public static final ResourceKey<Enchantment> LEAF_BREAKER;
     public static final ResourceKey<Enchantment> CAPTURING;
+    public static final ResourceKey<Enchantment> HARVESTING;
+    public static final ResourceKey<Enchantment> TILLING;
+    public static final ResourceKey<Enchantment> SCYTHE;
 
     public static final VeinMinerEnchant ORE_MINER_ENCHANT;
     public static final VeinMinerEnchant TREE_CHOPPER_ENCHANT;
     public static final VeinMinerEnchant LEAF_BREAKER_ENCHANT;
     public static final CapturingEnchant CAPTURING_ENCHANT;
+    public static final HarvestingEnchant HARVESTING_ENCHANT;
+    public static final TillingEnchant TILLING_ENCHANT;
+    public static final ScytheEnchantment SCYTHE_ENCHANT;
 
     static {
         if (ModConfig.oreMinerEnabled.getValue()) {
             ORE_MINER = ResourceKey.create(Registries.ENCHANTMENT, FabsBnB.location("ore_miner"));
-            ORE_MINER_ENCHANT = registerEnchantment(new VeinMinerEnchant(ORE_MINER, ORE_MINER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.PICKAXES, ModConfig.oreMinerMiningLimit.getValue(), ModConfig.oreMinerScanRange.getValue()));
+            ORE_MINER_ENCHANT = registerEnchantment(new VeinMinerEnchant(ORE_MINER, ORE_MINER_WHITELIST, DIGGING_TOOLS, ItemTags.PICKAXES, ModConfig.oreMinerMiningLimit.getValue(), ModConfig.oreMinerScanRange.getValue()));
         } else {
             ORE_MINER = null;
             ORE_MINER_ENCHANT = null;
@@ -189,7 +202,7 @@ public class ModRegistries {
 
         if (ModConfig.treeChopperEnabled.getValue()) {
             TREE_CHOPPER = ResourceKey.create(Registries.ENCHANTMENT, FabsBnB.location("tree_chopper"));
-            TREE_CHOPPER_ENCHANT = registerEnchantment(new VeinMinerEnchant(TREE_CHOPPER, TREE_CHOPPER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.AXES, ModConfig.treeChopperMiningLimit.getValue(), ModConfig.treeChopperScanRange.getValue(), null, true));
+            TREE_CHOPPER_ENCHANT = registerEnchantment(new VeinMinerEnchant(TREE_CHOPPER, TREE_CHOPPER_WHITELIST, ItemTags.AXES, ItemTags.AXES, ModConfig.treeChopperMiningLimit.getValue(), ModConfig.treeChopperScanRange.getValue(), null, true));
         } else {
             TREE_CHOPPER = null;
             TREE_CHOPPER_ENCHANT = null;
@@ -197,7 +210,7 @@ public class ModRegistries {
 
         if (ModConfig.leafBreakerEnabled.getValue()) {
             LEAF_BREAKER = ResourceKey.create(Registries.ENCHANTMENT, FabsBnB.location("leaf_breaker"));
-            LEAF_BREAKER_ENCHANT = registerEnchantment(new VeinMinerEnchant(LEAF_BREAKER, LEAF_BREAKER_WHITELIST, ItemTags.MINING_LOOT_ENCHANTABLE, ItemTags.AXES, ModConfig.leafBreakerMiningLimit.getValue(), ModConfig.leafBreakerScanRange.getValue(), null, true));
+            LEAF_BREAKER_ENCHANT = registerEnchantment(new VeinMinerEnchant(LEAF_BREAKER, LEAF_BREAKER_WHITELIST, ItemTags.AXES, ItemTags.AXES, ModConfig.leafBreakerMiningLimit.getValue(), ModConfig.leafBreakerScanRange.getValue(), null, true));
         } else {
             LEAF_BREAKER = null;
             LEAF_BREAKER_ENCHANT = null;
@@ -205,10 +218,34 @@ public class ModRegistries {
 
         if (ModConfig.capturingEnabled.getValue()) {
             CAPTURING = ResourceKey.create(Registries.ENCHANTMENT, FabsBnB.location("capturing"));
-            CAPTURING_ENCHANT = registerEnchantment(new CapturingEnchant(CAPTURING, ItemTags.SWORD_ENCHANTABLE, ItemTags.SWORDS));
+            CAPTURING_ENCHANT = registerEnchantment(new CapturingEnchant(CAPTURING, ItemTags.SHARP_WEAPON_ENCHANTABLE, ItemTags.SWORDS));
         } else {
             CAPTURING = null;
             CAPTURING_ENCHANT = null;
+        }
+
+        if (ModConfig.harvestingEnabled.getValue()) {
+            HARVESTING = ResourceKey.create(Registries.ENCHANTMENT, FabsBnB.location("harvesting"));
+            HARVESTING_ENCHANT = registerEnchantment(new HarvestingEnchant(HARVESTING, ItemTags.HOES, ItemTags.HOES));
+        } else {
+            HARVESTING = null;
+            HARVESTING_ENCHANT = null;
+        }
+
+        if (ModConfig.harvestingEnabled.getValue()) {
+            TILLING = ResourceKey.create(Registries.ENCHANTMENT, FabsBnB.location("tilling"));
+            TILLING_ENCHANT = registerEnchantment(new TillingEnchant(TILLING, ItemTags.HOES, ItemTags.HOES));
+        } else {
+            TILLING = null;
+            TILLING_ENCHANT = null;
+        }
+
+        if (ModConfig.scytheEnabled.getValue()) {
+            SCYTHE = ResourceKey.create(Registries.ENCHANTMENT, FabsBnB.location("scythe"));
+            SCYTHE_ENCHANT = registerEnchantment(new ScytheEnchantment(SCYTHE, ItemTags.HOES, ItemTags.HOES));
+        } else {
+            SCYTHE = null;
+            SCYTHE_ENCHANT = null;
         }
     }
 

@@ -7,13 +7,14 @@ import com.fabbe50.fabsbnb.loaders.CustomFoodDataLoader;
 import com.fabbe50.fabsbnb.util.Utilities;
 import com.fabbe50.fabsbnb.world.block.interfaces.ILeftClickable;
 import dev.architectury.event.EventResult;
-import dev.architectury.event.events.client.ClientLifecycleEvent;
 import dev.architectury.event.events.common.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -52,6 +53,21 @@ public class EventRegistry {
                     return EventResult.interruptTrue();
                 }
                 return clickableBlock.onLeftClick(level, blockPos, player, interactionHand, direction);
+            }
+            return EventResult.pass();
+        });
+        InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) -> {
+            Level level = player.level();
+            if (!level.isClientSide()) {
+                ItemStack stack = player.getItemInHand(hand);
+                if (stack.is(ItemTags.HOES)) {
+                    if (ModRegistries.HARVESTING_ENCHANT != null && ModRegistries.HARVESTING_ENCHANT.handleEvent(level, pos, stack)) {
+                        return EventResult.interruptTrue();
+                    }
+                    if (ModRegistries.TILLING_ENCHANT != null && ModRegistries.TILLING_ENCHANT.handleEvent(level, pos, stack)) {
+                        return EventResult.interruptTrue();
+                    }
+                }
             }
             return EventResult.pass();
         });
@@ -129,6 +145,9 @@ public class EventRegistry {
             return true;
         }
         if (ModRegistries.LEAF_BREAKER_ENCHANT != null && ModRegistries.LEAF_BREAKER_ENCHANT.handleEvent(level, blockPos, blockState, serverPlayer, stack)) {
+            return true;
+        }
+        if (ModRegistries.SCYTHE_ENCHANT != null && ModRegistries.SCYTHE_ENCHANT.handleEvent(level, blockPos, stack)) {
             return true;
         }
         return false;

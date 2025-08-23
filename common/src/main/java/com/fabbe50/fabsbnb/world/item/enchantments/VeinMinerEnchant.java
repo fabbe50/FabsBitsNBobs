@@ -5,10 +5,12 @@ import com.fabbe50.fabsbnb.util.Utilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderSet;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -72,11 +74,56 @@ public class VeinMinerEnchant implements IEnchantment {
     }
 
     @Override
-    public Enchantment.EnchantmentDefinition getEnchantmentDefinition(HolderGetter<Item> itemHolder) {
-        return Enchantment.definition(itemHolder.getOrThrow(supportedTools), itemHolder.getOrThrow(primaryTools), 1, getMaxLevel(), Enchantment.constantCost(15), Enchantment.constantCost(65), 10, EquipmentSlotGroup.HAND);
+    public int getWeight() {
+        return 1;
     }
 
-    public boolean handleEvent(Level level, BlockPos blockPos, BlockState blockState, @Nullable ServerPlayer serverPlayer, ItemStack stack) {
+    @Override
+    public ResourceKey<Enchantment> getResourceKey() {
+        return enchantmentKey;
+    }
+
+    @Override
+    public TagKey<Item> getSupportedItems() {
+        return supportedTools;
+    }
+
+    @Override
+    public TagKey<Item> getPrimaryItems() {
+        return primaryTools;
+    }
+
+    @Override
+    public int getMaxLevel() {
+        return 1;
+    }
+
+    @Override
+    public Enchantment.Cost getMinCost() {
+        return Enchantment.constantCost(15);
+    }
+
+    @Override
+    public Enchantment.Cost getMaxCost() {
+        return Enchantment.constantCost(65);
+    }
+
+    @Override
+    public int getAnvilCost() {
+        return 10;
+    }
+
+    @Override
+    public EquipmentSlotGroup getEquipmentSlotGroup() {
+        return EquipmentSlotGroup.HAND;
+    }
+
+    @Override
+    public boolean handleEvent(Object... objects) {
+        return handleEvent((Level) objects[0], (BlockPos) objects[1], (BlockState) objects[2], (ServerPlayer) objects[3], (ItemStack) objects[4]);
+    }
+
+    private boolean handleEvent(Level level, BlockPos blockPos, BlockState blockState, @Nullable ServerPlayer serverPlayer, ItemStack stack) {
         FabsBnB.debug("Running Vein-miner of type: " + enchantmentKey);
         if (serverPlayer != null) {
             if (serverPlayer.isShiftKeyDown()) {
@@ -205,16 +252,6 @@ public class VeinMinerEnchant implements IEnchantment {
             return false;
         }
         return player.getAbilities().instabuild;
-    }
-
-    @Override
-    public ResourceKey<Enchantment> getResourceKey() {
-        return enchantmentKey;
-    }
-
-    @Override
-    public int getMaxLevel() {
-        return 1;
     }
 
     public TagKey<Block> getBlockFilter() {

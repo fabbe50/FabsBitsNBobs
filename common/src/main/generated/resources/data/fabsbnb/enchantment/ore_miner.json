@@ -16,6 +16,6 @@
   "slots": [
     "hand"
   ],
-  "supported_items": "#minecraft:enchantable/mining_loot",
+  "supported_items": "#fabsbnb:digging_tools",
   "weight": 1
 }
