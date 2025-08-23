@@ -25,4 +25,33 @@ public abstract class AbstractRangedConfigOption<T extends Number, R extends Abs
     public T max() {
         return max;
     }
+
+    public abstract class Builder<Z extends AbstractRangedConfigOption<T, R>> extends AbstractConfigOption<T, R>.Builder<Z> {
+        T min;
+        T max;
+
+        public Builder(String name, T defaultValue) {
+            super(name, defaultValue, true, "general", "");
+        }
+
+        public Builder(String name, T defaultValue, T min, T max) {
+            super(name, defaultValue, true, "general", "");
+            this.min = min;
+            this.max = max;
+        }
+
+        public Builder(String name, T defaultValue, boolean requiresRestart, String category, String subCategory) {
+            super(name, defaultValue, requiresRestart, category, subCategory);
+        }
+
+        public Builder<Z> min(T min) {
+            this.min = min;
+            return this;
+        }
+
+        public Builder<Z> max(T max) {
+            this.max = max;
+            return this;
+        }
+    }
 }

@@ -11,6 +11,10 @@ import java.util.Properties;
 public interface IConfigOption<T, R extends AbstractConfigListEntry<T>> extends IClothBuilder<T, R> {
     String getKey();
 
+    String getCategory();
+
+    String getSubCategory();
+
     default Component getTranslation() {
         return LangUtils.getConfig(getKey());
     }

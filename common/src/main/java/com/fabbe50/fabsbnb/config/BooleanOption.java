@@ -7,14 +7,16 @@ import me.shedaniel.clothconfig2.impl.builders.BooleanToggleBuilder;
 import java.util.Properties;
 
 public class BooleanOption extends AbstractConfigOption<Boolean, BooleanListEntry> {
-    private boolean requiresRestart = false;
-
     public BooleanOption(String name, Boolean defaultValue) {
         super(name, defaultValue);
     }
 
     public BooleanOption(String name, Boolean defaultValue, Boolean value) {
         super(name, defaultValue, value);
+    }
+
+    public Builder makeBuilder() {
+        return new Builder(name, defaultValue);
     }
 
     @Override
@@ -32,25 +34,17 @@ public class BooleanOption extends AbstractConfigOption<Boolean, BooleanListEntr
         setValue(Boolean.parseBoolean((String) properties.computeIfAbsent(getKey(), o -> String.valueOf(getDefaultValue()))));
     }
 
-    public static class Builder {
-        String name;
-        boolean defaultValue;
-        boolean requiresRestart;
-
-        public Builder(String name, boolean defaultValue) {
-            this.name = name;
-            this.defaultValue = defaultValue;
-            this.requiresRestart = true;
+    public class Builder extends AbstractConfigOption<Boolean, BooleanListEntry>.Builder<BooleanOption> {
+        public Builder(String name, Boolean defaultValue) {
+            super(name, defaultValue);
         }
 
-        public Builder requiresRestart() {
-            this.requiresRestart = true;
-            return this;
-        }
-
+        @Override
         public BooleanOption build() {
-            BooleanOption option = new BooleanOption(name, defaultValue, defaultValue);
+            BooleanOption option = new BooleanOption(name, defaultValue);
             option.requiresRestart = requiresRestart;
+            option.category = category;
+            option.subCategory = subCategory;
             return option;
         }
     }

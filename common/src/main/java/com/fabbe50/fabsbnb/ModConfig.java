@@ -21,12 +21,12 @@ public class ModConfig {
 
     public static BooleanOption debugMode = addConfig(new BooleanOption("debugMode", true));
 
-    public static IntegerSliderOption woodenBuildingWandRadius = addConfig(new IntegerSliderOption("woodenBuildingWandRadius", 1, 1, 30, LangUtils.VALUE_BLOCKS));
-    public static IntegerSliderOption stoneBuildingWandRadius = addConfig(new IntegerSliderOption("stoneBuildingWandRadius", 2, 1, 30, LangUtils.VALUE_BLOCKS));
-    public static IntegerSliderOption ironBuildingWandRadius = addConfig(new IntegerSliderOption("ironBuildingWandRadius", 7, 1, 30, LangUtils.VALUE_BLOCKS));
-    public static IntegerSliderOption goldBuildingWandRadius = addConfig(new IntegerSliderOption("goldBuildingWandRadius", 5, 1, 30, LangUtils.VALUE_BLOCKS));
-    public static IntegerSliderOption diamondBuildingWandRadius = addConfig(new IntegerSliderOption("diamondBuildingWandRadius", 9, 1, 30, LangUtils.VALUE_BLOCKS));
-    public static IntegerSliderOption netheriteBuildingWandRadius = addConfig(new IntegerSliderOption("netheriteBuildingWandRadius", 15, 1, 30, LangUtils.VALUE_BLOCKS));
+    public static IntegerSliderOption woodenBuildingWandRadius = addConfig(new IntegerSliderOption("woodenBuildingWandRadius", 1, 1, 30).makeBuilder().textGetter(LangUtils.VALUE_BLOCKS).subCategory("building_wands").build());
+    public static IntegerSliderOption stoneBuildingWandRadius = addConfig(new IntegerSliderOption("stoneBuildingWandRadius", 2, 1, 30).makeBuilder().textGetter(LangUtils.VALUE_BLOCKS).subCategory("building_wands").build());
+    public static IntegerSliderOption ironBuildingWandRadius = addConfig(new IntegerSliderOption("ironBuildingWandRadius", 7, 1, 30).makeBuilder().textGetter(LangUtils.VALUE_BLOCKS).subCategory("building_wands").build());
+    public static IntegerSliderOption goldBuildingWandRadius = addConfig(new IntegerSliderOption("goldBuildingWandRadius", 5, 1, 30).makeBuilder().textGetter(LangUtils.VALUE_BLOCKS).subCategory("building_wands").build());
+    public static IntegerSliderOption diamondBuildingWandRadius = addConfig(new IntegerSliderOption("diamondBuildingWandRadius", 9, 1, 30).makeBuilder().textGetter(LangUtils.VALUE_BLOCKS).subCategory("building_wands").build());
+    public static IntegerSliderOption netheriteBuildingWandRadius = addConfig(new IntegerSliderOption("netheriteBuildingWandRadius", 15, 1, 30).makeBuilder().textGetter(LangUtils.VALUE_BLOCKS).subCategory("building_wands").build());
 
     public static DoubleOption whooshWandMultiplier = addConfig(new DoubleOption("whooshWandMultiplier", 3d, 1d, 50d));
     public static IntegerOption whooshWandCooldown = addConfig(new IntegerOption("whooshWandCooldown", 5, 0, Integer.MAX_VALUE));
@@ -35,17 +35,20 @@ public class ModConfig {
 
     public static DoubleOption entityMoverBlockSpeed = addConfig(new DoubleOption("entityMoverBlockSpeed", 0.3d));
 
-    public static BooleanOption oreMinerEnabled = addConfig(new BooleanOption.Builder("oreMinerEnabled", true).requiresRestart().build());
-    public static IntegerOption oreMinerMiningLimit = addConfig(new IntegerOption.Builder("oreMinerMiningLimit", 256, 1, Integer.MAX_VALUE).requiresRestart().build());
-    public static IntegerOption oreMinerScanRange = addConfig(new IntegerOption.Builder("oreMinerScanRange", 2, 1, 10).requiresRestart().build());
-    public static BooleanOption treeChopperEnabled = addConfig(new BooleanOption.Builder("treeChopperEnabled", true).requiresRestart().build());
-    public static IntegerOption treeChopperMiningLimit = addConfig(new IntegerOption.Builder("treeChopperMiningLimit", 256, 1, Integer.MAX_VALUE).requiresRestart().build());
-    public static IntegerOption treeChopperScanRange = addConfig(new IntegerOption.Builder("treeChopperScanRange", 2, 1, 10).requiresRestart().build());
-    public static BooleanOption leafBreakerEnabled = addConfig(new BooleanOption.Builder("leafBreakerEnabled", true).requiresRestart().build());
-    public static IntegerOption leafBreakerMiningLimit = addConfig(new IntegerOption.Builder("leafBreakerMiningLimit", 64, 1, Integer.MAX_VALUE).requiresRestart().build());
-    public static IntegerOption leafBreakerScanRange = addConfig(new IntegerOption.Builder("leafBreakerScanRange", 1, 1, 10).requiresRestart().build());
-    public static BooleanOption capturingEnabled = addConfig(new BooleanOption.Builder("capturingEnabled", true).requiresRestart().build());
-    public static IntegerOption oneInNChanceToDropSpawnEgg = addConfig(new IntegerOption("oneInNChanceToDropSpawnEgg", 100, 1, Integer.MAX_VALUE));
+    public static BooleanOption oreMinerEnabled = addConfig(new BooleanOption("oreMinerEnabled", true).makeBuilder().requiresRestart().category("enchantments").subCategory("ore_miner").build());
+    public static IntegerOption oreMinerMiningLimit = addConfig(new IntegerOption("oreMinerMiningLimit", 256, 1, Integer.MAX_VALUE).makeBuilder().requiresRestart().category("enchantments").subCategory("ore_miner").build());
+    public static IntegerOption oreMinerScanRange = addConfig(new IntegerOption("oreMinerScanRange", 2, 1, 10).makeBuilder().requiresRestart().category("enchantments").subCategory("ore_miner").build());
+    public static BooleanOption treeChopperEnabled = addConfig(new BooleanOption("treeChopperEnabled", true).makeBuilder().requiresRestart().category("enchantments").subCategory("tree_chopper").build());
+    public static IntegerOption treeChopperMiningLimit = addConfig(new IntegerOption("treeChopperMiningLimit", 256, 1, Integer.MAX_VALUE).makeBuilder().requiresRestart().category("enchantments").subCategory("tree_chopper").build());
+    public static IntegerOption treeChopperScanRange = addConfig(new IntegerOption("treeChopperScanRange", 2, 1, 10).makeBuilder().requiresRestart().category("enchantments").subCategory("tree_chopper").build());
+    public static BooleanOption leafBreakerEnabled = addConfig(new BooleanOption("leafBreakerEnabled", true).makeBuilder().requiresRestart().category("enchantments").subCategory("leaf_breaker").build());
+    public static IntegerOption leafBreakerMiningLimit = addConfig(new IntegerOption("leafBreakerMiningLimit", 64, 1, Integer.MAX_VALUE).makeBuilder().requiresRestart().category("enchantments").subCategory("leaf_breaker").build());
+    public static IntegerOption leafBreakerScanRange = addConfig(new IntegerOption("leafBreakerScanRange", 1, 1, 10).makeBuilder().requiresRestart().category("enchantments").subCategory("leaf_breaker").build());
+    public static BooleanOption capturingEnabled = addConfig(new BooleanOption("capturingEnabled", true).makeBuilder().requiresRestart().category("enchantments").subCategory("capturing").build());
+    public static IntegerOption oneInNChanceToDropSpawnEgg = addConfig(new IntegerOption("oneInNChanceToDropSpawnEgg", 100, 1, Integer.MAX_VALUE).makeBuilder().category("enchantments").subCategory("capturing").build());
+    public static BooleanOption harvestingEnabled = addConfig(new BooleanOption("harvestingEnabled", true).makeBuilder().requiresRestart().category("enchantments").subCategory("harvesting").build());
+    public static BooleanOption tillingEnabled = addConfig(new BooleanOption("tillingEnabled", true).makeBuilder().requiresRestart().category("enchantments").subCategory("tilling").build());
+    public static BooleanOption scytheEnabled = addConfig(new BooleanOption("scytheEnabled", true).makeBuilder().requiresRestart().category("enchantments").subCategory("scythe").build());
 
     public static void register() {
         FabsBnB.log("Registering config...");

@@ -1,11 +1,21 @@
 package com.fabbe50.fabsbnb.config;
 
+import com.fabbe50.fabsbnb.ClothScreen;
+import com.fabbe50.fabsbnb.util.LangUtils;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
+import me.shedaniel.clothconfig2.api.ConfigBuilder;
+import me.shedaniel.clothconfig2.api.ConfigCategory;
+import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
+import me.shedaniel.clothconfig2.gui.entries.SubCategoryListEntry;
+import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 
 public abstract class AbstractConfigOption<T, R extends AbstractConfigListEntry<T>> implements IConfigOption<T, R> {
-    private final String name;
-    private final T defaultValue;
-    private T value;
+    final String name;
+    final T defaultValue;
+    T value;
+    boolean requiresRestart = false;
+    String category = "general";
+    String subCategory = "";
 
     public AbstractConfigOption(String name, T defaultValue) {
         this(name, defaultValue, defaultValue);
@@ -23,6 +33,19 @@ public abstract class AbstractConfigOption<T, R extends AbstractConfigListEntry<
     }
 
     @Override
+    public ConfigCategory getConfigCategory(ConfigBuilder builder) {
+        return builder.getOrCreateCategory(LangUtils.getConfig("category." + getCategory()));
+    }
+
+    @Override
+    public SubCategoryBuilder getSubCategory(ConfigEntryBuilder builder) {
+        if (!getSubCategory().isBlank()) {
+            return ClothScreen.subCategory.computeIfAbsent(getSubCategory(), s -> builder.startSubCategory(LangUtils.getConfig("subcategory." + getSubCategory())));
+        }
+        return null;
+    }
+
+    @Override
     public T getDefaultValue() {
         return defaultValue;
     }
@@ -35,5 +58,57 @@ public abstract class AbstractConfigOption<T, R extends AbstractConfigListEntry<
     @Override
     public T getValue() {
         return value;
+    }
+
+    @Override
+    public boolean requiresRestart() {
+        return requiresRestart;
+    }
+
+    @Override
+    public String getCategory() {
+        return category;
+    }
+
+    @Override
+    public String getSubCategory() {
+        return subCategory;
+    }
+
+    public abstract class Builder<Z extends AbstractConfigOption<T, R>> {
+        String name;
+        T defaultValue;
+        boolean requiresRestart;
+        String category;
+        String subCategory;
+
+        public Builder(String name, T defaultValue) {
+            this(name, defaultValue, true, "general", "");
+        }
+
+        public Builder(String name, T defaultValue, boolean requiresRestart, String category, String subCategory) {
+            this.name = name;
+            this.defaultValue = defaultValue;
+            this.requiresRestart = requiresRestart;
+            this.category = category;
+            this.subCategory = subCategory;
+        }
+
+        public Builder<Z> requiresRestart() {
+            this.requiresRestart = true;
+            return this;
+        }
+
+        public Builder<Z> category(String category) {
+            this.category = category;
+            return this;
+        }
+
+        public Builder<Z> subCategory(String subCategory) {
+            this.subCategory = subCategory;
+            return this;
+        }
+
+        public abstract Z build();
     }
 }
