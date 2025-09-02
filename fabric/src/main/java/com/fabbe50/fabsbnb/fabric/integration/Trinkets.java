@@ -4,10 +4,13 @@ import com.fabbe50.fabsbnb.util.Utilities;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.Trinket;
+import dev.emi.trinkets.api.TrinketComponent;
 import dev.emi.trinkets.api.TrinketsApi;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+
+import java.util.Optional;
 
 public class Trinkets {
     public static void registerTrinkets() {
@@ -15,7 +18,9 @@ public class Trinkets {
     }
 
     public static boolean isWearingTrinket(LivingEntity entity, Item item) {
-        return TrinketsApi.getTrinketComponent(entity).orElseThrow().isEquipped(item);
+//        return TrinketsApi.getTrinketComponent(entity).isEquipped(item);
+        Optional<TrinketComponent> optionalTrinket = TrinketsApi.getTrinketComponent(entity);
+        return optionalTrinket.map(trinketComponent -> trinketComponent.isEquipped(item)).orElse(false);
     }
 
     public static class ChocolateNecklaceTrinket implements Trinket {
