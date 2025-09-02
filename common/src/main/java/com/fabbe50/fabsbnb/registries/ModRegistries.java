@@ -258,6 +258,8 @@ public class ModRegistries {
     // Potions
     public static final RegistrySupplier<Potion> FELINE_AURA_POTION_SHORT                                               = registerPotion("feline_aura_short", FELINE_AURA, SHORT_DURATION_POTION);
     public static final RegistrySupplier<Potion> FELINE_AURA_POTION_LONG                                                = registerPotion("feline_aura_long", FELINE_AURA, LONG_DURATION_POTION);
+    public static final RegistrySupplier<Potion> SCUTE_POTION_SHORT                                                     = registerPotion("scute_potion_short", new MobEffectInstance(MobEffects.RESISTANCE, SHORT_DURATION_POTION, 5), new MobEffectInstance(MobEffects.STRENGTH, SHORT_DURATION_POTION, 2));
+    public static final RegistrySupplier<Potion> SCUTE_POTION_LONG                                                      = registerPotion("scute_potion_long", new MobEffectInstance(MobEffects.RESISTANCE, LONG_DURATION_POTION, 5), new MobEffectInstance(MobEffects.STRENGTH, LONG_DURATION_POTION, 2));
 
     private static RegistrySupplier<Potion> registerPotion(String name, RegistrySupplier<MobEffect> effect, int duration) {
         RegistrySupplier<Potion> potion = POTIONS.register(FabsBnB.location(name), () -> new Potion(name, new MobEffectInstance(getMobEffectReference(effect), duration)));
@@ -289,6 +291,9 @@ public class ModRegistries {
 
     // Menu Types
     public static final RegistrySupplier<MenuType<BlockBreakerMenu>> BLOCK_BREAKER_MENU                                 = MENU_TYPES.register(FabsBnB.location("block_breaker_menu"), () -> MenuRegistry.ofExtended(BlockBreakerMenu::new));
+
+    // Recipes Serializers
+    public static final RegistrySupplier<RecipeSerializer<OwnTippedArrowRecipe>> OWN_TIPPED_ARROW_RECIPE_SERIALIZER     = RECIPE_SERIALIZERS.register(FabsBnB.location("own_tipped_arrow_recipe"), () -> new CustomRecipe.Serializer<>(OwnTippedArrowRecipe::new));
 
     // Tags
     public static final TagKey<Item> BUILDING_WANDS                                                                     = TagKey.create(Registries.ITEM, FabsBnB.location("building_wands"));

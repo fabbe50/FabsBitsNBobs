@@ -2,8 +2,16 @@ package com.fabbe50.fabsbnb.neoforge;
 
 import com.fabbe50.fabsbnb.neoforge.integration.Curios;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
+import net.minecraft.core.Holder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionBrewing;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.Tags;
@@ -19,5 +27,22 @@ public class PlatformImpl {
 
     public static boolean isWearingNecklace(LivingEntity entity) {
         return Curios.isWearingCurio(entity, ModRegistries.CHOCOLATE_NECKLACE.get());
+    }
+
+    public static void registerStarter(PotionBrewing.Builder builder, Item ingredient, Holder<Potion> output) {
+        builder.addStartMix(ingredient, output);
+    }
+
+    public static void registerStarter(PotionBrewing.Builder builder, Item ingredient, Item output) {
+        builder.addContainerRecipe(PotionContents.createItemStack(Items.POTION, Potions.AWKWARD).getItem(), ingredient, output);
+        builder.addMix(Potions.WATER, ingredient, Potions.MUNDANE);
+    }
+
+    public static void registerPotion(PotionBrewing.Builder builder, Holder<Potion> input, Item ingredient, Holder<Potion> output) {
+        builder.addMix(input, ingredient, output);
+    }
+
+    public static void registerPotion(PotionBrewing.Builder builder, Item input, Item ingredient, Item output) {
+        builder.addContainerRecipe(input, ingredient, output);
     }
 }
