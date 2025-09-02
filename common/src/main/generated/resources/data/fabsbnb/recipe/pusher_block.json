@@ -3,15 +3,9 @@
   "category": "misc",
   "group": "fabsbnb_pushers",
   "key": {
-    "I": {
-      "item": "minecraft:iron_ingot"
-    },
-    "R": {
-      "item": "minecraft:redstone"
-    },
-    "S": {
-      "item": "minecraft:slime_ball"
-    }
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone",
+    "S": "minecraft:slime_ball"
   },
   "pattern": [
     "ISI",

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:blasting",
+  "category": "blocks",
+  "cookingtime": 200,
+  "experience": 0.7,
+  "group": "fabsbnbstructural_goop",
+  "ingredient": "fabsbnb:slime_sand",
+  "result": {
+    "count": 1,
+    "id": "fabsbnb:structural_goop"
+  }
+}

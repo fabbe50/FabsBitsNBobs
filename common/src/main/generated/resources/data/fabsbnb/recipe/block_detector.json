@@ -3,15 +3,9 @@
   "category": "redstone",
   "group": "fabsbnbdetector",
   "key": {
-    "C": {
-      "tag": "minecraft:stone_crafting_materials"
-    },
-    "R": {
-      "item": "minecraft:redstone"
-    },
-    "W": {
-      "item": "minecraft:quartz_block"
-    }
+    "C": "#minecraft:stone_crafting_materials",
+    "R": "minecraft:redstone",
+    "W": "minecraft:quartz_block"
   },
   "pattern": [
     "CCC",

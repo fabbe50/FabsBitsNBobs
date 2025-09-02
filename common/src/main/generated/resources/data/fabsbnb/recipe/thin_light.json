@@ -3,15 +3,9 @@
   "category": "redstone",
   "group": "fabsbnbthin_light",
   "key": {
-    "G": {
-      "item": "minecraft:glowstone_dust"
-    },
-    "I": {
-      "item": "minecraft:iron_nugget"
-    },
-    "R": {
-      "item": "minecraft:redstone"
-    }
+    "G": "minecraft:glowstone_dust",
+    "I": "minecraft:iron_nugget",
+    "R": "minecraft:redstone"
   },
   "pattern": [
     "IRI",

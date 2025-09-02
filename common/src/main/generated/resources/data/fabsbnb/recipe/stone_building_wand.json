@@ -3,12 +3,8 @@
   "category": "equipment",
   "group": "fabsbnb",
   "key": {
-    "P": {
-      "tag": "minecraft:stone_tool_materials"
-    },
-    "S": {
-      "item": "minecraft:stick"
-    }
+    "P": "#minecraft:stone_tool_materials",
+    "S": "minecraft:stick"
   },
   "pattern": [
     "P  ",

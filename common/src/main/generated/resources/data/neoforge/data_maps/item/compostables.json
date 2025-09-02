@@ -1,0 +1,22 @@
+{
+  "values": {
+    "minecraft:bamboo": {
+      "chance": 0.3
+    },
+    "minecraft:chorus_flower": {
+      "chance": 0.3
+    },
+    "minecraft:chorus_fruit": {
+      "chance": 0.3
+    },
+    "minecraft:poisonous_potato": {
+      "chance": 1.0
+    },
+    "minecraft:rotten_flesh": {
+      "chance": 0.5
+    },
+    "minecraft:spider_eye": {
+      "chance": 0.3
+    }
+  }
+}

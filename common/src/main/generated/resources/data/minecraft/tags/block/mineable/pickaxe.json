@@ -7,6 +7,7 @@
     "fabsbnb:block_placer",
     "fabsbnb:block_detector",
     "fabsbnb:xp_holder",
+    "fabsbnb:structural_glass",
     "minecraft:glowstone"
   ]
 }

@@ -3,15 +3,9 @@
   "category": "redstone",
   "group": "fabsbnbbreaker",
   "key": {
-    "C": {
-      "tag": "minecraft:stone_crafting_materials"
-    },
-    "R": {
-      "item": "minecraft:redstone"
-    },
-    "W": {
-      "item": "minecraft:diamond_pickaxe"
-    }
+    "C": "#minecraft:stone_crafting_materials",
+    "R": "minecraft:redstone",
+    "W": "minecraft:diamond_pickaxe"
   },
   "pattern": [
     "CCC",

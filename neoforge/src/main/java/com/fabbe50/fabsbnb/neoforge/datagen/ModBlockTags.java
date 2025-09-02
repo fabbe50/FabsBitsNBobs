@@ -6,19 +6,22 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
 public class ModBlockTags extends BlockTagsProvider {
-    public ModBlockTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
-        super(output, lookupProvider, FabsBnB.MOD_ID, existingFileHelper);
+    private final TagKey<Block> COMMON_ORE_TAG = TagKey.create(Registries.BLOCK, FabsBnB.location("c", "ores"));
+    private final TagKey<Block> COMMON_CLUSTERS_TAG = TagKey.create(Registries.BLOCK, FabsBnB.location("c", "clusters"));
+    private final TagKey<Block> FORGE_ORE_TAG = TagKey.create(Registries.BLOCK, FabsBnB.location("forge", "ores"));
+    private final TagKey<Block> FORGE_CLUSTERS_TAG = TagKey.create(Registries.BLOCK, FabsBnB.location("forge", "clusters"));
+
+    public ModBlockTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+        super(output, lookupProvider, FabsBnB.MOD_ID);
     }
 
     @Override
@@ -31,10 +34,10 @@ public class ModBlockTags extends BlockTagsProvider {
                 .addTag(BlockTags.DOORS);
 
         tag(ModRegistries.ORE_MINER_WHITELIST)
-                .addOptionalTag(FabsBnB.location("c", "ores"))
-                .addOptionalTag(FabsBnB.location("c", "clusters"))
-                .addOptionalTag(FabsBnB.location("forge", "ores"))
-                .addOptionalTag(FabsBnB.location("forge", "clusters"));
+                .addOptionalTag(COMMON_ORE_TAG)
+                .addOptionalTag(COMMON_CLUSTERS_TAG)
+                .addOptionalTag(FORGE_ORE_TAG)
+                .addOptionalTag(FORGE_CLUSTERS_TAG);
 
         tag(ModRegistries.TREE_CHOPPER_WHITELIST)
                 .addTag(BlockTags.LOGS)
@@ -95,6 +98,14 @@ public class ModBlockTags extends BlockTagsProvider {
                 .add(ModRegistries.BLOCK_PLACER.get())
                 .add(ModRegistries.BLOCK_DETECTOR.get())
                 .add(ModRegistries.XP_HOLDER.get())
+                .add(ModRegistries.STRUCTURAL_GLASS.get())
                 .add(Blocks.GLOWSTONE);
+
+        tag(BlockTags.MINEABLE_WITH_SHOVEL)
+                .add(ModRegistries.SLIME_SAND.get());
+
+        tag(BlockTags.WITHER_IMMUNE)
+                .add(ModRegistries.STRUCTURAL_GOOP.get())
+                .add(ModRegistries.STRUCTURAL_GLASS.get());
     }
 }

@@ -3,12 +3,8 @@
   "category": "redstone",
   "group": "fabsbnbpowered_thin_light",
   "ingredients": [
-    {
-      "item": "minecraft:redstone_torch"
-    },
-    {
-      "item": "fabsbnb:thin_light"
-    }
+    "minecraft:redstone_torch",
+    "fabsbnb:thin_light"
   ],
   "result": {
     "count": 1,

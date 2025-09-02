@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "fabsbnbslime_sand",
+  "key": {
+    "S": "minecraft:slime_ball",
+    "Z": "minecraft:sand"
+  },
+  "pattern": [
+    "SZS",
+    "ZSZ",
+    "SZS"
+  ],
+  "result": {
+    "count": 4,
+    "id": "fabsbnb:slime_sand"
+  }
+}

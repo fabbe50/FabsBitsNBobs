@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smoking",
+  "category": "food",
+  "cookingtime": 100,
+  "experience": 0.5,
+  "group": "fabsbnbrotten_flesh_to_leather",
+  "ingredient": "minecraft:rotten_flesh",
+  "result": {
+    "count": 1,
+    "id": "minecraft:leather"
+  }
+}

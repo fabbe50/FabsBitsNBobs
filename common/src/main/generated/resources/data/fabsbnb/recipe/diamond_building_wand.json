@@ -3,12 +3,8 @@
   "category": "equipment",
   "group": "fabsbnb_building_wands",
   "key": {
-    "P": {
-      "item": "minecraft:diamond"
-    },
-    "S": {
-      "item": "minecraft:stick"
-    }
+    "P": "minecraft:diamond",
+    "S": "minecraft:stick"
   },
   "pattern": [
     "P  ",

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:blasting",
+  "category": "blocks",
+  "cookingtime": 200,
+  "experience": 1.0,
+  "group": "fabsbnbstructural_glass",
+  "ingredient": "fabsbnb:structural_goop",
+  "result": {
+    "count": 1,
+    "id": "fabsbnb:structural_glass"
+  }
+}

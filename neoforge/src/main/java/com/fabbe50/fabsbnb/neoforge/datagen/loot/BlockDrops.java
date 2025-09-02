@@ -30,17 +30,20 @@ public class BlockDrops extends VanillaBlockLoot {
         dropSelf(ModRegistries.BLOCK_BREAKER.get());
         dropSelf(ModRegistries.BLOCK_DETECTOR.get());
         dropSelf(ModRegistries.XP_HOLDER.get());
+        dropSelf(ModRegistries.SLIME_SAND.get());
+        dropSelf(ModRegistries.STRUCTURAL_GOOP.get());
+        dropWhenSilkTouch(ModRegistries.STRUCTURAL_GLASS.get());
     }
 
     @Override
-    public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> biConsumer) {
+    public void generate(@NotNull BiConsumer<ResourceKey<LootTable>, LootTable.Builder> biConsumer) {
         this.generate();
         Set<ResourceKey<LootTable>> set = new HashSet<>();
 
         for(Block block : this.getKnownBlocks()) {
             if (block.isEnabled(this.enabledFeatures)) {
-                ResourceKey<LootTable> lootTableKey = block.getLootTable();
-                if (lootTableKey != BuiltInLootTables.EMPTY && set.add(lootTableKey)) {
+                ResourceKey<LootTable> lootTableKey = block.getLootTable().orElseThrow();
+                if (set.add(lootTableKey)) {
                     LootTable.Builder loottable$builder = this.map.remove(lootTableKey);
                     if (loottable$builder == null) {
                         throw new IllegalStateException(String.format(Locale.ROOT, "Missing loot-table '%s' for '%s'", lootTableKey, BuiltInRegistries.BLOCK.getKey(block)));

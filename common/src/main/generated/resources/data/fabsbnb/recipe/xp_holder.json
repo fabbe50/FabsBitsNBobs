@@ -3,15 +3,9 @@
   "category": "misc",
   "group": "fabsbnbxp_holder",
   "key": {
-    "D": {
-      "item": "minecraft:diamond"
-    },
-    "E": {
-      "item": "minecraft:emerald"
-    },
-    "O": {
-      "item": "minecraft:obsidian"
-    }
+    "D": "minecraft:diamond",
+    "E": "minecraft:emerald",
+    "O": "minecraft:obsidian"
   },
   "pattern": [
     " E ",

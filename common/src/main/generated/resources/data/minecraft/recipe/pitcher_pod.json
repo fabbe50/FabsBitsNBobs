@@ -3,12 +3,8 @@
   "category": "misc",
   "group": "fabsbnbpitcher_pod_from_plant",
   "ingredients": [
-    {
-      "item": "minecraft:pitcher_plant"
-    },
-    {
-      "item": "minecraft:sand"
-    }
+    "minecraft:pitcher_plant",
+    "minecraft:sand"
   ],
   "result": {
     "count": 2,

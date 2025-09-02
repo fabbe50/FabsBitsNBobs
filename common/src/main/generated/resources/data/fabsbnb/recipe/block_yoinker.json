@@ -3,18 +3,10 @@
   "category": "equipment",
   "group": "fabsbnb_yoinker",
   "key": {
-    "E": {
-      "item": "minecraft:ender_eye"
-    },
-    "I": {
-      "item": "minecraft:iron_ingot"
-    },
-    "R": {
-      "item": "minecraft:stick"
-    },
-    "S": {
-      "item": "minecraft:shulker_shell"
-    }
+    "E": "minecraft:ender_eye",
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:stick",
+    "S": "minecraft:shulker_shell"
   },
   "pattern": [
     "SES",

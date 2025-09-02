@@ -3,33 +3,15 @@
   "category": "misc",
   "group": "fabsbnb",
   "ingredients": [
-    {
-      "item": "minecraft:water_bucket"
-    },
-    {
-      "item": "fabsbnb:lava_sponge_used"
-    },
-    {
-      "item": "fabsbnb:lava_sponge_used"
-    },
-    {
-      "item": "fabsbnb:lava_sponge_used"
-    },
-    {
-      "item": "fabsbnb:lava_sponge_used"
-    },
-    {
-      "item": "fabsbnb:lava_sponge_used"
-    },
-    {
-      "item": "fabsbnb:lava_sponge_used"
-    },
-    {
-      "item": "fabsbnb:lava_sponge_used"
-    },
-    {
-      "item": "fabsbnb:lava_sponge_used"
-    }
+    "minecraft:water_bucket",
+    "fabsbnb:lava_sponge_used",
+    "fabsbnb:lava_sponge_used",
+    "fabsbnb:lava_sponge_used",
+    "fabsbnb:lava_sponge_used",
+    "fabsbnb:lava_sponge_used",
+    "fabsbnb:lava_sponge_used",
+    "fabsbnb:lava_sponge_used",
+    "fabsbnb:lava_sponge_used"
   ],
   "result": {
     "count": 8,

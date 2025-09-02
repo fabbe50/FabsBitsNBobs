@@ -12,9 +12,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Translations extends LanguageProvider {
-    public Translations(PackOutput output, String locale) {
-        super(output, FabsBnB.MOD_ID, locale);
+    public Translations(PackOutput output) {
+        super(output, FabsBnB.MOD_ID, "en_us");
     }
 
     @Override
@@ -22,15 +25,18 @@ public class Translations extends LanguageProvider {
         add(LangUtils.MOD_NAME, "Fab's Bits & Bobs");
 
         // Blocks
-        addBlock(ModRegistries.LAVA_SPONGE, "Lava Sponge");
-        addBlock(ModRegistries.LAVA_SPONGE_USED, "Hot Oozing Lava Sponge", "Combine with water bucket in smithing table or place in a cold and dark place.");
-        addBlock(ModRegistries.PUSHER_BLOCK, "Pusher Plate");
-        addBlock(ModRegistries.THIN_LIGHT, "Light");
-        addBlock(ModRegistries.POWERED_THIN_LIGHT, "Powered Light");
-        addBlock(ModRegistries.BLOCK_PLACER, "Block Placer");
-        addBlock(ModRegistries.BLOCK_BREAKER, "Block Breaker");
-        addBlock(ModRegistries.BLOCK_DETECTOR, "Block Detector");
-        addBlock(ModRegistries.XP_HOLDER, "XP Holder");
+        addBlock(ModRegistries.LAVA_SPONGE, ModRegistries.ITEM_LAVA_SPONGE, "Lava Sponge");
+        addBlock(ModRegistries.LAVA_SPONGE_USED, ModRegistries.ITEM_LAVA_SPONGE_USED, "Hot Oozing Lava Sponge", "Combine with water bucket in smithing table or place in a cold and dark place.");
+        addBlock(ModRegistries.PUSHER_BLOCK, ModRegistries.ITEM_PUSHER_BLOCK, "Pusher Plate", "Pushes entities that lands on it in the direction of the arrow.");
+        addBlock(ModRegistries.THIN_LIGHT, ModRegistries.ITEM_THIN_LIGHT, "Light");
+        addBlock(ModRegistries.POWERED_THIN_LIGHT, ModRegistries.ITEM_POWERED_THIN_LIGHT, "Powered Light");
+        addBlock(ModRegistries.BLOCK_PLACER, ModRegistries.ITEM_BLOCK_PLACER, "Block Placer", "Places blocks in front of it.");
+        addBlock(ModRegistries.BLOCK_BREAKER, ModRegistries.ITEM_BLOCK_BREAKER, "Block Breaker", "Breaks blocks placed in front of it.");
+        addBlock(ModRegistries.BLOCK_DETECTOR, ModRegistries.ITEM_BLOCK_DETECTOR, "Block Detector", "Detects which block is in front of it.");
+        addBlock(ModRegistries.XP_HOLDER, ModRegistries.ITEM_XP_HOLDER, "XP Holder", "Stores XP. Can pick up XP around itself, toggled by right clicking with a redstone torch on the block.");
+        addBlock(ModRegistries.SLIME_SAND, ModRegistries.ITEM_SLIME_SAND, "Slime Sand");
+        addBlock(ModRegistries.STRUCTURAL_GOOP, ModRegistries.ITEM_STRUCTURAL_GOOP, "Structural Goop", "Wither Proof", "Explosion Resistant", "Instant Break", "Non-solid");
+        addBlock(ModRegistries.STRUCTURAL_GLASS, ModRegistries.ITEM_STRUCTURAL_GLASS, "Structural Glass", "Wither Proof", "Explosion Resistant");
 
         // Containers
         add(LangUtils.getContainerKey("block_placer"), "Block Placer");
@@ -104,6 +110,7 @@ public class Translations extends LanguageProvider {
         addText("tilling.desc_screen", "When right-clicking a dirt type block with a hoe enchanted with tilling it will till all the soil within an area base on the tier of the tool.");
         addText("scythe.desc_screen", "When breaking a grass or flower block with a hoe enchanted with scythe it will break all the grass and flowers within an area base on the tier of the tool.");
         addText("feline_aura.desc_screen", "Scares away creepers and phantoms.");
+        addText("scute_potion.desc_screen", "Gives high resistance and strength.");
         addText("cactus.desc_screen[0]", "Adjusted behaviour:");
         addText("cactus.desc_screen[1]", "Doesn't break when it lands on a cactus block.");
         addText("cactus.desc_screen[2]", "Edible. Giving 2 chunks of food and high saturation. Inflicts weak nausea for 7.5 seconds.");
@@ -120,6 +127,9 @@ public class Translations extends LanguageProvider {
         add("effect.fabsbnb.feline_aura.description", "Scares attacking phantoms and causes creepers to run away in fear.");
         addPotion("feline_aura_short", "Feline Aura");
         addPotion("feline_aura_long", "Feline Aura");
+        addPotion("scute_potion_short", "The Scute");
+        addPotion("scute_potion_long", "The Scute");
+
 
         // Enchantments
         addEnchantment("ore_miner", "Ore Miner", "Mines the entire ore vein and drops the items at the original block.");
@@ -159,6 +169,13 @@ public class Translations extends LanguageProvider {
         addConfig(ModConfig.harvestingEnabled, "Harvesting Enabled", "If the harvesting enchantment should be enabled.");
         addConfig(ModConfig.tillingEnabled, "Tilling Enabled", "If the tilling enchantment should be enabled.");
         addConfig(ModConfig.scytheEnabled, "Scythe Enabled", "If the scythe enchantment should be enabled.");
+        addConfig(ModConfig.experimentalSquidPushing, "Experimental Squid Pushing",
+                "Due to how the squid movement is implemented, the way velocity is applied to entities doesn't work.",
+                "This option enables a more primitive way of moving entities. It only applies to squid type entities."
+        );
+        addConfig(ModConfig.vaultUnlocking, "Vault Unlocking", "Whether or not the trial vaults are unlockable with items using the vault_unlockers tag.");
+        addConfig(ModConfig.necklaceDurability, "Necklace Durability", "The amount of durability the necklace should have.");
+        addConfig(ModConfig.whooshWandDurability, "Whoosh Wand Durability", "The amount of durability the whoosh wand should have.");
         add(LangUtils.getConfigKey("category.general"), "General");
         add(LangUtils.getConfigKey("subcategory.building_wands"), "Building Wands");
         add(LangUtils.getConfigKey("category.enchantments"), "Enchantments");
@@ -176,6 +193,7 @@ public class Translations extends LanguageProvider {
         add("tag.item.c.netherite_items", "Netherite Items");
         add("tag.item.curios.necklace", "Necklace");
         add("tag.item.fabsbnb.immune_to_cactus", "Immune to Cactus");
+        add("tag.item.fabsbnb.vault_unlockers", "Vault Unlockers");
         add("jei.category.fabsbnb.cauldron_conversion", "Cauldron Conversation");
         add("fabsbnb.cauldron_conversion", "Cauldron Conversation");
     }
@@ -200,12 +218,21 @@ public class Translations extends LanguageProvider {
         }
     }
 
-    public void addBlock(RegistrySupplier<Block> block, String translation) {
+    public void addBlock(RegistrySupplier<Block> block, RegistrySupplier<Item> item, String translation) {
         add(block.get(), translation);
+        add(item.get(), translation);
     }
 
-    public void addBlock(RegistrySupplier<Block> block, String translation, String description) {
+    public void addBlock(RegistrySupplier<Block> block, RegistrySupplier<Item> item, String translation, String description) {
         addBlock(block, translation, Pair.of("desc", description));
+        addItem(item, translation, Pair.of("desc", description));
+    }
+
+    public void addBlock(RegistrySupplier<Block> block, RegistrySupplier<Item> item, String translation, String... descriptions) {
+        AtomicInteger i = new AtomicInteger();
+        addBlock(block, translation, Arrays.stream(descriptions).map(s -> Pair.of("desc[" + i.getAndIncrement() + "]", s)).toArray(Pair[]::new));
+        i.set(0);
+        addItem(item, translation, Arrays.stream(descriptions).map(s -> Pair.of("desc[" + i.getAndIncrement() + "]", s)).toArray(Pair[]::new));
     }
 
     @SafeVarargs
@@ -217,10 +244,10 @@ public class Translations extends LanguageProvider {
     }
 
     public void addPotion(String name, String translation) {
-        add("item.minecraft.potion.effect." + name, "Potion of " + translation);
-        add("item.minecraft.splash_potion.effect." + name, "Splash Potion of " + translation);
-        add("item.minecraft.lingering_potion.effect." + name, "Lingering Potion of " + translation);
-        add("item.minecraft.tipped_arrow.effect." + name, "Arrow of " + translation);
+        add("item.fabsbnb.potion.effect." + name, "Potion of " + translation);
+        add("item.fabsbnb.splash_potion.effect." + name, "Splash Potion of " + translation);
+        add("item.fabsbnb.lingering_potion.effect." + name, "Lingering Potion of " + translation);
+        add("item.fabsbnb.tipped_arrow.effect." + name, "Arrow of " + translation);
     }
 
     public void addEnchantment(String name, String translation, String description) {

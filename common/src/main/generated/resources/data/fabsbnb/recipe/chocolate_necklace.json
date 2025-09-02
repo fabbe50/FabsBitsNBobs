@@ -3,18 +3,10 @@
   "category": "equipment",
   "group": "fabsbnbchocolate_necklace",
   "key": {
-    "C": {
-      "item": "fabsbnb:chocolate_milk_bottle"
-    },
-    "G": {
-      "item": "minecraft:gold_ingot"
-    },
-    "N": {
-      "item": "minecraft:gold_nugget"
-    },
-    "S": {
-      "item": "minecraft:nether_star"
-    }
+    "C": "fabsbnb:chocolate_milk_bottle",
+    "G": "minecraft:gold_ingot",
+    "N": "minecraft:gold_nugget",
+    "S": "minecraft:nether_star"
   },
   "pattern": [
     "NGN",

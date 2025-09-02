@@ -3,15 +3,9 @@
   "category": "redstone",
   "group": "fabsbnbplacer",
   "key": {
-    "C": {
-      "tag": "minecraft:stone_crafting_materials"
-    },
-    "R": {
-      "item": "minecraft:redstone"
-    },
-    "W": {
-      "item": "fabsbnb:diamond_building_wand"
-    }
+    "C": "#minecraft:stone_crafting_materials",
+    "R": "minecraft:redstone",
+    "W": "fabsbnb:diamond_building_wand"
   },
   "pattern": [
     "CCC",

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_goop": {
+      "conditions": {
+        "items": [
+          {
+            "items": "fabsbnb:structural_goop"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "fabsbnb:structural_glass"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_goop"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "fabsbnb:structural_glass"
+    ]
+  }
+}

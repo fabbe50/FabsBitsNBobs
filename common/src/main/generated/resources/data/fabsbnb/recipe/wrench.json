@@ -3,9 +3,7 @@
   "category": "equipment",
   "group": "fabsbnbwrench",
   "key": {
-    "I": {
-      "item": "minecraft:iron_ingot"
-    }
+    "I": "minecraft:iron_ingot"
   },
   "pattern": [
     "I I",

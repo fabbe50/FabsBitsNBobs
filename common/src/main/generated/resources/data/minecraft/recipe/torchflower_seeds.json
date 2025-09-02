@@ -3,12 +3,8 @@
   "category": "misc",
   "group": "fabsbnbtorch_flower_seeds_from_plant",
   "ingredients": [
-    {
-      "item": "minecraft:torchflower"
-    },
-    {
-      "item": "minecraft:sand"
-    }
+    "minecraft:torchflower",
+    "minecraft:sand"
   ],
   "result": {
     "count": 2,

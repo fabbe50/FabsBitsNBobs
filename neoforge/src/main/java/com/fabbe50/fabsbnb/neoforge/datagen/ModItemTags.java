@@ -1,28 +1,22 @@
 package com.fabbe50.fabsbnb.neoforge.datagen;
 
 import com.fabbe50.fabsbnb.FabsBnB;
-import com.fabbe50.fabsbnb.loaders.CustomFoodDataLoader;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.ItemTagsProvider;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.data.ItemTagsProvider;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
 public class ModItemTags extends ItemTagsProvider {
-    public ModItemTags(PackOutput arg, CompletableFuture<HolderLookup.Provider> completableFuture, CompletableFuture<TagLookup<Block>> completableFuture2, @Nullable ExistingFileHelper existingFileHelper) {
-        super(arg, completableFuture, completableFuture2, FabsBnB.MOD_ID, existingFileHelper);
+    public ModItemTags(PackOutput arg, CompletableFuture<HolderLookup.Provider> completableFuture) {
+        super(arg, completableFuture, FabsBnB.MOD_ID);
     }
 
     @Override
@@ -62,5 +56,22 @@ public class ModItemTags extends ItemTagsProvider {
         tag(ModRegistries.IMMUNE_TO_CACTUS_DAMAGE)
                 .add(Items.CACTUS)
                 .addTag(ModRegistries.NETHERITE_ITEMS);
+
+        tag(ModRegistries.VAULT_UNLOCKERS)
+                .add(Items.TRIAL_KEY)
+                .add(Items.OMINOUS_TRIAL_KEY)
+                .add(Items.DIAMOND_BLOCK);
+
+        tag(ItemTags.DURABILITY_ENCHANTABLE)
+                .add(ModRegistries.WHOOSH_WAND.get())
+                .add(ModRegistries.CHOCOLATE_NECKLACE.get());
+
+        tag(Tags.Items.POTIONS_BOTTLE)
+                .add(ModRegistries.OWN_POTION_ITEM.get())
+                .add(ModRegistries.OWN_SPLASH_POTION_ITEM.get())
+                .add(ModRegistries.OWN_LINGERING_POTION_ITEM.get());
+
+        tag(ModRegistries.WAND_OF_HOLDING_ACCEPTS)
+                .add(Items.STONE);
     }
 }

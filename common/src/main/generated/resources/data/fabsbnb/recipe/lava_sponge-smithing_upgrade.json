@@ -1,14 +1,8 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "item": "minecraft:lava_bucket"
-  },
-  "base": {
-    "item": "minecraft:sponge"
-  },
+  "addition": "minecraft:lava_bucket",
+  "base": "minecraft:sponge",
   "result": {
-    "count": 1,
     "id": "fabsbnb:lava_sponge"
-  },
-  "template": []
+  }
 }
