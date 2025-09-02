@@ -27,7 +27,10 @@
       "com.fabbe50.fabsbnb.integration.ModJEIPlugin"
     ],
     "rei_client": [
-      "com.fabbe50.fabsbnb.integration.ModREIPlugin"
+      "com.fabbe50.fabsbnb.integration.rei.ModREIClientPlugin"
+    ],
+    "rei_common": [
+      "com.fabbe50.fabsbnb.integration.rei.ModREICommonPlugin"
     ],
     "modmenu": [
       "com.fabbe50.fabsbnb.fabric.client.ModMenuIntegration"
