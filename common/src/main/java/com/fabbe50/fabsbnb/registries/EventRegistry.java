@@ -2,31 +2,42 @@ package com.fabbe50.fabsbnb.registries;
 
 import com.fabbe50.fabsbnb.FabsBnB;
 import com.fabbe50.fabsbnb.data.CustomFoodData;
+import com.fabbe50.fabsbnb.data.ItemStackData;
+import com.fabbe50.fabsbnb.data.YoinkerData;
 import com.fabbe50.fabsbnb.events.ItemStackEvent;
 import com.fabbe50.fabsbnb.loaders.CustomFoodDataLoader;
 import com.fabbe50.fabsbnb.util.Utilities;
 import com.fabbe50.fabsbnb.world.block.interfaces.ILeftClickable;
+import com.fabbe50.fabsbnb.world.item.HolderWandItem;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.*;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.component.Consumables;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+
+import java.util.ArrayList;
+import java.util.Set;
 
 public class EventRegistry {
     public static void register() {
@@ -125,6 +136,46 @@ public class EventRegistry {
                     }
                 }
             }
+        });
+        PlayerEvent.PICKUP_ITEM_PRE.register((player, entity, stack) -> {
+            /* TODO: Fix this implementation of holding items.
+                It detects the acceptable drops, as well as detects the wand item.
+                For some reason it doesn't save the items into the wand.
+                At least not enough for the tooltip to update.
+             */
+            if (player.getInventory().hasAnyOf(Set.of(ModRegistries.WAND_OF_HOLDING.get())) && stack.is(ModRegistries.WAND_OF_HOLDING_ACCEPTS)) {
+                if (!entity.hasPickUpDelay()) {
+                    ItemStack pickedUpStack = stack.copyAndClear();
+                    int slot = 0;
+                    ItemStack wandItem = ItemStack.EMPTY;
+                    for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+                        ItemStack tempStack = player.getInventory().getItem(i);
+                        if (tempStack.getItem() instanceof HolderWandItem) {
+                            slot = i;
+                            wandItem = tempStack;
+                            break;
+                        }
+                    }
+                    if (wandItem.isEmpty()) {
+                        return EventResult.pass();
+                    }
+                    CompoundTag compoundTag = wandItem.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+                    NonNullList<ItemStackData> itemStacks = ItemStackData.loadAllItems(compoundTag);
+                    for (ItemStackData stackData : new ArrayList<>(itemStacks.stream().toList())) {
+                        if (stackData.item().equals(pickedUpStack.getItem())) {
+                            int newAmount = stackData.amount() + pickedUpStack.getCount();
+                            itemStacks.remove(stackData);
+                            itemStacks.add(new ItemStackData(pickedUpStack.getItem().arch$holder(), newAmount));
+                        }
+                    }
+                    CompoundTag compoundTag1 = ItemStackData.saveAllItems(compoundTag, itemStacks);
+                    wandItem.set(DataComponents.CUSTOM_DATA, CustomData.of(compoundTag1));
+//                    player.getInventory().setItem(slot, wandItem);
+                    return EventResult.interruptTrue();
+                }
+                return EventResult.interruptFalse();
+            }
+            return EventResult.pass();
         });
     }
 
