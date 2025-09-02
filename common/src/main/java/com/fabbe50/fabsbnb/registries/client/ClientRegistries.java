@@ -10,6 +10,7 @@ import dev.architectury.registry.ReloadListenerRegistry;
 import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry;
 import dev.architectury.registry.client.rendering.RenderTypeRegistry;
 import dev.architectury.registry.menu.MenuRegistry;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.server.packs.PackType;
 
 public class ClientRegistries {
@@ -23,7 +24,7 @@ public class ClientRegistries {
 
     public static void registerBlockRenderer() {
         BlockEntityRendererRegistry.register(ModRegistries.XP_HOLDER_BLOCK_ENTITY.get(), XPHolderRenderer::new);
-                        (itemStack, layer) -> layer == 0 ? PotionContents.getColor(ModRegistries.getPotionReference(potionRegistrySupplier)) : -1,
-                        ModRegistries.OWN_POTION_ITEM.get(),
+        RenderTypeRegistry.register(ChunkSectionLayer.TRANSLUCENT, ModRegistries.STRUCTURAL_GOOP.get());
+        RenderTypeRegistry.register(ChunkSectionLayer.TRANSLUCENT, ModRegistries.STRUCTURAL_GLASS.get());
     }
 }
