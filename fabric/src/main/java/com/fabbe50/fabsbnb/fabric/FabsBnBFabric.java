@@ -25,9 +25,11 @@ public final class FabsBnBFabric implements ModInitializer {
         FabsBnB.init();
 
         ItemGroupEvents.MODIFY_ENTRIES_ALL.register((creativeModeTab, event) -> {
-            TabData data = new TabData(event);
-            TabList<FabricItemGroupEntries, TabData> tabList = new TabList<>();
-            tabList.registerTab(data, event.getContext().holders());
+            if (creativeModeTab.equals(ModRegistries.TAB.get())) {
+                TabData data = new TabData(event);
+                TabList<FabricItemGroupEntries, TabData> tabList = new TabList<>();
+                tabList.registerTab(data, event.getContext().holders());
+            }
         });
         FabricBrewingRecipeRegistryBuilder.BUILD.register(PotionBrewingRecipes::register);
 
