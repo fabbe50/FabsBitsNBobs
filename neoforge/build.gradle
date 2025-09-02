@@ -57,7 +57,7 @@ dependencies {
 
     modImplementation "dev.architectury:architectury-neoforge:$rootProject.architectury_api_version"
 
-    modRuntimeOnly "dev.emi:emi-neoforge:${emi_version}"
+    //modRuntimeOnly "dev.emi:emi-neoforge:${emi_version}"
     modRuntimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
     modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
 
@@ -65,7 +65,7 @@ dependencies {
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:$rei_version"
 
     modCompileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
-    modRuntimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+//    modRuntimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
 
     modApi "me.shedaniel.cloth:cloth-config-neoforge:${rootProject.cloth_config_version}"
 
