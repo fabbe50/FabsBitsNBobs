@@ -7,7 +7,7 @@ import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.shedaniel.clothconfig2.gui.entries.SubCategoryListEntry;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 
-public interface IClothBuilder<R, T extends AbstractConfigListEntry<R>> {
+public interface IClothBuilder<R, T> {
     T buildClothEntry(ConfigEntryBuilder builder);
 
     boolean requiresRestart();

@@ -1,7 +1,7 @@
 package com.fabbe50.fabsbnb.fabric.client;
 
-import com.fabbe50.fabsbnb.ClothScreen;
 import com.fabbe50.fabsbnb.FabsBnB;
+import com.fabbe50.fabsbnb.FabsBnBClient;
 import com.fabbe50.fabsbnb.Platform;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
@@ -9,10 +9,7 @@ import com.terraformersmc.modmenu.api.ModMenuApi;
 public class ModMenuIntegration implements ModMenuApi {
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        if (Platform.isModLoaded("cloth_config")) {
-            return ClothScreen::getConfigScreen;
-        }
-        return null;
+        return FabsBnBClient::getConfigScreen;
     }
 
     static {

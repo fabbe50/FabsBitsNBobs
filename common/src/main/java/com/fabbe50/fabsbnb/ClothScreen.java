@@ -2,6 +2,7 @@ package com.fabbe50.fabsbnb;
 
 import com.fabbe50.fabsbnb.config.IConfigOption;
 import com.fabbe50.fabsbnb.util.LangUtils;
+import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.gui.entries.SubCategoryListEntry;
@@ -32,14 +33,14 @@ public class ClothScreen {
             var category = configOption.getConfigCategory(builder);
             var subCategoryBuilder = configOption.getSubCategory(entryBuilder);
             if (subCategoryBuilder != null) {
-                subCategoryBuilder.add(configOption.buildClothEntry(entryBuilder));
+                subCategoryBuilder.add((AbstractConfigListEntry) configOption.buildClothEntry(entryBuilder));
                 String subCategoryName = configOption.getSubCategory();
                 if (!seenSubCategories.contains(subCategoryName)) {
                     category.addEntry(subCategoryBuilder.build());
                     seenSubCategories.add(subCategoryName);
                 }
             } else {
-                category.addEntry(configOption.buildClothEntry(entryBuilder));
+                category.addEntry((AbstractConfigListEntry) configOption.buildClothEntry(entryBuilder));
             }
         }
 

@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -30,10 +29,15 @@ public class ModConfig {
 
     public static DoubleOption whooshWandMultiplier = addConfig(new DoubleOption("whooshWandMultiplier", 3d, 1d, 50d));
     public static IntegerOption whooshWandCooldown = addConfig(new IntegerOption("whooshWandCooldown", 5, 0, Integer.MAX_VALUE));
+    public static IntegerOption whooshWandDurability = addConfig(new IntegerOption("whooshWandDurability", 786));
 
     public static BooleanOption necklaceWorksInInventory = addConfig(new BooleanOption("necklaceWorksInInventory", true));
+    public static IntegerOption necklaceDurability = addConfig(new IntegerOption("necklaceDurability", 256));
 
     public static DoubleOption entityMoverBlockSpeed = addConfig(new DoubleOption("entityMoverBlockSpeed", 0.3d));
+    public static BooleanOption experimentalSquidPushing = addConfig(new BooleanOption("experimentalSquidPushing", false));
+
+    public static IntegerOption xpHolderCollectionRange = addConfig(new IntegerOption("xpHolderCollectionRange", 5, 1, 20));
 
     public static BooleanOption oreMinerEnabled = addConfig(new BooleanOption("oreMinerEnabled", true).makeBuilder().requiresRestart().category("enchantments").subCategory("ore_miner").build());
     public static IntegerOption oreMinerMiningLimit = addConfig(new IntegerOption("oreMinerMiningLimit", 256, 1, Integer.MAX_VALUE).makeBuilder().requiresRestart().category("enchantments").subCategory("ore_miner").build());
@@ -98,7 +102,7 @@ public class ModConfig {
         FabsBnB.log("Config saved!");
     }
 
-    private static <T, R extends AbstractConfigListEntry<T>, V extends IConfigOption<T, R>> V addConfig(V configOption) {
+    private static <T, R, V extends IConfigOption<T, R>> V addConfig(V configOption) {
         configOptions.put(configOption.getKey(), configOption);
         return configOption;
     }

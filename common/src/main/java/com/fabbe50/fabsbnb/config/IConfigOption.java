@@ -8,7 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-public interface IConfigOption<T, R extends AbstractConfigListEntry<T>> extends IClothBuilder<T, R> {
+public interface IConfigOption<T, R> extends IClothBuilder<T, R> {
     String getKey();
 
     String getCategory();
