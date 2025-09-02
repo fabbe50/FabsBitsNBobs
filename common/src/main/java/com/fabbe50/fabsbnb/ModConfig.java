@@ -39,6 +39,8 @@ public class ModConfig {
 
     public static IntegerOption xpHolderCollectionRange = addConfig(new IntegerOption("xpHolderCollectionRange", 5, 1, 20));
 
+    public static BooleanOption vaultUnlocking = addConfig(new BooleanOption("vaultUnlocking", true));
+
     public static BooleanOption oreMinerEnabled = addConfig(new BooleanOption("oreMinerEnabled", true).makeBuilder().requiresRestart().category("enchantments").subCategory("ore_miner").build());
     public static IntegerOption oreMinerMiningLimit = addConfig(new IntegerOption("oreMinerMiningLimit", 256, 1, Integer.MAX_VALUE).makeBuilder().requiresRestart().category("enchantments").subCategory("ore_miner").build());
     public static IntegerOption oreMinerScanRange = addConfig(new IntegerOption("oreMinerScanRange", 2, 1, 10).makeBuilder().requiresRestart().category("enchantments").subCategory("ore_miner").build());

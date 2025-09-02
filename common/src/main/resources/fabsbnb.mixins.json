@@ -17,7 +17,8 @@
     "PhantomSweepAttackGoalMixin",
     "PotionContentsMixin",
     "SpiderMixin",
-    "TagLoaderMixin"
+    "TagLoaderMixin",
+    "VaultBlockMixin"
   ],
   "injectors": {
     "defaultRequire": 1

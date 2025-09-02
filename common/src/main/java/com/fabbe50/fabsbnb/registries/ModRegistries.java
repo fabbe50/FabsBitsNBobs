@@ -303,6 +303,7 @@ public class ModRegistries {
     public static final TagKey<Item> IMMUNE_TO_CACTUS_DAMAGE                                                            = TagKey.create(Registries.ITEM, FabsBnB.location("immune_to_cactus"));
     public static final TagKey<Item> NETHERITE_ITEMS                                                                    = TagKey.create(Registries.ITEM, FabsBnB.location("c", "netherite_items"));
     public static final TagKey<Item> DIGGING_TOOLS                                                                      = TagKey.create(Registries.ITEM, FabsBnB.location("digging_tools"));
+    public static final TagKey<Item> VAULT_UNLOCKERS                                                                    = TagKey.create(Registries.ITEM, FabsBnB.location("vault_unlockers"));
     public static final TagKey<Block> BLOCK_YOINKER_BLACKLIST                                                           = TagKey.create(Registries.BLOCK, FabsBnB.location("block_yoinker_blacklist"));
     public static final TagKey<Block> SPIDER_NOT_CLIMBABLE                                                              = TagKey.create(Registries.BLOCK, FabsBnB.location("spider_not_climbable"));
     public static final TagKey<Block> ORE_MINER_WHITELIST                                                               = TagKey.create(Registries.BLOCK, FabsBnB.location("ore_miner_whitelist"));
