@@ -19,6 +19,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockBreakerBlockEntity extends RandomizableContainerBlockEntity {
@@ -45,19 +47,19 @@ public class BlockBreakerBlockEntity extends RandomizableContainerBlockEntity {
     }
 
     @Override
-    public void loadAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
-        super.loadAdditional(compoundTag, provider);
+    public void loadAdditional(ValueInput valueInput) {
+        super.loadAdditional(valueInput);
         this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        if (!this.tryLoadLootTable(compoundTag)) {
-            ContainerHelper.loadAllItems(compoundTag, this.items, provider);
+        if (!this.tryLoadLootTable(valueInput)) {
+            ContainerHelper.loadAllItems(valueInput, this.items);
         }
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
-        super.saveAdditional(compoundTag, provider);
-        if (!this.trySaveLootTable(compoundTag)) {
-            ContainerHelper.saveAllItems(compoundTag, this.items, provider);
+    protected void saveAdditional(ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
+        if (!this.trySaveLootTable(valueOutput)) {
+            ContainerHelper.saveAllItems(valueOutput, this.items);
         }
     }
 

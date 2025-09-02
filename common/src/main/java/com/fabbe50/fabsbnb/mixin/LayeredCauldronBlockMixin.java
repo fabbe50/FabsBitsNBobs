@@ -3,6 +3,7 @@ package com.fabbe50.fabsbnb.mixin;
 import com.fabbe50.fabsbnb.data.CauldronConversionData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -20,7 +21,7 @@ public abstract class LayeredCauldronBlockMixin {
     @Shadow public abstract boolean isFull(BlockState arg);
 
     @Inject(at = @At("TAIL"), method = "entityInside")
-    public void injectEntityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity, CallbackInfo ci) {
+    public void injectEntityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity, InsideBlockEffectApplier insideBlockEffectApplier, CallbackInfo ci) {
         if (this.isFull(blockState)) {
             if (entity instanceof ItemEntity itemEntity) {
                 ItemStack inputStack = itemEntity.getItem();

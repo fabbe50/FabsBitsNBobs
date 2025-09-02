@@ -13,12 +13,19 @@ public class CustomUsedSpongeBlock extends ExtBlock {
     public static SimpleParticleType particleType;
 
     public CustomUsedSpongeBlock(Properties properties) {
-        super(properties.strength(0.6f).sound(SoundType.GRASS));
-        particleType = null;
+        this(0, null, properties.strength(0.6f).sound(SoundType.GRASS));
+    }
+
+    public CustomUsedSpongeBlock(int tooltipLines, Properties properties) {
+        this(tooltipLines, null, properties.strength(0.6f).sound(SoundType.GRASS));
     }
 
     public CustomUsedSpongeBlock(SimpleParticleType particle, Properties properties) {
-        super(properties.strength(0.6f).sound(SoundType.GRASS));
+        this(0, particle, properties.strength(0.6f).sound(SoundType.GRASS));
+    }
+
+    public CustomUsedSpongeBlock(int tooltipLines, SimpleParticleType particle, Properties properties) {
+        super(tooltipLines, properties.strength(0.6f).sound(SoundType.GRASS));
         particleType = particle;
     }
 

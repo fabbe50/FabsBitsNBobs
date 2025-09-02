@@ -3,7 +3,6 @@ package com.fabbe50.fabsbnb.world.item;
 import com.fabbe50.fabsbnb.util.LangUtils;
 import com.fabbe50.fabsbnb.util.Utilities;
 import com.fabbe50.fabsbnb.world.item.base.ModTieredItem;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -18,12 +17,13 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -32,14 +32,14 @@ import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 
 public class BuildingWandItem extends ModTieredItem {
-    public BuildingWandItem(Tier tier, Properties properties) {
-        super(tier, properties.stacksTo(1).durability(tier.getUses() * Utilities.square(Utilities.getRadiusFromTier(tier))));
+    public BuildingWandItem(ToolMaterial material, Item.Properties properties) {
+        super(material, properties.stacksTo(1).durability(material.durability() * Utilities.square(Utilities.getRadiusFromTier(material))));
     }
 
     @Override
@@ -56,7 +56,6 @@ public class BuildingWandItem extends ModTieredItem {
             if (player == null) {
                 return InteractionResult.FAIL;
             }
-            Tier tier = this.getTier();
 
             CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
 
@@ -73,10 +72,10 @@ public class BuildingWandItem extends ModTieredItem {
                 }
                 return InteractionResult.FAIL;
             } else if (tag.contains("setBlock")) {
-                String stringLocation = tag.getString("setBlock");
+                String stringLocation = tag.getString("setBlock").orElseThrow();
                 boolean fuzzy;
                 if (tag.contains("fuzzy")) {
-                    fuzzy = tag.getBoolean("fuzzy");
+                    fuzzy = tag.getBoolean("fuzzy").orElseThrow();
                 } else {
                     fuzzy = false;
                 }
@@ -84,16 +83,16 @@ public class BuildingWandItem extends ModTieredItem {
                 if (location == null) {
                     return InteractionResult.FAIL;
                 }
-                Holder.Reference<Block> blockReference = Optional.ofNullable(ResourceLocation.tryParse(tag.getString("setBlock")))
+                Holder.Reference<Block> blockReference = Optional.ofNullable(ResourceLocation.tryParse(tag.getString("setBlock").orElseThrow()))
                         .map(location1 -> ResourceKey.create(Registries.BLOCK, location1))
-                        .flatMap(resourceKey -> level.registryAccess().registryOrThrow(Registries.BLOCK).getHolder(resourceKey))
+                        .flatMap(resourceKey -> level.registryAccess().get(resourceKey))
                         .orElse(null);
                 if (blockReference == null) {
                     return InteractionResult.FAIL;
                 }
                 Block blockToPlace = blockReference.value();
 
-                int maxRadius = Utilities.getRadiusFromTier(tier);
+                int maxRadius = Utilities.getRadiusFromTier(getMaterial());
 
                 Direction direction1 = face.getAxis().equals(Direction.Axis.X) || face.getAxis().equals(Direction.Axis.Z) ? Direction.UP : Direction.NORTH;
                 Direction direction2 = face.getAxis().equals(Direction.Axis.Y) ? Direction.EAST : (face.getAxis().equals(Direction.Axis.X) ? Direction.NORTH : Direction.EAST);
@@ -137,15 +136,17 @@ public class BuildingWandItem extends ModTieredItem {
         return visited.stream().anyMatch(pos -> testArea.contains(BlockPos.of(pos).getCenter()));
     }
 
+
+
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
+    public @NotNull InteractionResult use(Level level, Player player, InteractionHand interactionHand) {
         if (level instanceof ServerLevel) {
             if (player.isShiftKeyDown() && !player.isUsingItem()) {
                 ItemStack stack = player.getItemInHand(interactionHand);
                 CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
                 boolean fuzzy = false;
                 if (tag.contains("fuzzy")) {
-                    fuzzy = !tag.getBoolean("fuzzy");
+                    fuzzy = !tag.getBoolean("fuzzy").orElseThrow();
                 } else {
                     fuzzy = true;
                 }
@@ -154,28 +155,28 @@ public class BuildingWandItem extends ModTieredItem {
 
                 stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
                 player.setItemInHand(interactionHand, stack);
-                return InteractionResultHolder.success(stack);
+                return InteractionResult.SUCCESS.heldItemTransformedTo(stack);
             }
         }
         return super.use(level, player, interactionHand);
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, TooltipContext tooltipContext, List<Component> list, TooltipFlag tooltipFlag) {
-        super.appendHoverText(itemStack, tooltipContext, list, tooltipFlag);
+    public void appendHoverText(ItemStack itemStack, TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, Consumer<Component> consumer, TooltipFlag tooltipFlag) {
+        super.appendHoverText(itemStack, tooltipContext, tooltipDisplay, consumer, tooltipFlag);
 
         CompoundTag tag = itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         String blockSelected = LangUtils.EMPTY;
         if (tag.contains("setBlock")) {
-            blockSelected = tag.getString("setBlock");
+            blockSelected = tag.getString("setBlock").orElseThrow();
         }
         boolean fuzzy = false;
         if (tag.contains("fuzzy")) {
-            fuzzy = tag.getBoolean("fuzzy");
+            fuzzy = tag.getBoolean("fuzzy").orElseThrow();
         }
 
-        list.add(LangUtils.withValue(SELECTED_BLOCK_KEY, blockSelected));
-        list.add(LangUtils.conditionWithStyle(FUZZY_TOGGLE, fuzzy));
+        consumer.accept(LangUtils.withValue(SELECTED_BLOCK_KEY, blockSelected));
+        consumer.accept(LangUtils.conditionWithStyle(FUZZY_TOGGLE, fuzzy));
     }
 
     public static final String SELECTED_BLOCK_KEY = LangUtils.getTextKey("building_wand.selected_block");

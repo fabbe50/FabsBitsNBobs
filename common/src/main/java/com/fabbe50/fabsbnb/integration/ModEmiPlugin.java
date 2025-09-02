@@ -22,11 +22,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.level.Level;
 
@@ -68,7 +68,7 @@ public class ModEmiPlugin implements EmiPlugin {
             for (IEnchantment enchantment : enchantmentComponents.keySet()) {
                 List<EmiIngredient> stackList = new ArrayList<>();
                 for (int i = 1; i <= enchantment.getMaxLevel(); i++) {
-                    stackList.add(EmiIngredient.of(Ingredient.of(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Utilities.getHolder(level, enchantment.getResourceKey()), i)))));
+                    stackList.add(EmiIngredient.of(Ingredient.of(EnchantmentHelper.createBook(new EnchantmentInstance(Utilities.getHolder(level, enchantment.getResourceKey()), i)).getItem())));
                 }
                 if (enchantment instanceof VeinMinerEnchant veinMinerEnchant) {
                     stackList.add(EmiIngredient.of(veinMinerEnchant.getBlockFilter()));
@@ -84,7 +84,7 @@ public class ModEmiPlugin implements EmiPlugin {
         Map<String, Pair<List<ItemStack>, List<Component>>> stackComponents = ItemInformations.getItemStackComponents();
         for (String name : stackComponents.keySet()) {
             emiRegistry.addRecipe(new EmiInfoRecipe(
-                    stackComponents.get(name).getFirst().stream().map(Ingredient::of).map(EmiIngredient::of).toList(),
+                    stackComponents.get(name).getFirst().stream().map(ItemStack::getItem).map(Ingredient::of).map(EmiIngredient::of).toList(),
                     stackComponents.get(name).getSecond(),
                     getDynamicLocation(name)
             ));

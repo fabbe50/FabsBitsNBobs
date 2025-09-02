@@ -53,8 +53,12 @@ public class ModRegistries {
     public static final int STRONG_POTION = 450;
 
     // Registry Lists
-    public static final List<RegistrySupplier<Item>>  ITEM_LIST = new ArrayList<>();
+    public static final List<RegistrySupplier<Item>> ITEM_LIST = new ArrayList<>();
+    public static final List<RegistrySupplier<Item>> CREATIVE_ITEM_LIST = new ArrayList<>();
+    public static final List<RegistrySupplier<Item>> NORMAL_ITEM_LIST = new ArrayList<>();
+    public static final List<RegistrySupplier<Item>> BLOCK_ITEM_LIST = new ArrayList<>();
     public static final List<RegistrySupplier<Block>> BLOCK_LIST = new ArrayList<>();
+    public static final List<RegistrySupplier<Block>> NORMAL_BLOCK_LIST = new ArrayList<>();
     public static final List<RegistrySupplier<Potion>> POTION_LIST = new ArrayList<>();
     public static final List<IEnchantment> ENCHANTMENT_LIST = new ArrayList<>();
 
@@ -154,6 +158,10 @@ public class ModRegistries {
     public static Holder<Potion> getPotionReference(RegistrySupplier<Potion> input) {
         return POTIONS.getHolder(input.getId());
     }
+
+    // Consume Effects
+    public static final RegistrySupplier<ConsumeEffect.Type<DrinkItem.HandleDrink>> HANDLE_DRINK                        = CONSUME_EFFECT_TYPES.register(FabsBnB.location("handle_drink"), () -> new ConsumeEffect.Type<>(DrinkItem.HandleDrink.CODEC, DrinkItem.HandleDrink.STREAM_CODEC));
+
 
     // Creative Tabs
     public static final RegistrySupplier<CreativeModeTab> TAB                                                           = TABS.register(FabsBnB.location("tab"), () -> CreativeTabRegistry.create(LangUtils.MOD_NAME_C, () -> new ItemStack(DIAMOND_BUILDING_WAND.get())));
@@ -257,5 +265,24 @@ public class ModRegistries {
 
     public static void init() {
         FabsBnB.log("Setting up registry...");
+        if (Platform.isFabric()) {
+            registerCompostables();
+        }
+    }
+
+    public static void registerCompostables() {
+        FabsBnB.log("Registering compostables...");
+        addCompost(0.5f, Items.ROTTEN_FLESH);
+        addCompost(0.3f, Items.BAMBOO);
+        addCompost(1f, Items.POISONOUS_POTATO);
+        addCompost(0.3f, Items.SPIDER_EYE);
+        addCompost(0.3f, Items.CHORUS_FRUIT);
+        addCompost(0.3f, Items.CHORUS_FLOWER);
+        addCompost(0.4f, Items.ROTTEN_FLESH);
+    }
+
+    private static void addCompost(float chance, Item item) {
+        FabsBnB.debug("Adding compostable: " + item.arch$registryName() + " with chance: " + chance);
+        ComposterBlock.COMPOSTABLES.put(item, chance);
     }
 }

@@ -11,6 +11,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class TabList<R, T extends TabList.TabReg<R>> {
 
     public void registerTab(T event, HolderLookup.Provider provider) {
         FabsBnB.log("Setting up creative tab...");
-        for (RegistrySupplier<Item> item : ModRegistries.ITEM_LIST) {
+        for (RegistrySupplier<Item> item : ModRegistries.CREATIVE_ITEM_LIST) {
             ItemStack stack = new ItemStack(item.get());
             if (!stack.isEmpty()) {
                 event.accept(stack);
@@ -36,7 +37,7 @@ public class TabList<R, T extends TabList.TabReg<R>> {
                     Holder.Reference<Enchantment> enchantmentReference = enchantmentLookup.get(enchantment.getResourceKey()).orElse(null);
                     if (enchantmentReference != null) {
                         for (int i = 1; i <= enchantment.getMaxLevel(); i++) {
-                            event.accept(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(enchantmentReference, i)));
+                            event.accept(EnchantmentHelper.createBook(new EnchantmentInstance(enchantmentReference, i)));
                         }
                     }
                 }

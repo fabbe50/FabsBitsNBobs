@@ -10,13 +10,18 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.level.redstone.Orientation;
 import org.jetbrains.annotations.Nullable;
 
 public class ThinLightBlock extends PoweredThinLightBlock {
-    protected static final BooleanProperty LIT = RedstoneTorchBlock.LIT;
+    public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
     public ThinLightBlock(Properties properties) {
-        super(properties.strength(0.3f).sound(SoundType.GLASS));
+        this(0, properties.strength(0.3f).sound(SoundType.GLASS));
+    }
+
+    public ThinLightBlock(int tooltipLines, Properties properties) {
+        super(tooltipLines, properties.strength(0.3f).sound(SoundType.GLASS));
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(FACE, AttachFace.WALL).setValue(LIT, false));
     }
 
@@ -30,7 +35,7 @@ public class ThinLightBlock extends PoweredThinLightBlock {
     }
 
     @Override
-    public void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block block, BlockPos blockPos2, boolean bl) {
+    protected void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block block, @Nullable Orientation orientation, boolean bl) {
         if (!level.isClientSide) {
             boolean bl2 = blockState.getValue(LIT);
             if (bl2 != level.hasNeighborSignal(blockPos)) {

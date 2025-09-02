@@ -5,32 +5,35 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractDispenserLikeBlock extends ExtBaseEntityBlock {
-    public static final DirectionProperty FACING = DirectionalBlock.FACING;
+    public static final EnumProperty<Direction> FACING = DirectionalBlock.FACING;
     public static final BooleanProperty TRIGGERED = BlockStateProperties.TRIGGERED;
 
     public AbstractDispenserLikeBlock(Properties properties) {
-        super(properties.mapColor(MapColor.STONE).sound(SoundType.STONE).requiresCorrectToolForDrops().strength(3.5f));
+        this(0, properties.mapColor(MapColor.STONE).sound(SoundType.STONE).requiresCorrectToolForDrops().strength(3.5f));
+    }
+
+    public AbstractDispenserLikeBlock(int tooltipLines, Properties properties) {
+        super(tooltipLines, properties.mapColor(MapColor.STONE).sound(SoundType.STONE).requiresCorrectToolForDrops().strength(3.5f));
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(TRIGGERED, false));
     }
 
@@ -42,7 +45,7 @@ public abstract class AbstractDispenserLikeBlock extends ExtBaseEntityBlock {
     protected abstract void doThings(BlockState state, ServerLevel level, BlockPos pos);
 
     @Override
-    public void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block block, BlockPos blockPos2, boolean bl) {
+    protected void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block block, @Nullable Orientation orientation, boolean bl) {
         boolean hasSignal = level.hasNeighborSignal(blockPos) || level.hasNeighborSignal(blockPos.above());
         boolean isTriggered = blockState.getValue(TRIGGERED);
         if (hasSignal && !isTriggered) {
@@ -74,11 +77,11 @@ public abstract class AbstractDispenserLikeBlock extends ExtBaseEntityBlock {
     protected abstract InteractionResult use(Player player, BlockState state, Level level, BlockPos pos);
 
     @Override
-    public void onRemove(BlockState blockState, Level level, BlockPos blockPos, BlockState blockState2, boolean bl) {
-        if (!blockState.is(blockState2.getBlock())) {
-            BlockEntity blockEntity = level.getBlockEntity(blockPos);
-            this.onRemove(level, blockPos, blockEntity);
-            super.onRemove(blockState, level, blockPos, blockState2, bl);
+    public void destroy(LevelAccessor levelAccessor, BlockPos blockPos, BlockState blockState) {
+        if (!blockState.is(levelAccessor.getBlockState(blockPos).getBlock())) {
+            BlockEntity blockEntity = levelAccessor.getBlockEntity(blockPos);
+            this.onRemove((Level) levelAccessor, blockPos, blockEntity);
+            super.destroy(levelAccessor, blockPos, blockState);
         }
     }
 

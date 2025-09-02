@@ -29,8 +29,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class EventRegistry {
-    private static final FoodProperties GLISTERING_MELON = new FoodProperties.Builder().nutrition(3).saturationModifier(0.6f).alwaysEdible().effect(new MobEffectInstance(MobEffects.REGENERATION, 100, 1), 1).build();
-
     public static void register() {
         FabsBnB.log("Setting up events...");
         InteractionEvent.INTERACT_ENTITY.register((player, entity, interactionHand) -> {
@@ -50,11 +48,11 @@ public class EventRegistry {
             Level level = player.level();
             if (level.getBlockState(blockPos).getBlock() instanceof ILeftClickable clickableBlock && player.getMainHandItem().isEmpty() && player.getOffhandItem().isEmpty()) {
                 if (level.isClientSide) {
-                    return EventResult.interruptTrue();
+                    return InteractionResult.SUCCESS;
                 }
                 return clickableBlock.onLeftClick(level, blockPos, player, interactionHand, direction);
             }
-            return EventResult.pass();
+            return InteractionResult.PASS;
         });
         InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) -> {
             Level level = player.level();
@@ -62,14 +60,14 @@ public class EventRegistry {
                 ItemStack stack = player.getItemInHand(hand);
                 if (stack.is(ItemTags.HOES)) {
                     if (ModRegistries.HARVESTING_ENCHANT != null && ModRegistries.HARVESTING_ENCHANT.handleEvent(level, pos, stack)) {
-                        return EventResult.interruptTrue();
+                        return InteractionResult.SUCCESS;
                     }
                     if (ModRegistries.TILLING_ENCHANT != null && ModRegistries.TILLING_ENCHANT.handleEvent(level, pos, stack)) {
-                        return EventResult.interruptTrue();
+                        return InteractionResult.SUCCESS;
                     }
                 }
             }
-            return EventResult.pass();
+            return InteractionResult.PASS;
         });
         EntityEvent.LIVING_HURT.register((livingEntity, damageSource, v) -> {
             if (damageSource.is(DamageTypes.FLY_INTO_WALL) || damageSource.is(DamageTypes.FALL)) {
@@ -117,9 +115,12 @@ public class EventRegistry {
                                 foodProperties.alwaysEdible();
                             }
                             for (CustomFoodData.MobEffectData mobEffectData : foodData.mobEffectInstances()) {
-                                foodProperties.effect(new MobEffectInstance(BuiltInRegistries.MOB_EFFECT.getHolder(mobEffectData.location()).orElseThrow(), mobEffectData.duration(), mobEffectData.power()), 1);
+                                stack.set(DataComponents.POTION_CONTENTS, PotionContents.EMPTY.withEffectAdded(
+                                        new MobEffectInstance(BuiltInRegistries.MOB_EFFECT.get(mobEffectData.location()).orElseThrow(), mobEffectData.duration(), mobEffectData.power())
+                                ));
                             }
                             stack.set(DataComponents.FOOD, foodProperties.build());
+                            stack.set(DataComponents.CONSUMABLE, Consumables.DEFAULT_FOOD);
                         }
                     }
                 }
@@ -129,7 +130,10 @@ public class EventRegistry {
 
     public static boolean handleCustomMiningEnchantments(Level level, BlockPos blockPos, BlockState blockState, ServerPlayer serverPlayer) {
         ItemStack stack = serverPlayer.getItemInHand(InteractionHand.MAIN_HAND);
-        return handleCustomMiningEnchantments(level, blockPos, blockState, serverPlayer, stack);
+        if (!stack.isEmpty()) {
+            return handleCustomMiningEnchantments(level, blockPos, blockState, serverPlayer, stack);
+        }
+        return false;
     }
 
     public static boolean handleCustomMiningEnchantments(Level level, BlockPos blockPos, BlockState blockState, ItemStack stack) {

@@ -7,10 +7,10 @@
   ],
   "mixins": [
     "CactusBlockMixin",
-    "ComposterBlockMixin",
     "CreeperMixin",
     "EnchantedBookItemMixin",
     "EnchantmentHelperMixin",
+    "ItemPropertiesMixin",
     "ItemStackMixin",
     "LayeredCauldronBlockMixin",
     "PhantomSweepAttackGoalMixin",

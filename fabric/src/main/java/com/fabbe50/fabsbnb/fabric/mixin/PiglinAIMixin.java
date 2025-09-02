@@ -10,8 +10,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PiglinAi.class)
 public class PiglinAIMixin {
-    @Inject(method = "isWearingGold", at = @At("TAIL"), cancellable = true)
-    private static void injectIsWearingGold(LivingEntity livingEntity, CallbackInfoReturnable<Boolean> cir) {
+    @Inject(method = "isWearingSafeArmor", at = @At("TAIL"), cancellable = true)
+    private static void injectIsWearingSafeArmor(LivingEntity livingEntity, CallbackInfoReturnable<Boolean> cir) {
         if (Platform.isWearingNecklace(livingEntity)) {
             cir.setReturnValue(true);
         }

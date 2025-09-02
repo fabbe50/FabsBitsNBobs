@@ -1,10 +1,13 @@
 package com.fabbe50.fabsbnb.world.item.enchantments;
 
-import com.fabbe50.fabsbnb.data.ToolTierScanRange;
+import com.fabbe50.fabsbnb.data.ToolMaterialScanRange;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
 import com.fabbe50.fabsbnb.util.Utilities;
+import com.fabbe50.fabsbnb.world.item.base.ModTieredItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
@@ -12,8 +15,7 @@ import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TieredItem;
-import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
@@ -84,20 +86,21 @@ public record ScytheEnchantment(ResourceKey<Enchantment> enchantmentKey, TagKey<
                 if (!blockState.is(ModRegistries.SCYTHE_ABLE)) {
                     return false;
                 }
-                if (stack.getItem() instanceof TieredItem tieredItem) {
-                    Utilities.getBlocksInSphericalRadius(blockPos, ToolTierScanRange.getScanRangeFromToolTier((Tiers) tieredItem.getTier()).getScanRange())
-                            .forEach(blockPos1 -> {
-                                BlockState state = level.getBlockState(blockPos1);
-                                if (state.is(ModRegistries.SCYTHE_ABLE)) {
-                                    List<ItemStack> stacks = state.getDrops(new LootParams.Builder((ServerLevel) level).withParameter(LootContextParams.TOOL, stack).withParameter(LootContextParams.ORIGIN, blockPos1.getCenter()));
-                                    for (ItemStack dropStack : stacks) {
-                                        ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), dropStack);
-                                        level.addFreshEntity(itemEntity);
-                                    }
-                                    level.setBlockAndUpdate(blockPos1, Blocks.AIR.defaultBlockState());
+                CompoundTag compoundTag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+                int scanRange = compoundTag.getInt("scanRange").orElse(1);
+                Utilities.getBlocksInSphericalRadius(blockPos, scanRange)
+                        .forEach(blockPos1 -> {
+                            BlockState state = level.getBlockState(blockPos1);
+                            if (state.is(ModRegistries.SCYTHE_ABLE)) {
+                                List<ItemStack> stacks = state.getDrops(new LootParams.Builder((ServerLevel) level).withParameter(LootContextParams.TOOL, stack).withParameter(LootContextParams.ORIGIN, blockPos1.getCenter()));
+                                for (ItemStack dropStack : stacks) {
+                                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), dropStack);
+                                    level.addFreshEntity(itemEntity);
                                 }
-                            });
-                }
+                                level.setBlockAndUpdate(blockPos1, Blocks.AIR.defaultBlockState());
+                            }
+                        });
+
             }
         }
 

@@ -16,14 +16,16 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 public class BlockYoinkerItem extends ModItem {
     public BlockYoinkerItem(Properties properties) {
@@ -61,22 +63,20 @@ public class BlockYoinkerItem extends ModItem {
                 return this.yoinkBlock(yoinker, blockState, (ServerLevel) level, pos);
             }
         } else {
-            Direction face = useOnContext.getClickedFace();
-            if (blockState.hasBlockEntity()) {
-                if (player != null && player.isShiftKeyDown()) {
-                    if (this.placeBlock((ServerLevel) level, pos.relative(face), savedState).equals(InteractionResult.FAIL)) {
+            if (player != null) {
+                if (!blockState.hasBlockEntity() || player.isShiftKeyDown()) {
+                    Direction face = useOnContext.getClickedFace();
+                    if (this.placeBlock((ServerLevel) level, player, pos.relative(face), savedState).equals(InteractionResult.FAIL)) {
                         return InteractionResult.FAIL;
                     }
+                    if (YoinkerData.hasBlockEntityData(yoinker)) {
+                        level.setBlockEntity(BlockEntity.loadStatic(pos.relative(face), savedState, YoinkerData.getBlockEntityData(yoinker), level.registryAccess()));
+                    }
+                    YoinkerData.clearData(yoinker);
                 }
             } else {
-                if (this.placeBlock((ServerLevel) level, pos.relative(face), savedState).equals(InteractionResult.FAIL)) {
-                    return InteractionResult.FAIL;
-                }
+                return InteractionResult.FAIL;
             }
-            if (YoinkerData.hasBlockEntityData(yoinker)) {
-                level.setBlockEntity(BlockEntity.loadStatic(pos.relative(face), savedState, YoinkerData.getBlockEntityData(yoinker), level.registryAccess()));
-            }
-            YoinkerData.clearData(yoinker);
         }
         return InteractionResult.SUCCESS;
     }
@@ -90,7 +90,13 @@ public class BlockYoinkerItem extends ModItem {
         return InteractionResult.SUCCESS;
     }
 
-    private InteractionResult placeBlock(ServerLevel level, BlockPos pos, BlockState state) {
+    private InteractionResult placeBlock(ServerLevel level, Player player, BlockPos pos, BlockState state) {
+        if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
+            state = state.setValue(BlockStateProperties.HORIZONTAL_FACING, player.getDirection().getOpposite());
+        }
+        if (state.hasProperty(BlockStateProperties.FACING)) {
+            state = state.setValue(BlockStateProperties.FACING, player.getDirection().getOpposite());
+        }
         if (!level.setBlockAndUpdate(pos, state)) {
             return InteractionResult.FAIL;
         }
@@ -113,21 +119,21 @@ public class BlockYoinkerItem extends ModItem {
 
     @Override
     public boolean isFoil(ItemStack itemStack) {
-        return !YoinkerData.doesYoinkerContainBlock(itemStack);
+        return YoinkerData.doesYoinkerContainBlock(itemStack);
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, TooltipContext tooltipContext, List<Component> list, TooltipFlag tooltipFlag) {
-        super.appendHoverText(itemStack, tooltipContext, list, tooltipFlag);
+    public void appendHoverText(ItemStack itemStack, TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, Consumer<Component> consumer, TooltipFlag tooltipFlag) {
+        super.appendHoverText(itemStack, tooltipContext, tooltipDisplay, consumer, tooltipFlag);
         if (tooltipContext != null) {
             BlockState blockState = YoinkerData.getBlockState(tooltipContext.registries(), itemStack);
             if (blockState.getBlock() != Blocks.AIR) {
-                list.add(LangUtils.withValue(LangUtils.CONTAINS, LangUtils.getComponent(blockState)));
+                consumer.accept(LangUtils.withValue(LangUtils.CONTAINS, LangUtils.getComponent(blockState)));
             } else {
-                list.add(LangUtils.withValue(LangUtils.CONTAINS, LangUtils.EMPTY_C));
+                consumer.accept(LangUtils.withValue(LangUtils.CONTAINS, LangUtils.EMPTY_C));
             }
-            list.add(Component.empty());
-            list.add(LangUtils.getDescription(this));
+            consumer.accept(Component.empty());
+            consumer.accept(LangUtils.getDescription(this));
         }
     }
 

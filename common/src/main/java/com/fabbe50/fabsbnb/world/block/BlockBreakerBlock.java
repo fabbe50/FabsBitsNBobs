@@ -9,6 +9,7 @@ import dev.architectury.registry.menu.ExtendedMenuProvider;
 import dev.architectury.registry.menu.MenuRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -19,7 +20,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -37,7 +37,7 @@ public class BlockBreakerBlock extends AbstractDispenserLikeBlock {
     public static final MapCodec<BlockBreakerBlock> CODEC = simpleCodec(BlockBreakerBlock::new);
 
     public BlockBreakerBlock(Properties properties) {
-        super(properties);
+        super(1, properties);
     }
 
     @Override
@@ -58,8 +58,8 @@ public class BlockBreakerBlock extends AbstractDispenserLikeBlock {
             if (toolStack.isEmpty() && !toolRequired) {
                 blockBroken = breakBlock(level, posInFront, stateInFront, ItemStack.EMPTY);
             } else if (!toolStack.isEmpty()) {
-                if (toolStack.getItem() instanceof DiggerItem diggerItem) {
-                    if (diggerItem.isCorrectToolForDrops(toolStack, stateInFront)) {
+                if (toolStack.getItem().components().has(DataComponents.TOOL)) {
+                    if (toolStack.getItem().isCorrectToolForDrops(toolStack, stateInFront)) {
                         blockBroken = breakBlock(level, posInFront, stateInFront, toolStack);
                         Utilities.hurtItem(1, level, toolStack, pos);
                     } else if (!toolRequired) {

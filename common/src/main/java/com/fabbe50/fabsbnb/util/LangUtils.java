@@ -8,6 +8,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LangUtils {
     public static final String MOD_NAME = LangUtils.getTextKey("name");
     public static final String EMPTY = LangUtils.getTextKey("empty");
@@ -89,6 +92,14 @@ public class LangUtils {
 
     public static Component getDescription(Block block) {
         return Component.translatable(getDescriptionKey(block)).withStyle(ChatFormatting.DARK_PURPLE);
+    }
+
+    public static List<Component> getDescription(Block block, int lines) {
+        List<Component> descLines = new ArrayList<>();
+        for (int i = 0; i < lines; i++) {
+            descLines.add(Component.translatable(getDescriptionKey(block) + "[" + i + "]").withStyle(ChatFormatting.DARK_PURPLE));
+        }
+        return descLines;
     }
 
     public static Component getDescription(Item item) {

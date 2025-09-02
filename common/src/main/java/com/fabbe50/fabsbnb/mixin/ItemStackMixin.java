@@ -3,6 +3,7 @@ package com.fabbe50.fabsbnb.mixin;
 import com.fabbe50.fabsbnb.events.ItemStackEvent;
 import net.minecraft.core.component.PatchedDataComponentMap;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
@@ -24,7 +25,7 @@ public class ItemStackMixin {
     }
 
     @Inject(method = "inventoryTick", at = @At("HEAD"))
-    private void injectInventoryTick(Level level, Entity entity, int i, boolean bl, CallbackInfo ci) {
+    private void injectInventoryTick(Level level, Entity entity, EquipmentSlot equipmentSlot, CallbackInfo ci) {
         ItemStackEvent.INVENTORY_TICK.invoker().inventoryTick((ItemStack) (Object) this, level, entity);
     }
 }

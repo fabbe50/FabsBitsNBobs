@@ -14,18 +14,18 @@ import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.recipe.IFocusGroup;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.AbstractRecipeCategory;
+import mezz.jei.api.recipe.types.IRecipeType;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +36,7 @@ import java.util.Map;
 
 @JeiPlugin
 public class ModJEIPlugin implements IModPlugin {
-    public static RecipeType<CauldronRecipe> cauldronType = RecipeType.create(FabsBnB.MOD_ID, "cauldron_conversion", CauldronRecipe.class);
+    public static IRecipeType<CauldronRecipe> cauldronType = IRecipeType.create(FabsBnB.MOD_ID, "cauldron_conversion", CauldronRecipe.class);
     public static CauldronRecipeCategory cauldronRecipeCategory = new CauldronRecipeCategory(cauldronType, Component.translatable("jei.category.fabsbnb.cauldron_conversion"));
 
     @Override
@@ -72,7 +72,7 @@ public class ModJEIPlugin implements IModPlugin {
                 Map<IEnchantment, List<Component>> enchantmentComponents = ItemInformations.getEnchantmentComponents();
                 for (IEnchantment enchantment : enchantmentComponents.keySet()) {
                     for (int i = 1; i <= enchantment.getMaxLevel(); i++) {
-                        registration.addItemStackInfo(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Utilities.getHolder(level, enchantment.getResourceKey()), i)), enchantmentComponents.get(enchantment).toArray(Component[]::new));
+                        registration.addItemStackInfo(EnchantmentHelper.createBook(new EnchantmentInstance(Utilities.getHolder(level, enchantment.getResourceKey()), i)), enchantmentComponents.get(enchantment).toArray(Component[]::new));
                     }
                 }
             }
@@ -90,7 +90,7 @@ public class ModJEIPlugin implements IModPlugin {
     }
 
     public static class CauldronRecipeCategory extends AbstractRecipeCategory<CauldronRecipe> {
-        public CauldronRecipeCategory(RecipeType<CauldronRecipe> recipeType, Component title) {
+        public CauldronRecipeCategory(IRecipeType<CauldronRecipe> recipeType, Component title) {
             super(recipeType, title, new IDrawable() {
                 @Override
                 public int getWidth() {
@@ -112,9 +112,9 @@ public class ModJEIPlugin implements IModPlugin {
         @Override
         public void setRecipe(IRecipeLayoutBuilder builder, CauldronRecipe cauldronRecipe, IFocusGroup iFocusGroup) {
             IRecipeSlotBuilder inputSlot = builder.addInputSlot(0, 0).setStandardSlotBackground();
-            inputSlot.addIngredients(cauldronRecipe.input());
+            inputSlot.add(cauldronRecipe.input());
             IRecipeSlotBuilder outputSlot = builder.addOutputSlot(90, 0).setOutputSlotBackground();
-            outputSlot.addIngredients(cauldronRecipe.output());
+            outputSlot.add(cauldronRecipe.output());
         }
     }
 }

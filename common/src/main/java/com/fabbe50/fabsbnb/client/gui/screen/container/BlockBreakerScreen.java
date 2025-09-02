@@ -4,6 +4,7 @@ import com.fabbe50.fabsbnb.FabsBnB;
 import com.fabbe50.fabsbnb.world.inventory.BlockBreakerMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -32,6 +33,6 @@ public class BlockBreakerScreen extends AbstractContainerScreen<BlockBreakerMenu
     protected void renderBg(GuiGraphics guiGraphics, float f, int i, int j) {
         int k = (this.width - this.imageWidth) / 2;
         int l = (this.height - this.imageHeight) / 2;
-        guiGraphics.blit(CONTAINER_LOCATION, k, l, 0, 0, this.imageWidth, this.imageHeight);
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, CONTAINER_LOCATION, k, l, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
     }
 }

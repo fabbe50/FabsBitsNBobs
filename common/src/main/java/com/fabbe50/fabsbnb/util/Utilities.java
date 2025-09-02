@@ -17,8 +17,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
@@ -32,16 +31,32 @@ import java.util.Optional;
 import java.util.function.ToIntFunction;
 
 public class Utilities {
-    public static int getRadiusFromTier(Tier tier) {
-        return switch (tier) {
-            case Tiers.WOOD -> ModConfig.woodenBuildingWandRadius.getValue();
-            case Tiers.STONE -> ModConfig.stoneBuildingWandRadius.getValue();
-            case Tiers.IRON -> ModConfig.ironBuildingWandRadius.getValue();
-            case Tiers.GOLD -> ModConfig.goldBuildingWandRadius.getValue();
-            case Tiers.DIAMOND -> ModConfig.diamondBuildingWandRadius.getValue();
-            case Tiers.NETHERITE -> ModConfig.netheriteBuildingWandRadius.getValue();
+    public static int getRadiusFromTier(ToolMaterial material) {
+        if (material.equals(ToolMaterial.WOOD)) {
+            return ModConfig.woodenBuildingWandRadius.getValue();
+        } else if (material.equals(ToolMaterial.STONE)) {
+            return ModConfig.stoneBuildingWandRadius.getValue();
+        } else if (material.equals(ToolMaterial.IRON)) {
+            return ModConfig.ironBuildingWandRadius.getValue();
+        } else if (material.equals(ToolMaterial.GOLD)) {
+            return ModConfig.goldBuildingWandRadius.getValue();
+        } else if (material.equals(ToolMaterial.DIAMOND)) {
+            return ModConfig.diamondBuildingWandRadius.getValue();
+        } else if (material.equals(ToolMaterial.NETHERITE)) {
+            return ModConfig.netheriteBuildingWandRadius.getValue();
+        } else {
+            return 1;
+        }
+
+        /* return switch (material) {
+            case ToolMaterial.WOOD -> ModConfig.woodenBuildingWandRadius.getValue();
+            case ToolMaterial.STONE -> ModConfig.stoneBuildingWandRadius.getValue();
+            case ToolMaterial.IRON -> ModConfig.ironBuildingWandRadius.getValue();
+            case ToolMaterial.GOLD -> ModConfig.goldBuildingWandRadius.getValue();
+            case ToolMaterial.DIAMOND -> ModConfig.diamondBuildingWandRadius.getValue();
+            case ToolMaterial.NETHERITE -> ModConfig.netheriteBuildingWandRadius.getValue();
             default -> 1;
-        };
+        }; */
     }
 
     public static int square(int value) {
@@ -57,7 +72,7 @@ public class Utilities {
     public static Holder.Reference<Block> parseBlockReference(HolderLookup.Provider provider, ItemStack stack, String key) {
         CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         if (tag.contains(key)) {
-            String sLocation = tag.getString(key);
+            String sLocation = tag.getString(key).orElseThrow();
             ResourceLocation location = ResourceLocation.tryParse(sLocation);
             if (location != null) {
                 return Optional.of(location)
@@ -164,7 +179,7 @@ public class Utilities {
     }
 
     public static void hurtItem(int i, ServerLevel level, ItemStack stack, BlockPos pos) {
-        stack.hurtAndBreak(i, level, null, item -> level.playSeededSound(null, pos.getX(), pos.getY(), pos.getZ(), item.getBreakingSound(), SoundSource.BLOCKS, 1, 0.5f, 1));
+        stack.hurtAndBreak(i, level, null, item -> level.playSeededSound(null, pos.getX(), pos.getY(), pos.getZ(), item.components().get(DataComponents.BREAK_SOUND), SoundSource.BLOCKS, 1, 0.5f, 1));
     }
 
     public static void hurtItem(LivingEntity entity, ItemStack stack) {

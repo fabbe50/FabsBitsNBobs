@@ -4,9 +4,12 @@ import com.fabbe50.fabsbnb.world.block.base.ExtFaceAttachedHorizontalDirectional
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FaceAttachedHorizontalDirectionalBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
@@ -37,7 +40,11 @@ public class PoweredThinLightBlock extends ExtFaceAttachedHorizontalDirectionalB
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public PoweredThinLightBlock(Properties properties) {
-        super(properties.strength(0.3F).sound(SoundType.GLASS).isValidSpawn((blockState, blockGetter, blockPos, object) -> true));
+        this(0, properties.strength(0.3F).sound(SoundType.GLASS).isValidSpawn((blockState, blockGetter, blockPos, object) -> true));
+    }
+
+    public PoweredThinLightBlock(int tooltipLines, Properties properties) {
+        super(tooltipLines, properties.strength(0.3F).sound(SoundType.GLASS).isValidSpawn((blockState, blockGetter, blockPos, object) -> true));
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(FACE, AttachFace.WALL).setValue(WATERLOGGED, false));
     }
 
@@ -78,12 +85,12 @@ public class PoweredThinLightBlock extends ExtFaceAttachedHorizontalDirectionalB
     }
 
     @Override
-    public @NotNull BlockState updateShape(BlockState blockState, Direction direction, BlockState blockState2, LevelAccessor levelAccessor, BlockPos blockPos, BlockPos blockPos2) {
+    protected @NotNull BlockState updateShape(BlockState blockState, LevelReader levelReader, ScheduledTickAccess scheduledTickAccess, BlockPos blockPos, Direction direction, BlockPos blockPos2, BlockState blockState2, RandomSource randomSource) {
         if (blockState.getValue(WATERLOGGED)) {
-            levelAccessor.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
+            scheduledTickAccess.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelReader));
         }
 
-        return super.updateShape(blockState, direction, blockState2, levelAccessor, blockPos, blockPos2);
+        return super.updateShape(blockState, levelReader, scheduledTickAccess, blockPos, direction, blockPos2, blockState2, randomSource);
     }
 
     @Override

@@ -23,7 +23,7 @@ public class BlockPlacerBlock extends AbstractDispenserLikeBlock {
     public static final MapCodec<BlockPlacerBlock> CODEC = simpleCodec(BlockPlacerBlock::new);
 
     public BlockPlacerBlock(Properties properties) {
-        super(properties);
+        super(1, properties);
     }
 
     @Override

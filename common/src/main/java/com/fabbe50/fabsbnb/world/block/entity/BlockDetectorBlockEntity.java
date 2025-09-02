@@ -1,6 +1,5 @@
 package com.fabbe50.fabsbnb.world.block.entity;
 
-import com.fabbe50.fabsbnb.util.Utilities;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -9,16 +8,15 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class BlockDetectorBlockEntity extends BlockEntity {
-    private CompoundTag stateTag;
-    private boolean isFinalized = false;
     private BlockState stateToCheckFor;
 
     public BlockDetectorBlockEntity(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
@@ -34,31 +32,20 @@ public class BlockDetectorBlockEntity extends BlockEntity {
     }
 
     public BlockState getStateToCheckFor() {
-        if (this.level != null && this.stateTag != null && !this.isFinalized) {
-            this.stateToCheckFor = NbtUtils.readBlockState(Utilities.getBlockRegistryLookup(this.level.registryAccess()), this.stateTag);
-            this.stateTag = null;
-            this.isFinalized = true;
-        }
         return this.stateToCheckFor;
     }
 
     @Override
-    public void loadAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
-        super.loadAdditional(compoundTag, provider);
-        if (compoundTag.contains("stateToCheckFor")) {
-            this.stateTag = compoundTag.getCompound("stateToCheckFor");
-        }
+    public void loadAdditional(ValueInput valueInput) {
+        super.loadAdditional(valueInput);
+        valueInput.read("stateToCheckFor", BlockState.CODEC).ifPresent(state -> this.stateToCheckFor = state);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
-        super.saveAdditional(compoundTag, provider);
+    protected void saveAdditional(ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
         if (this.stateToCheckFor != null) {
-            ResourceLocation location = this.stateToCheckFor.getBlock().arch$registryName();
-            if (location != null) {
-                CompoundTag blockData = NbtUtils.writeBlockState(this.stateToCheckFor);
-                compoundTag.put("stateToCheckFor", blockData);
-            }
+            valueOutput.store("stateToCheckFor", BlockState.CODEC, this.stateToCheckFor);
         }
     }
 

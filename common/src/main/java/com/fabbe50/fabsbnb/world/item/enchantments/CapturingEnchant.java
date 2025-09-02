@@ -4,6 +4,7 @@ import com.fabbe50.fabsbnb.ModConfig;
 import com.fabbe50.fabsbnb.util.Utilities;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
@@ -78,7 +79,7 @@ public record CapturingEnchant(ResourceKey<Enchantment> enchantmentKey, TagKey<I
         if (spawnEggItem != null) {
             ItemStack spawnEggStack = new ItemStack(spawnEggItem);
             if (attackedEntity.getRandom().nextInt(ModConfig.oneInNChanceToDropSpawnEgg.getValue() / enchantmentLevel) == 0) {
-                attackedEntity.spawnAtLocation(spawnEggStack);
+                attackedEntity.spawnAtLocation((ServerLevel) level, spawnEggStack);
                 return true;
             }
         }

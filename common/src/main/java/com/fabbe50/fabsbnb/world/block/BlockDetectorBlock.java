@@ -1,45 +1,42 @@
 package com.fabbe50.fabsbnb.world.block;
 
-import com.fabbe50.fabsbnb.FabsBnB;
 import com.fabbe50.fabsbnb.util.LangUtils;
 import com.fabbe50.fabsbnb.world.block.base.ExtBaseEntityBlock;
 import com.fabbe50.fabsbnb.world.block.entity.BlockDetectorBlockEntity;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.redstone.ExperimentalRedstoneUtils;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class BlockDetectorBlock extends ExtBaseEntityBlock {
     public static final MapCodec<BlockDetectorBlock> CODEC = simpleCodec(BlockDetectorBlock::new);
-    public static final DirectionProperty FACING = DirectionalBlock.FACING;
+    public static final EnumProperty<Direction> FACING = DirectionalBlock.FACING;
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
     public BlockDetectorBlock(Properties properties) {
-        super(properties.mapColor(MapColor.STONE).sound(SoundType.STONE).requiresCorrectToolForDrops().strength(3.5f));
+        super(1, properties.mapColor(MapColor.STONE).sound(SoundType.STONE).requiresCorrectToolForDrops().strength(3.5f).isRedstoneConductor((blockState, blockGetter, blockPos) -> false));
         this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.SOUTH).setValue(POWERED, false));
     }
 
@@ -90,40 +87,34 @@ public class BlockDetectorBlock extends ExtBaseEntityBlock {
     }
 
     @Override
-    public @NotNull BlockState updateShape(BlockState blockState, Direction direction, BlockState blockState2, LevelAccessor levelAccessor, BlockPos blockPos, BlockPos blockPos2) {
+    protected @NotNull BlockState updateShape(BlockState blockState, LevelReader levelReader, ScheduledTickAccess scheduledTickAccess, BlockPos blockPos, Direction direction, BlockPos blockPos2, BlockState blockState2, RandomSource randomSource) {
         if (blockState.getValue(FACING) == direction && !blockState.getValue(POWERED)) {
-            if (!levelAccessor.isClientSide() && !levelAccessor.getBlockTicks().hasScheduledTick(blockPos, this)) {
-                levelAccessor.scheduleTick(blockPos, this, 2);
+            if (!levelReader.isClientSide() && !scheduledTickAccess.getBlockTicks().hasScheduledTick(blockPos, this)) {
+                scheduledTickAccess.scheduleTick(blockPos, this, 2);
             }
         }
-        return super.updateShape(blockState, direction, blockState2, levelAccessor, blockPos, blockPos2);
+        return super.updateShape(blockState, levelReader, scheduledTickAccess, blockPos, direction, blockPos2, blockState2, randomSource);
     }
 
     @Override
-    public void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block block, BlockPos blockPos2, boolean bl) {
-        this.checkConditionsAndUpdate(blockState, level, blockPos, blockPos2);
+    protected void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block block, @Nullable Orientation orientation, boolean bl) {
+        this.checkConditionsAndUpdate(blockState, level, blockPos);
     }
 
     private void checkConditionsAndUpdate(BlockState blockState, Level level, BlockPos blockPos) {
-        this.checkConditionsAndUpdate(blockState, level, blockPos, blockPos.relative(blockState.getValue(FACING)));
-    }
-
-    private void checkConditionsAndUpdate(BlockState blockState, Level level, BlockPos blockPos, BlockPos blockPos2) {
-        Direction facing = blockState.getValue(FACING);
-        if (blockPos.relative(facing).equals(blockPos2)) {
-            BlockEntity blockEntity = level.getBlockEntity(blockPos);
-            if (blockEntity instanceof BlockDetectorBlockEntity detectorBlockEntity) {
-                if (detectorBlockEntity.getStateToCheckFor() == null) {
-                    return;
-                }
-                BlockState stateAtPos = level.getBlockState(blockPos2);
-                if (detectorBlockEntity.getStateToCheckFor().getBlock().equals(stateAtPos.getBlock()) && !blockState.getValue(POWERED)) {
-                    level.setBlock(blockPos, blockState.setValue(POWERED, true), 2);
-                    this.updateNeighborsInFront(level, blockPos, blockState);
-                } else if (blockState.getValue(POWERED)) {
-                    level.setBlock(blockPos, blockState.setValue(POWERED, false), 2);
-                    this.updateNeighborsInFront(level, blockPos, blockState);
-                }
+        BlockPos blockPos2 = blockPos.relative(blockState.getValue(FACING));
+        BlockEntity blockEntity = level.getBlockEntity(blockPos);
+        if (blockEntity instanceof BlockDetectorBlockEntity detectorBlockEntity) {
+            if (detectorBlockEntity.getStateToCheckFor() == null) {
+                return;
+            }
+            BlockState stateAtPos = level.getBlockState(blockPos2);
+            if (detectorBlockEntity.getStateToCheckFor().getBlock().equals(stateAtPos.getBlock()) && !blockState.getValue(POWERED)) {
+                level.setBlock(blockPos, blockState.setValue(POWERED, true), 2);
+                this.updateNeighborsInFront(level, blockPos, blockState);
+            } else if (!detectorBlockEntity.getStateToCheckFor().getBlock().equals(stateAtPos.getBlock()) && blockState.getValue(POWERED)) {
+                level.setBlock(blockPos, blockState.setValue(POWERED, false), 2);
+                this.updateNeighborsInFront(level, blockPos, blockState);
             }
         }
     }
@@ -131,8 +122,9 @@ public class BlockDetectorBlock extends ExtBaseEntityBlock {
     protected void updateNeighborsInFront(Level level, BlockPos blockPos, BlockState blockState) {
         Direction direction = blockState.getValue(FACING);
         BlockPos blockPos2 = blockPos.relative(direction.getOpposite());
-        level.neighborChanged(blockPos2, this, blockPos);
-        level.updateNeighborsAtExceptFromFacing(blockPos2, this, direction);
+        Orientation orientation = ExperimentalRedstoneUtils.initialOrientation(level, direction.getOpposite(), (Direction)null);
+        level.neighborChanged(blockPos2, this, orientation);
+        level.updateNeighborsAtExceptFromFacing(blockPos2, this, direction, orientation);
     }
 
     @Override
@@ -160,8 +152,8 @@ public class BlockDetectorBlock extends ExtBaseEntityBlock {
     }
 
     @Override
-    public void onRemove(BlockState blockState, Level level, BlockPos blockPos, BlockState blockState2, boolean bl) {
-        this.updateNeighborsInFront(level, blockPos, blockState.setValue(POWERED, false));
+    public void destroy(LevelAccessor levelAccessor, BlockPos blockPos, BlockState blockState) {
+        this.updateNeighborsInFront((Level) levelAccessor, blockPos, blockState.setValue(POWERED, false));
     }
 
     @Override

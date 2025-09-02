@@ -119,3 +119,5 @@ runs/
 !gradle-wrapper.jar
 /common/src/main/generated/resources/.cache
 /models_textures
+
+_RESOURCES/

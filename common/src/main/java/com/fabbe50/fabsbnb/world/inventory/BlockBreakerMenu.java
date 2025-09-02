@@ -1,6 +1,7 @@
 package com.fabbe50.fabsbnb.world.inventory;
 
 import com.fabbe50.fabsbnb.registries.ModRegistries;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -8,9 +9,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockBreakerMenu extends AbstractContainerMenu {
@@ -100,7 +99,7 @@ public class BlockBreakerMenu extends AbstractContainerMenu {
         }
 
         public static boolean mayPlaceItem(ItemStack itemStack) {
-            return itemStack.getItem() instanceof DiggerItem;
+            return itemStack.has(DataComponents.TOOL);
         }
     }
 }

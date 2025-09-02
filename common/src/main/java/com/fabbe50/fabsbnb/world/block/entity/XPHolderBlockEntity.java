@@ -1,5 +1,7 @@
 package com.fabbe50.fabsbnb.world.block.entity;
 
+import com.fabbe50.fabsbnb.FabsBnB;
+import com.fabbe50.fabsbnb.ModConfig;
 import com.fabbe50.fabsbnb.util.Utilities;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
 import net.minecraft.core.BlockPos;
@@ -14,6 +16,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,6 +25,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class XPHolderBlockEntity extends BlockEntity {
+    private static final float PI_F = (float)Math.PI;
+    private static final float TWO_PI_F = PI_F * 2F;
+
     public int time;
     public float rot;
     public float oRot;
@@ -28,7 +35,6 @@ public class XPHolderBlockEntity extends BlockEntity {
 
     private int xp;
     private boolean collectXP;
-    private int range;
 
     public XPHolderBlockEntity(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
         super(blockEntityType, blockPos, blockState);
@@ -39,19 +45,17 @@ public class XPHolderBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
-        super.saveAdditional(compoundTag, provider);
-        compoundTag.putInt("xp", this.xp);
-        compoundTag.putInt("range", this.range);
-        compoundTag.putBoolean("collect", this.collectXP);
+    protected void saveAdditional(ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
+        valueOutput.putInt("xp", this.xp);
+        valueOutput.putBoolean("collect", this.collectXP);
     }
 
     @Override
-    protected void loadAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
-        super.loadAdditional(compoundTag, provider);
-        this.xp = compoundTag.getInt("xp");
-        this.range = compoundTag.getInt("range");
-        this.collectXP = compoundTag.getBoolean("collect");
+    protected void loadAdditional(ValueInput valueInput) {
+        super.loadAdditional(valueInput);
+        this.xp = valueInput.getInt("xp").orElse(0);
+        this.collectXP = valueInput.getBooleanOr("collect", false);
     }
 
     @Override
@@ -67,39 +71,29 @@ public class XPHolderBlockEntity extends BlockEntity {
     }
 
     public void tickClient() {
-        if (this.getLevel() != null) {
-            this.oRot = this.rot;
-            Player player = this.getLevel().getNearestPlayer((double) getBlockPos().getX() + (double) 0.5F, (double) getBlockPos().getY() + (double) 0.5F, (double) getBlockPos().getZ() + (double) 0.5F, 3.0F, false);
-            if (player != null) {
-                double d = player.getX() - ((double)getBlockPos().getX() + (double)0.5F);
-                double e = player.getZ() - ((double)getBlockPos().getZ() + (double)0.5F);
-                this.tRot = (float) Mth.atan2(e, d);
+        if (level == null) return;
+
+        this.oRot = this.rot;
+
+        BlockPos pos = this.getBlockPos();
+        Player nearest = level.getNearestPlayer(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 12.0, false);
+
+        if (nearest != null) {
+            double dx = nearest.getX() - (pos.getX() + 0.5);
+            double dz = nearest.getZ() - (pos.getZ() + 0.5);
+            double distSq = dx * dx + dz * dz;
+
+            if (distSq < 9.0) { // player is close
+                this.tRot = (float) Math.atan2(dz, dx);
             } else {
-                this.tRot += 0.02F;
+                this.tRot += 0.02F; // lazy spin
             }
-            while(this.rot >= (float)Math.PI) {
-                this.rot -= ((float)Math.PI * 2F);
-            }
-            while(this.rot < -(float)Math.PI) {
-                this.rot += ((float)Math.PI * 2F);
-            }
-            while(this.tRot >= (float)Math.PI) {
-                this.tRot -= ((float)Math.PI * 2F);
-            }
-            while(this.tRot < -(float)Math.PI) {
-                this.tRot += ((float)Math.PI * 2F);
-            }
-
-            float g;
-            for(g = this.tRot - this.rot; g >= (float)Math.PI; g -= ((float)Math.PI * 2F)) {
-            }
-            while(g < -(float)Math.PI) {
-                g += ((float)Math.PI * 2F);
-            }
-
-            this.rot += g * 0.4F;
-            this.time++;
+        } else {
+            this.tRot += 0.02F; // lazy spin
         }
+
+        // Smoothly rotate using shortest path
+        this.rot = Mth.rotLerp(0.4F, this.rot, this.tRot);
     }
 
     public void tickServer() {
@@ -201,7 +195,7 @@ public class XPHolderBlockEntity extends BlockEntity {
     private void collectXP() {
         assert level != null;
 
-        range = 5;
+        int range = ModConfig.xpHolderCollectionRange.getValue();
 
         BlockPos pos = this.getBlockPos();
         AABB area = new AABB(pos.getCenter().add(-range, -range, -range), pos.getCenter().add(range, range, range));
@@ -220,6 +214,10 @@ public class XPHolderBlockEntity extends BlockEntity {
 
     public int getXp() {
         return xp;
+    }
+
+    public void setXp(int xp) {
+        this.xp = xp;
     }
 
     private void markDirty() {
