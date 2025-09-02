@@ -2,9 +2,10 @@ package com.fabbe50.fabsbnb.registries;
 
 import com.fabbe50.fabsbnb.FabsBnB;
 import com.fabbe50.fabsbnb.ModConfig;
+import com.fabbe50.fabsbnb.data.OwnTippedArrowRecipe;
 import com.fabbe50.fabsbnb.util.LangUtils;
-import com.fabbe50.fabsbnb.util.Utilities;
 import com.fabbe50.fabsbnb.world.block.*;
+import com.fabbe50.fabsbnb.world.block.base.ExtTransparentBlock;
 import com.fabbe50.fabsbnb.world.block.entity.BlockBreakerBlockEntity;
 import com.fabbe50.fabsbnb.world.block.entity.BlockDetectorBlockEntity;
 import com.fabbe50.fabsbnb.world.block.entity.BlockPlacerBlockEntity;
@@ -15,36 +16,49 @@ import com.fabbe50.fabsbnb.world.item.*;
 import com.fabbe50.fabsbnb.world.item.base.ModBlockItem;
 import com.fabbe50.fabsbnb.world.item.base.ModItem;
 import com.fabbe50.fabsbnb.world.item.enchantments.*;
-import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import dev.architectury.platform.Platform;
 import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.menu.MenuRegistry;
 import dev.architectury.registry.registries.Registrar;
 import dev.architectury.registry.registries.RegistrySupplier;
-import net.fabricmc.loader.impl.ModContainerImpl;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.ColorRGBA;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.consume_effects.ConsumeEffect;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.function.ToIntFunction;
 
 public class ModRegistries {
     // Constants
@@ -69,69 +83,166 @@ public class ModRegistries {
     public  static final Registrar<Item>                        ITEMS                                                   = FabsBnB.MANAGER.get().get(Registries.ITEM);
     private static final Registrar<MobEffect>                   MOB_EFFECTS                                             = FabsBnB.MANAGER.get().get(Registries.MOB_EFFECT);
     private static final Registrar<Potion>                      POTIONS                                                 = FabsBnB.MANAGER.get().get(Registries.POTION);
+    private static final Registrar<ConsumeEffect.Type<?>>       CONSUME_EFFECT_TYPES                                    = FabsBnB.MANAGER.get().get(Registries.CONSUME_EFFECT_TYPE);
     private static final Registrar<MenuType<?>>                 MENU_TYPES                                              = FabsBnB.MANAGER.get().get(Registries.MENU);
+    private static final Registrar<RecipeSerializer<?>>         RECIPE_SERIALIZERS                                      = FabsBnB.MANAGER.get().get(Registries.RECIPE_SERIALIZER);
 
     // Blocks
-    public static final RegistrySupplier<Block> LAVA_SPONGE                                                             = registerBlock(FabsBnB.location("lava_sponge"), () -> new CustomSpongeBlock(FluidTags.LAVA, BlockBehaviour.Properties.of()));
-    public static final RegistrySupplier<Block> LAVA_SPONGE_USED                                                        = registerBlock(FabsBnB.location("lava_sponge_used"), () -> new LavaUsedSpongeBlock(BlockBehaviour.Properties.of()));
-    public static final RegistrySupplier<Block> PUSHER_BLOCK                                                            = registerBlock(FabsBnB.location("pusher_block"), () -> new PusherBlock(BlockBehaviour.Properties.of()));
-    public static final RegistrySupplier<Block> THIN_LIGHT                                                              = registerBlock(FabsBnB.location("thin_light"), () -> new ThinLightBlock(BlockBehaviour.Properties.of().lightLevel(Utilities.litBlockEmission(15))));
-    public static final RegistrySupplier<Block> POWERED_THIN_LIGHT                                                      = registerBlock(FabsBnB.location("powered_thin_light"), () -> new PoweredThinLightBlock(BlockBehaviour.Properties.of().lightLevel(value -> 15)));
-    public static final RegistrySupplier<Block> BLOCK_PLACER                                                            = registerBlock(FabsBnB.location("block_placer"), () -> new BlockPlacerBlock(BlockBehaviour.Properties.of()));
-    public static final RegistrySupplier<Block> BLOCK_BREAKER                                                           = registerBlock(FabsBnB.location("block_breaker"), () -> new BlockBreakerBlock(BlockBehaviour.Properties.of()));
-    public static final RegistrySupplier<Block> BLOCK_DETECTOR                                                          = registerBlock(FabsBnB.location("block_detector"), () -> new BlockDetectorBlock(BlockBehaviour.Properties.of()));
-    public static final RegistrySupplier<Block> XP_HOLDER                                                               = registerBlock(FabsBnB.location("xp_holder"), () -> new XPHolderBlock(BlockBehaviour.Properties.of()));
+    public static final RegistrySupplier<Block> LAVA_SPONGE                                                             = registerBlock("lava_sponge", properties -> new CustomSpongeBlock(FluidTags.LAVA, properties));
+    public static final RegistrySupplier<Block> LAVA_SPONGE_USED                                                        = registerBlock("lava_sponge_used", LavaUsedSpongeBlock::new);
+    public static final RegistrySupplier<Block> PUSHER_BLOCK                                                            = registerBlock("pusher_block", PusherBlock::new, true);
+    public static final RegistrySupplier<Block> THIN_LIGHT                                                              = registerBlock("thin_light", properties -> new ThinLightBlock(properties.lightLevel(litBlockEmission(15))), true);
+    public static final RegistrySupplier<Block> POWERED_THIN_LIGHT                                                      = registerBlock("powered_thin_light", properties -> new PoweredThinLightBlock(properties.lightLevel(value -> 15)), true);
+    public static final RegistrySupplier<Block> BLOCK_PLACER                                                            = registerBlock("block_placer", BlockPlacerBlock::new, true);
+    public static final RegistrySupplier<Block> BLOCK_BREAKER                                                           = registerBlock("block_breaker", BlockBreakerBlock::new, true);
+    public static final RegistrySupplier<Block> BLOCK_DETECTOR                                                          = registerBlock("block_detector", BlockDetectorBlock::new, true);
+    public static final RegistrySupplier<Block> XP_HOLDER                                                               = registerBlock("xp_holder", XPHolderBlock::new, true);
 
-    private static RegistrySupplier<Block> registerBlock(ResourceLocation location, Supplier<Block> blockSupplier) {
-        RegistrySupplier<Block> block = BLOCKS.register(location, blockSupplier);
-        BLOCK_LIST.add(block);
+    private static RegistrySupplier<Block> registerBlock(String name, Function<BlockBehaviour.Properties, Block> function) {
+        return registerBlock(name, function, BlockBehaviour.Properties.of());
+    }
+
+    private static RegistrySupplier<Block> registerBlock(String name, Function<BlockBehaviour.Properties, Block> function, boolean customModel) {
+        return registerBlock(name, function, true, customModel);
+    }
+
+    private static RegistrySupplier<Block> registerBlock(String name, Function<BlockBehaviour.Properties, Block> function, boolean makeKnown, boolean customModel) {
+        return registerBlock(name, function, BlockBehaviour.Properties.of(), makeKnown, customModel);
+    }
+
+    private static RegistrySupplier<Block> registerBlock(String name, Function<BlockBehaviour.Properties, Block> function, BlockBehaviour.Properties properties) {
+        return registerBlock(name, function, properties, false);
+    }
+
+    private static RegistrySupplier<Block> registerBlock(String name, Function<BlockBehaviour.Properties, Block> function, BlockBehaviour.Properties properties, boolean customModel) {
+        return registerBlock(name, function, properties, true, customModel);
+    }
+
+    private static RegistrySupplier<Block> registerBlock(String name, Function<BlockBehaviour.Properties, Block> function, BlockBehaviour.Properties properties, boolean makeKnown, boolean customModel) {
+        RegistrySupplier<Block> block = BLOCKS.register(FabsBnB.location(name), () -> function.apply(properties.setId(FabsBnB.key(Registries.BLOCK, name))));
+        if (makeKnown) {
+            BLOCK_LIST.add(block);
+        }
+        if (!customModel) {
+            NORMAL_BLOCK_LIST.add(block);
+        }
         return block;
     }
 
+    private static ToIntFunction<BlockState> litBlockEmission(int i) {
+        return (blockState) -> (Boolean)blockState.getValue(BlockStateProperties.LIT) ? i : 0;
+    }
+
+    private static Boolean never(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, EntityType<?> entityType) {
+        return false;
+    }
+
+    private static boolean never(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos) {
+        return false;
+    }
+
     // Block Entities
-    public static final RegistrySupplier<BlockEntityType<BlockPlacerBlockEntity>> BLOCK_PLACER_BLOCK_ENTITY             = BLOCK_ENTITIES.register(FabsBnB.location("block_placer_block_entity"), Suppliers.memoize(() -> BlockEntityType.Builder.of(BlockPlacerBlockEntity::new, BLOCK_PLACER.get()).build(null)));
-    public static final RegistrySupplier<BlockEntityType<BlockBreakerBlockEntity>> BLOCK_BREAKER_BLOCK_ENTITY           = BLOCK_ENTITIES.register(FabsBnB.location("block_breaker_block_entity"), Suppliers.memoize(() -> BlockEntityType.Builder.of(BlockBreakerBlockEntity::new, BLOCK_BREAKER.get()).build(null)));
-    public static final RegistrySupplier<BlockEntityType<BlockDetectorBlockEntity>> BLOCK_DETECTOR_BLOCK_ENTITY         = BLOCK_ENTITIES.register(FabsBnB.location("block_detector_block_entity"), Suppliers.memoize(() -> BlockEntityType.Builder.of(BlockDetectorBlockEntity::new, BLOCK_DETECTOR.get()).build(null)));
-    public static final RegistrySupplier<BlockEntityType<XPHolderBlockEntity>> XP_HOLDER_BLOCK_ENTITY                   = BLOCK_ENTITIES.register(FabsBnB.location("xp_holder_block_entity"), Suppliers.memoize(() -> BlockEntityType.Builder.of(XPHolderBlockEntity::new, XP_HOLDER.get()).build(null)));
+    public static final RegistrySupplier<BlockEntityType<BlockPlacerBlockEntity>> BLOCK_PLACER_BLOCK_ENTITY             = BLOCK_ENTITIES.register(FabsBnB.location("block_placer_block_entity"), Suppliers.memoize(() -> new BlockEntityType<>(BlockPlacerBlockEntity::new, Set.of(BLOCK_PLACER.get()))));
+    public static final RegistrySupplier<BlockEntityType<BlockBreakerBlockEntity>> BLOCK_BREAKER_BLOCK_ENTITY           = BLOCK_ENTITIES.register(FabsBnB.location("block_breaker_block_entity"), Suppliers.memoize(() -> new BlockEntityType<>(BlockBreakerBlockEntity::new, Set.of(BLOCK_BREAKER.get()))));
+    public static final RegistrySupplier<BlockEntityType<BlockDetectorBlockEntity>> BLOCK_DETECTOR_BLOCK_ENTITY         = BLOCK_ENTITIES.register(FabsBnB.location("block_detector_block_entity"), Suppliers.memoize(() -> new BlockEntityType<>(BlockDetectorBlockEntity::new, Set.of(BLOCK_DETECTOR.get()))));
+    public static final RegistrySupplier<BlockEntityType<XPHolderBlockEntity>> XP_HOLDER_BLOCK_ENTITY                   = BLOCK_ENTITIES.register(FabsBnB.location("xp_holder_block_entity"), Suppliers.memoize(() -> new BlockEntityType<>(XPHolderBlockEntity::new, Set.of(XP_HOLDER.get()))));
 
     // Items
-    public static final RegistrySupplier<Item> WOODEN_BUILDING_WAND                                                     = registerItem(FabsBnB.location("wooden_building_wand"), () -> new BuildingWandItem(Tiers.WOOD, new Item.Properties()));
-    public static final RegistrySupplier<Item> STONE_BUILDING_WAND                                                      = registerItem(FabsBnB.location("stone_building_wand"), () -> new BuildingWandItem(Tiers.STONE, new Item.Properties()));
-    public static final RegistrySupplier<Item> IRON_BUILDING_WAND                                                       = registerItem(FabsBnB.location("iron_building_wand"), () -> new BuildingWandItem(Tiers.IRON, new Item.Properties()));
-    public static final RegistrySupplier<Item> GOLD_BUILDING_WAND                                                       = registerItem(FabsBnB.location("gold_building_wand"), () -> new BuildingWandItem(Tiers.GOLD, new Item.Properties()));
-    public static final RegistrySupplier<Item> DIAMOND_BUILDING_WAND                                                    = registerItem(FabsBnB.location("diamond_building_wand"), () -> new BuildingWandItem(Tiers.DIAMOND, new Item.Properties()));
-    public static final RegistrySupplier<Item> NETHERITE_BUILDING_WAND                                                  = registerItem(FabsBnB.location("netherite_building_wand"), () -> new BuildingWandItem(Tiers.NETHERITE, new Item.Properties()));
-    public static final RegistrySupplier<Item> ITEM_BLOCK_YOINKER                                                       = registerItem(FabsBnB.location("block_yoinker"), () -> new BlockYoinkerItem(new Item.Properties()));
-    public static final RegistrySupplier<Item> WHOOSH_WAND                                                              = registerItem(FabsBnB.location("whoosh_wand"), () -> new WhooshWandItem(new Item.Properties()));
-    public static final RegistrySupplier<Item> CAT_CLAW                                                                 = registerItem(FabsBnB.location("cat_claw"), () -> new ModItem(new Item.Properties()));
-    public static final RegistrySupplier<Item> WRENCH                                                                   = registerItem(FabsBnB.location("wrench"), () -> new WrenchItem(new Item.Properties()));
-    public static final RegistrySupplier<Item> MILK_BOTTLE                                                              = registerItem(FabsBnB.location("milk_bottle"), () -> new MilkBottleItem(new Item.Properties()));
-    public static final RegistrySupplier<Item> CHOCOLATE_MILK_BOTTLE                                                    = registerItem(FabsBnB.location("chocolate_milk_bottle"), () -> new ChocolateMilkBottleItem(new Item.Properties()));
-    public static final RegistrySupplier<Item> CHOCOLATE_NECKLACE                                                       = registerItem(FabsBnB.location("chocolate_necklace"), () -> new ChocolateNecklaceItem(new Item.Properties()));
-    public static final RegistrySupplier<Item> ITEM_LAVA_SPONGE                                                         = registerItem(FabsBnB.location("lava_sponge"), () -> new ModBlockItem(LAVA_SPONGE.get(), new Item.Properties()));
-    public static final RegistrySupplier<Item> ITEM_LAVA_SPONGE_USED                                                    = registerItem(FabsBnB.location("lava_sponge_used"), () -> new ModBlockItem(LAVA_SPONGE_USED.get(), new Item.Properties()));
-    public static final RegistrySupplier<Item> ITEM_PUSHER_BLOCK                                                        = registerItem(FabsBnB.location("pusher_block"), () -> new ModBlockItem(PUSHER_BLOCK.get(), new Item.Properties()));
-    public static final RegistrySupplier<Item> ITEM_THIN_LIGHT                                                          = registerItem(FabsBnB.location("thin_light"), () -> new ModBlockItem(THIN_LIGHT.get(), new Item.Properties()));
-    public static final RegistrySupplier<Item> ITEM_POWERED_THIN_LIGHT                                                  = registerItem(FabsBnB.location("powered_thin_light"), () -> new ModBlockItem(POWERED_THIN_LIGHT.get(), new Item.Properties()));
-    public static final RegistrySupplier<Item> ITEM_BLOCK_PLACER                                                        = registerItem(FabsBnB.location("block_placer"), () -> new ModBlockItem(BLOCK_PLACER.get(), new Item.Properties()));
-    public static final RegistrySupplier<Item> ITEM_BLOCK_BREAKER                                                       = registerItem(FabsBnB.location("block_breaker"), () -> new ModBlockItem(BLOCK_BREAKER.get(), new Item.Properties()));
-    public static final RegistrySupplier<Item> ITEM_BLOCK_DETECTOR                                                      = registerItem(FabsBnB.location("block_detector"), () -> new ModBlockItem(BLOCK_DETECTOR.get(), new Item.Properties()));
-    public static final RegistrySupplier<Item> ITEM_XP_HOLDER                                                           = registerItem(FabsBnB.location("xp_holder"), () -> new ModBlockItem(XP_HOLDER.get(), new Item.Properties()));
+    public static final RegistrySupplier<Item> WOODEN_BUILDING_WAND                                                     = registerItem("wooden_building_wand", properties -> new BuildingWandItem(ToolMaterial.WOOD, properties));
+    public static final RegistrySupplier<Item> STONE_BUILDING_WAND                                                      = registerItem("stone_building_wand", properties -> new BuildingWandItem(ToolMaterial.STONE, properties));
+    public static final RegistrySupplier<Item> IRON_BUILDING_WAND                                                       = registerItem("iron_building_wand", properties -> new BuildingWandItem(ToolMaterial.IRON, properties));
+    public static final RegistrySupplier<Item> GOLD_BUILDING_WAND                                                       = registerItem("gold_building_wand", properties -> new BuildingWandItem(ToolMaterial.GOLD, properties));
+    public static final RegistrySupplier<Item> DIAMOND_BUILDING_WAND                                                    = registerItem("diamond_building_wand", properties -> new BuildingWandItem(ToolMaterial.DIAMOND, properties));
+    public static final RegistrySupplier<Item> NETHERITE_BUILDING_WAND                                                  = registerItem("netherite_building_wand", properties -> new BuildingWandItem(ToolMaterial.NETHERITE, properties));
+    public static final RegistrySupplier<Item> ITEM_BLOCK_YOINKER                                                       = registerItem("block_yoinker", BlockYoinkerItem::new);
+    public static final RegistrySupplier<Item> WHOOSH_WAND                                                              = registerItem("whoosh_wand", WhooshWandItem::new);
+    public static final RegistrySupplier<Item> CAT_CLAW                                                                 = registerItem("cat_claw", ModItem::new);
+    public static final RegistrySupplier<Item> WRENCH                                                                   = registerItem("wrench", WrenchItem::new);
+    public static final RegistrySupplier<Item> MILK_BOTTLE                                                              = registerItem("milk_bottle", MilkBottleItem::new);
+    public static final RegistrySupplier<Item> CHOCOLATE_MILK_BOTTLE                                                    = registerItem("chocolate_milk_bottle", ChocolateMilkBottleItem::new);
+    public static final RegistrySupplier<Item> CHOCOLATE_NECKLACE                                                       = registerItem("chocolate_necklace", ChocolateNecklaceItem::new);
+    public static final RegistrySupplier<Item> WAND_OF_HOLDING                                                          = registerItem("holding_wand", HolderWandItem::new);
+    public static final RegistrySupplier<Item> ITEM_LAVA_SPONGE                                                         = registerItemBlock("lava_sponge", LAVA_SPONGE);
+    public static final RegistrySupplier<Item> ITEM_LAVA_SPONGE_USED                                                    = registerItemBlock("lava_sponge_used", LAVA_SPONGE_USED);
+    public static final RegistrySupplier<Item> ITEM_PUSHER_BLOCK                                                        = registerItemBlock("pusher_block", PUSHER_BLOCK);
+    public static final RegistrySupplier<Item> ITEM_THIN_LIGHT                                                          = registerItemBlock("thin_light", THIN_LIGHT);
+    public static final RegistrySupplier<Item> ITEM_POWERED_THIN_LIGHT                                                  = registerItemBlock("powered_thin_light", POWERED_THIN_LIGHT);
+    public static final RegistrySupplier<Item> ITEM_BLOCK_PLACER                                                        = registerItemBlock("block_placer", BLOCK_PLACER);
+    public static final RegistrySupplier<Item> ITEM_BLOCK_BREAKER                                                       = registerItemBlock("block_breaker", BLOCK_BREAKER);
+    public static final RegistrySupplier<Item> ITEM_BLOCK_DETECTOR                                                      = registerItemBlock("block_detector", BLOCK_DETECTOR);
     public static final RegistrySupplier<Item> FULL_WATER_CAULDRON                                                      = registerItem(FabsBnB.location("water_cauldron"), () -> new BlockItem(Blocks.WATER_CAULDRON, new Item.Properties()), false);
     public static final RegistrySupplier<Item> EXT_ENCHANTED_BOOK                                                       = registerItem(FabsBnB.location("enchanted_book"), () -> new EnchantedBookItem(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).component(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)), false);
     public static final RegistrySupplier<Item> OWN_POTION_ITEM                                                          = registerItem(FabsBnB.location("potion"), () -> new PotionItem(new Item.Properties()), false);
-    public static final RegistrySupplier<Item> OWN_SPLASH_POTION_ITEM                                                   = registerItem(FabsBnB.location("splash_potion"), () -> new SplashPotionItem(new Item.Properties()), false);
-    public static final RegistrySupplier<Item> OWN_LINGERING_POTION_ITEM                                                = registerItem(FabsBnB.location("lingering_potion"), () -> new LingeringPotionItem(new Item.Properties()), false);
-    public static final RegistrySupplier<Item> OWN_TIPPED_ARROW_ITEM                                                    = registerItem(FabsBnB.location("tipped_arrow"), () -> new TippedArrowItem(new Item.Properties()), false);
+    public static final RegistrySupplier<Item> ITEM_XP_HOLDER                                                           = registerItemBlock("xp_holder", XP_HOLDER);
+    public static final RegistrySupplier<Item> FULL_WATER_CAULDRON                                                      = registerItemBlock("water_cauldron", Blocks.WATER_CAULDRON, false);
+    public static final RegistrySupplier<Item> EXT_ENCHANTED_BOOK                                                       = registerItemWithCustomModel("enchanted_book", properties -> new Item(properties.stacksTo(1).rarity(Rarity.UNCOMMON).component(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)), false, false);
+    public static final RegistrySupplier<Item> OWN_POTION_ITEM                                                          = registerItemWithCustomModel("potion", properties -> new PotionItem(properties.stacksTo(16)), false, false);
+    public static final RegistrySupplier<Item> OWN_SPLASH_POTION_ITEM                                                   = registerItemWithCustomModel("splash_potion", properties -> new SplashPotionItem(properties.stacksTo(16)), false, false);
+    public static final RegistrySupplier<Item> OWN_LINGERING_POTION_ITEM                                                = registerItemWithCustomModel("lingering_potion", properties -> new LingeringPotionItem(properties.stacksTo(16)), false, false);
+    public static final RegistrySupplier<Item> OWN_TIPPED_ARROW_ITEM                                                    = registerItemWithCustomModel("tipped_arrow", TippedArrowItem::new, false, false);
 
-    private static RegistrySupplier<Item> registerItem(ResourceLocation location, Supplier<Item> itemSupplier) {
-        return registerItem(location, itemSupplier, true);
+    private static RegistrySupplier<Item> registerItem(String name, Function<Item.Properties, Item> function) {
+        return registerItem(name, function, true, true);
     }
 
-    private static RegistrySupplier<Item> registerItem(ResourceLocation location, Supplier<Item> itemSupplier, boolean addToTab) {
-        RegistrySupplier<Item> item = ITEMS.register(location, itemSupplier);
-        if (addToTab) {
+    private static RegistrySupplier<Item> registerItemBlock(String name, RegistrySupplier<Block> block) {
+        return registerItemBlock(name, block, true, true);
+    }
+
+    private static RegistrySupplier<Item> registerItemBlock(String name, RegistrySupplier<Block> block, boolean makeKnown) {
+        return registerItemBlock(name, block, makeKnown, makeKnown);
+    }
+
+    private static RegistrySupplier<Item> registerItemBlock(String name, Block block, boolean makeKnown) {
+        return registerItemBlock(name, block, makeKnown, makeKnown);
+    }
+
+    private static RegistrySupplier<Item> registerItemBlock(String name, RegistrySupplier<Block> block, boolean makeKnown, boolean addToTab) {
+        RegistrySupplier<Item> item = registerItem(name, properties -> new ModBlockItem(block.get(), properties), makeKnown, addToTab);
+        if (makeKnown) {
+            BLOCK_ITEM_LIST.add(item);
+        }
+        return item;
+    }
+
+    private static RegistrySupplier<Item> registerItemBlock(String name, Block block, boolean makeKnown, boolean addToTab) {
+        RegistrySupplier<Item> item = registerItem(name, properties -> new ModBlockItem(block, properties), makeKnown, addToTab);
+        if (makeKnown) {
+            BLOCK_ITEM_LIST.add(item);
+        }
+        return item;
+    }
+
+    private static RegistrySupplier<Item> registerItem(String name, Function<Item.Properties, Item> function, boolean makeKnown) {
+        return registerItem(name, function, makeKnown, makeKnown);
+    }
+
+    private static RegistrySupplier<Item> registerItem(String name, Function<Item.Properties, Item> function, boolean makeKnown, boolean addToTab) {
+        return registerItem(name, function, new Item.Properties(), makeKnown, addToTab);
+    }
+
+    private static RegistrySupplier<Item> registerItemWithCustomModel(String name, Function<Item.Properties, Item> function, boolean makeKnown, boolean addToTab) {
+        return registerItemWithCustomModel(name, function, new Item.Properties(), makeKnown, addToTab);
+    }
+
+    private static RegistrySupplier<Item> registerItem(String name, Function<Item.Properties, Item> function, Item.Properties properties, boolean makeKnown, boolean addToTab) {
+        return registerItem(name, function, properties, makeKnown, addToTab, false);
+    }
+
+    private static RegistrySupplier<Item> registerItemWithCustomModel(String name, Function<Item.Properties, Item> function, Item.Properties properties, boolean makeKnown, boolean addToTab) {
+        return registerItem(name, function, properties, makeKnown, addToTab, true);
+    }
+
+    private static RegistrySupplier<Item> registerItem(String name, Function<Item.Properties, Item> function, Item.Properties properties, boolean makeKnown, boolean addToTab, boolean customModel) {
+        RegistrySupplier<Item> item = ITEMS.register(FabsBnB.location(name), () -> function.apply(properties.setId(FabsBnB.key(Registries.ITEM, name))));
+        if (makeKnown) {
             ITEM_LIST.add(item);
+        }
+        if (addToTab) {
+            CREATIVE_ITEM_LIST.add(item);
+        }
+        if (!customModel) {
+            NORMAL_ITEM_LIST.add(item);
         }
         return item;
     }
@@ -149,7 +260,13 @@ public class ModRegistries {
     public static final RegistrySupplier<Potion> FELINE_AURA_POTION_LONG                                                = registerPotion("feline_aura_long", FELINE_AURA, LONG_DURATION_POTION);
 
     private static RegistrySupplier<Potion> registerPotion(String name, RegistrySupplier<MobEffect> effect, int duration) {
-        RegistrySupplier<Potion> potion = POTIONS.register(FabsBnB.location(name), () -> new Potion(new MobEffectInstance(getMobEffectReference(effect), duration)));
+        RegistrySupplier<Potion> potion = POTIONS.register(FabsBnB.location(name), () -> new Potion(name, new MobEffectInstance(getMobEffectReference(effect), duration)));
+        POTION_LIST.add(potion);
+        return potion;
+    }
+
+    private static RegistrySupplier<Potion> registerPotion(String name, MobEffectInstance... mobEffectInstances) {
+        RegistrySupplier<Potion> potion = POTIONS.register(FabsBnB.location(name), () -> new Potion(name, mobEffectInstances));
         POTION_LIST.add(potion);
         return potion;
     }
@@ -157,6 +274,10 @@ public class ModRegistries {
     // Wrapper to fix RegistrySupplier not being able to save potions. Thanks to fzzyhamstrs on GitHub.
     public static Holder<Potion> getPotionReference(RegistrySupplier<Potion> input) {
         return POTIONS.getHolder(input.getId());
+    }
+
+    public static Holder<Potion> getPotionReference(Potion input) {
+        return POTIONS.getHolder(POTIONS.getId(input));
     }
 
     // Consume Effects
