@@ -1,7 +1,11 @@
 package com.fabbe50.fabsbnb.mixin;
 
 import com.fabbe50.fabsbnb.data.CauldronConversionData;
+import com.fabbe50.fabsbnb.loaders.CauldronConversionDataLoader;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -25,9 +29,16 @@ public abstract class LayeredCauldronBlockMixin {
         if (this.isFull(blockState)) {
             if (entity instanceof ItemEntity itemEntity) {
                 ItemStack inputStack = itemEntity.getItem();
-                for (Item ingredient : CauldronConversionData.getConversionMap().keySet()) {
-                    if (inputStack.is(ingredient)) {
-                        itemEntity.setItem(new ItemStack(CauldronConversionData.getConversionMap().get(ingredient), inputStack.getCount()));
+                for (CauldronConversionData conversionData : CauldronConversionDataLoader.INSTANCE.getDataMap().values()) {
+                    ResourceLocation inputLocation = conversionData.input();
+                    ResourceLocation outputLocation = conversionData.output();
+                    if (inputLocation != null && outputLocation != null) {
+                        ResourceLocation itemInside = inputStack.getItem().arch$registryName();
+                        if (itemInside != null) {
+                            if (itemInside.toString().equals(inputLocation.toString())) {
+                                itemEntity.setItem(new ItemStack(CauldronConversionData.getConversionMap().get(level.registryAccess().lookup(Registries.ITEM).orElseThrow().getValue(outputLocation)), inputStack.getCount()));
+                            }
+                        }
                     }
                 }
             }

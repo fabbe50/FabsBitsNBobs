@@ -1,8 +1,12 @@
 package com.fabbe50.fabsbnb.neoforge.datagen;
 
 import com.fabbe50.fabsbnb.FabsBnB;
+import com.fabbe50.fabsbnb.data.CauldronConversionData;
 import com.fabbe50.fabsbnb.neoforge.datagen.loot.ModLootTableProvider;
 import com.fabbe50.fabsbnb.neoforge.datagen.registrysets.RegistrySets;
+import com.fabbe50.fabsbnb.neoforge.datagen.registrysets.sets.CauldronConversions;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
@@ -11,6 +15,9 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 public class DataGenerators {
     @SubscribeEvent
     public static void gatherClientData(GatherDataEvent.Client event) {
+        DataGenerator generator = event.getGenerator();
+        PackOutput packOutput = generator.getPackOutput();
+
         event.createProvider(ModModelProvider::new);
         event.createProvider(Translations::new);
 
@@ -20,6 +27,7 @@ public class DataGenerators {
         event.createProvider(ModLootTableProvider::new);
         event.createProvider(RegistrySets::new);
         event.createProvider(ModDataMaps::new);
+        event.addProvider(new CauldronConversions(packOutput, PackOutput.Target.DATA_PACK, CauldronConversionData.CODEC.codec(), event.getLookupProvider()));
     }
 
     @SubscribeEvent

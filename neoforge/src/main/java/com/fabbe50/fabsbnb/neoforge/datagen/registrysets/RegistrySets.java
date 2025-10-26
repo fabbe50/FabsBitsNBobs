@@ -1,6 +1,7 @@
 package com.fabbe50.fabsbnb.neoforge.datagen.registrysets;
 
 import com.fabbe50.fabsbnb.FabsBnB;
+import com.fabbe50.fabsbnb.neoforge.datagen.registrysets.sets.CauldronConversions;
 import com.fabbe50.fabsbnb.neoforge.datagen.registrysets.sets.Enchantments;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;

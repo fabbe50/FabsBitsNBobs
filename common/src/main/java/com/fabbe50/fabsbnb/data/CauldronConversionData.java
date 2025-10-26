@@ -1,13 +1,32 @@
 package com.fabbe50.fabsbnb.data;
 
 import com.fabbe50.fabsbnb.registries.ModRegistries;
+import com.google.gson.JsonObject;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class CauldronConversionData {
+public record CauldronConversionData(ResourceLocation input, ResourceLocation output) {
+    public static final MapCodec<CauldronConversionData> CODEC = RecordCodecBuilder.mapCodec(instance ->
+            instance.group(
+                    ResourceLocation.CODEC.fieldOf("input").forGetter(CauldronConversionData::input),
+                    ResourceLocation.CODEC.fieldOf("output").forGetter(CauldronConversionData::output)
+            ).apply(instance, CauldronConversionData::new));
+
+    public static CauldronConversionData fromJson(JsonObject json) {
+        ResourceLocation input = ResourceLocation.parse(json.get("input").getAsString());
+        ResourceLocation output = ResourceLocation.parse(json.get("output").getAsString());
+        return new CauldronConversionData(input, output);
+    }
+
     private static final Map<Item, Item> CONVERSION_MAP = new HashMap<>();
 
     public static Map<Item, Item> getConversionMap() {
