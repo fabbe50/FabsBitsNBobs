@@ -91,7 +91,9 @@ public class ModBlockTags extends BlockTagsProvider {
                 .add(Blocks.CACTUS);
 
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
-                .add(ModRegistries.PUSHER_BLOCK.get())
+                .add(ModRegistries.SLOW_PUSHER_BLOCK.get())
+                .add(ModRegistries.NORMAL_PUSHER_BLOCK.get())
+                .add(ModRegistries.FAST_PUSHER_BLOCK.get())
                 .add(ModRegistries.THIN_LIGHT.get())
                 .add(ModRegistries.POWERED_THIN_LIGHT.get())
                 .add(ModRegistries.BLOCK_BREAKER.get())
@@ -107,5 +109,10 @@ public class ModBlockTags extends BlockTagsProvider {
         tag(BlockTags.WITHER_IMMUNE)
                 .add(ModRegistries.STRUCTURAL_GOOP.get())
                 .add(ModRegistries.STRUCTURAL_GLASS.get());
+
+        tag(ModRegistries.PUSHER_BLOCKS)
+                .add(ModRegistries.SLOW_PUSHER_BLOCK.get())
+                .add(ModRegistries.NORMAL_PUSHER_BLOCK.get())
+                .add(ModRegistries.FAST_PUSHER_BLOCK.get());
     }
 }

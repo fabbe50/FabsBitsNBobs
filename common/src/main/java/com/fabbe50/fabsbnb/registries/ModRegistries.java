@@ -2,7 +2,10 @@ package com.fabbe50.fabsbnb.registries;
 
 import com.fabbe50.fabsbnb.FabsBnB;
 import com.fabbe50.fabsbnb.ModConfig;
+import com.fabbe50.fabsbnb.data.CauldronConversionData;
 import com.fabbe50.fabsbnb.data.OwnTippedArrowRecipe;
+import com.fabbe50.fabsbnb.loaders.CauldronConversionDataLoader;
+import com.fabbe50.fabsbnb.loaders.CustomFoodDataLoader;
 import com.fabbe50.fabsbnb.util.LangUtils;
 import com.fabbe50.fabsbnb.world.block.*;
 import com.fabbe50.fabsbnb.world.block.base.ExtTransparentBlock;
@@ -17,19 +20,18 @@ import com.fabbe50.fabsbnb.world.item.base.ModBlockItem;
 import com.fabbe50.fabsbnb.world.item.base.ModItem;
 import com.fabbe50.fabsbnb.world.item.enchantments.*;
 import com.google.common.base.Suppliers;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.architectury.platform.Platform;
 import dev.architectury.registry.CreativeTabRegistry;
+import dev.architectury.registry.ReloadListenerRegistry;
 import dev.architectury.registry.menu.MenuRegistry;
 import dev.architectury.registry.registries.Registrar;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.packs.PackType;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -90,7 +92,9 @@ public class ModRegistries {
     // Blocks
     public static final RegistrySupplier<Block> LAVA_SPONGE                                                             = registerBlock("lava_sponge", properties -> new CustomSpongeBlock(FluidTags.LAVA, properties));
     public static final RegistrySupplier<Block> LAVA_SPONGE_USED                                                        = registerBlock("lava_sponge_used", LavaUsedSpongeBlock::new);
-    public static final RegistrySupplier<Block> PUSHER_BLOCK                                                            = registerBlock("pusher_block", PusherBlock::new, true);
+    public static final RegistrySupplier<Block> SLOW_PUSHER_BLOCK                                                       = registerBlock("slow_pusher_block", (properties) -> new PusherBlock(ModConfig.slowMoverBlockSpeed.getValue(), properties), true);
+    public static final RegistrySupplier<Block> NORMAL_PUSHER_BLOCK                                                     = registerBlock("normal_pusher_block", (properties) -> new PusherBlock(ModConfig.normalMoverBlockSpeed.getValue(), properties), true);
+    public static final RegistrySupplier<Block> FAST_PUSHER_BLOCK                                                       = registerBlock("fast_pusher_block", (properties) -> new PusherBlock(ModConfig.fastMoverBlockSpeed.getValue(), properties), true);
     public static final RegistrySupplier<Block> THIN_LIGHT                                                              = registerBlock("thin_light", properties -> new ThinLightBlock(properties.lightLevel(litBlockEmission(15))), true);
     public static final RegistrySupplier<Block> POWERED_THIN_LIGHT                                                      = registerBlock("powered_thin_light", properties -> new PoweredThinLightBlock(properties.lightLevel(value -> 15)), true);
     public static final RegistrySupplier<Block> BLOCK_PLACER                                                            = registerBlock("block_placer", BlockPlacerBlock::new, true);
@@ -167,7 +171,9 @@ public class ModRegistries {
     public static final RegistrySupplier<Item> WAND_OF_HOLDING                                                          = registerItem("holding_wand", HolderWandItem::new);
     public static final RegistrySupplier<Item> ITEM_LAVA_SPONGE                                                         = registerItemBlock("lava_sponge", LAVA_SPONGE);
     public static final RegistrySupplier<Item> ITEM_LAVA_SPONGE_USED                                                    = registerItemBlock("lava_sponge_used", LAVA_SPONGE_USED);
-    public static final RegistrySupplier<Item> ITEM_PUSHER_BLOCK                                                        = registerItemBlock("pusher_block", PUSHER_BLOCK);
+    public static final RegistrySupplier<Item> ITEM_SLOW_PUSHER_BLOCK                                                   = registerItemBlock("slow_pusher_block", SLOW_PUSHER_BLOCK);
+    public static final RegistrySupplier<Item> ITEM_NORMAL_PUSHER_BLOCK                                                 = registerItemBlock("normal_pusher_block", NORMAL_PUSHER_BLOCK);
+    public static final RegistrySupplier<Item> ITEM_FAST_PUSHER_BLOCK                                                   = registerItemBlock("fast_pusher_block", FAST_PUSHER_BLOCK);
     public static final RegistrySupplier<Item> ITEM_THIN_LIGHT                                                          = registerItemBlock("thin_light", THIN_LIGHT);
     public static final RegistrySupplier<Item> ITEM_POWERED_THIN_LIGHT                                                  = registerItemBlock("powered_thin_light", POWERED_THIN_LIGHT);
     public static final RegistrySupplier<Item> ITEM_BLOCK_PLACER                                                        = registerItemBlock("block_placer", BLOCK_PLACER);
@@ -305,6 +311,7 @@ public class ModRegistries {
     public static final TagKey<Item> DIGGING_TOOLS                                                                      = TagKey.create(Registries.ITEM, FabsBnB.location("digging_tools"));
     public static final TagKey<Item> VAULT_UNLOCKERS                                                                    = TagKey.create(Registries.ITEM, FabsBnB.location("vault_unlockers"));
     public static final TagKey<Item> WAND_OF_HOLDING_ACCEPTS                                                            = TagKey.create(Registries.ITEM, FabsBnB.location("holding_wand_accepts"));
+    public static final TagKey<Item> PUSHER_BLOCK_ITEMS                                                                 = TagKey.create(Registries.ITEM, FabsBnB.location("pusher_blocks"));
     public static final TagKey<Block> BLOCK_YOINKER_BLACKLIST                                                           = TagKey.create(Registries.BLOCK, FabsBnB.location("block_yoinker_blacklist"));
     public static final TagKey<Block> SPIDER_NOT_CLIMBABLE                                                              = TagKey.create(Registries.BLOCK, FabsBnB.location("spider_not_climbable"));
     public static final TagKey<Block> ORE_MINER_WHITELIST                                                               = TagKey.create(Registries.BLOCK, FabsBnB.location("ore_miner_whitelist"));
@@ -312,6 +319,7 @@ public class ModRegistries {
     public static final TagKey<Block> TREE_CHOPPER_ATTACHMENTS                                                          = TagKey.create(Registries.BLOCK, FabsBnB.location("tree_chopper_attachments"));
     public static final TagKey<Block> LEAF_BREAKER_WHITELIST                                                            = TagKey.create(Registries.BLOCK, FabsBnB.location("leaf_breaker_whitelist"));
     public static final TagKey<Block> SCYTHE_ABLE                                                                       = TagKey.create(Registries.BLOCK, FabsBnB.location("scythe-able"));
+    public static final TagKey<Block> PUSHER_BLOCKS                                                                     = TagKey.create(Registries.BLOCK, FabsBnB.location("pusher_blocks"));
 
     // Enchantments
     public static final ResourceKey<Enchantment> ORE_MINER;
@@ -393,12 +401,17 @@ public class ModRegistries {
         return enchantment;
     }
 
+    public static Holder<Item> getItemHolder(Item item) {
+        return ITEMS.getHolder(ITEMS.getId(item));
+    }
 
     public static void init() {
         FabsBnB.log("Setting up registry...");
         if (Platform.isFabric()) {
             registerCompostables();
         }
+        ReloadListenerRegistry.register(PackType.SERVER_DATA, CustomFoodDataLoader.INSTANCE, FabsBnB.location("custom_food"));
+        ReloadListenerRegistry.register(PackType.SERVER_DATA, CauldronConversionDataLoader.INSTANCE, FabsBnB.location("cauldron_conversion"));
     }
 
     public static void registerCompostables() {

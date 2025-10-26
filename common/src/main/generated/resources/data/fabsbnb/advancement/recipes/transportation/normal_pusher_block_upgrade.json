@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_slow_pusher": {
+      "conditions": {
+        "items": [
+          {
+            "items": "fabsbnb:slow_pusher_block"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "fabsbnb:normal_pusher_block_upgrade"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_slow_pusher"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "fabsbnb:normal_pusher_block_upgrade"
+    ]
+  }
+}

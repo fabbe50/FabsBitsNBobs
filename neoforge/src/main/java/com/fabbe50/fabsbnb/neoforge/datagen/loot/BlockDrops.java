@@ -6,7 +6,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.loot.packs.VanillaBlockLoot;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +22,9 @@ public class BlockDrops extends VanillaBlockLoot {
     protected void generate() {
         dropSelf(ModRegistries.LAVA_SPONGE.get());
         dropSelf(ModRegistries.LAVA_SPONGE_USED.get());
-        dropSelf(ModRegistries.PUSHER_BLOCK.get());
+        dropSelf(ModRegistries.SLOW_PUSHER_BLOCK.get());
+        dropSelf(ModRegistries.NORMAL_PUSHER_BLOCK.get());
+        dropSelf(ModRegistries.FAST_PUSHER_BLOCK.get());
         dropSelf(ModRegistries.THIN_LIGHT.get());
         dropSelf(ModRegistries.POWERED_THIN_LIGHT.get());
         dropSelf(ModRegistries.BLOCK_PLACER.get());

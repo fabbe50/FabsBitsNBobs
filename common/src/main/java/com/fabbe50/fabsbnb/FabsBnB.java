@@ -27,6 +27,8 @@ public final class FabsBnB {
         ModConfig.register();
         ModRegistries.init();
         EventRegistry.register();
+
+        Platform.dataFix();
     }
 
     public static ResourceLocation location(String owner, String name) {
@@ -35,6 +37,10 @@ public final class FabsBnB {
 
     public static ResourceLocation location(String name) {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, name);
+    }
+
+    public static String locationString(String name) {
+        return location(name).toString();
     }
 
     public static ResourceKey<Recipe<?>> recipeKey(String name) {

@@ -1,8 +1,10 @@
 package com.fabbe50.fabsbnb.neoforge;
 
+import com.fabbe50.fabsbnb.data.DataFixer;
 import com.fabbe50.fabsbnb.neoforge.integration.Curios;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
@@ -15,6 +17,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.registries.IRegistryExtension;
 
 public class PlatformImpl {
     public static TagKey<Block> getOresTag() {
@@ -44,5 +47,13 @@ public class PlatformImpl {
 
     public static void registerPotion(PotionBrewing.Builder builder, Item input, Item ingredient, Item output) {
         builder.addContainerRecipe(input, ingredient, output);
+    }
+
+    public static void dataFix() {
+        var blockReg = (IRegistryExtension<Block>) BuiltInRegistries.BLOCK;
+        var itemReg = (IRegistryExtension<Item>) BuiltInRegistries.ITEM;
+
+        DataFixer.BLOCK_FIXER.forEach(blockReg::addAlias);
+        DataFixer.ITEM_FIXER.forEach(itemReg::addAlias);
     }
 }

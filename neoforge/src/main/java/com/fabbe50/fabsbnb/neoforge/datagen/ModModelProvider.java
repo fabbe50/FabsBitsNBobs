@@ -2,22 +2,13 @@ package com.fabbe50.fabsbnb.neoforge.datagen;
 
 import com.fabbe50.fabsbnb.FabsBnB;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
-import com.fabbe50.fabsbnb.world.block.PoweredThinLightBlock;
-import com.fabbe50.fabsbnb.world.block.ThinLightBlock;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.client.color.item.Potion;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
-import net.minecraft.client.data.models.MultiVariant;
-import net.minecraft.client.data.models.blockstates.BlockModelDefinitionGenerator;
-import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
-import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.data.models.model.ItemModelUtils;
-import net.minecraft.client.data.models.model.ModelInstance;
 import net.minecraft.client.data.models.model.ModelTemplates;
-import net.minecraft.client.data.models.model.TexturedModel;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
@@ -25,7 +16,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.stream.Stream;
@@ -41,7 +31,9 @@ public class ModModelProvider extends ModelProvider {
             blockModels.createTrivialCube(block.get());
         }
         blockModels.createNonTemplateModelBlock(ModRegistries.XP_HOLDER.get());
-        blockModels.createNonTemplateHorizontalBlock(ModRegistries.PUSHER_BLOCK.get());
+        blockModels.createNonTemplateHorizontalBlock(ModRegistries.SLOW_PUSHER_BLOCK.get());
+        blockModels.createNonTemplateHorizontalBlock(ModRegistries.NORMAL_PUSHER_BLOCK.get());
+        blockModels.createNonTemplateHorizontalBlock(ModRegistries.FAST_PUSHER_BLOCK.get());
 
         for (RegistrySupplier<Item> itemBlock : ModRegistries.BLOCK_ITEM_LIST) {
             createBlockItemModel(blockModels, itemBlock);

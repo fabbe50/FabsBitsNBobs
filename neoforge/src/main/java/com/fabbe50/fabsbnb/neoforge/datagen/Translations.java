@@ -27,7 +27,9 @@ public class Translations extends LanguageProvider {
         // Blocks
         addBlock(ModRegistries.LAVA_SPONGE, ModRegistries.ITEM_LAVA_SPONGE, "Lava Sponge");
         addBlock(ModRegistries.LAVA_SPONGE_USED, ModRegistries.ITEM_LAVA_SPONGE_USED, "Hot Oozing Lava Sponge", "Combine with water bucket in smithing table or place in a cold and dark place.");
-        addBlock(ModRegistries.PUSHER_BLOCK, ModRegistries.ITEM_PUSHER_BLOCK, "Pusher Plate", "Pushes entities that lands on it in the direction of the arrow.");
+        addBlock(ModRegistries.SLOW_PUSHER_BLOCK, ModRegistries.ITEM_SLOW_PUSHER_BLOCK, "Basic Pusher Plate", "Slowly pushes entities that lands on it in the direction of the arrow.");
+        addBlock(ModRegistries.NORMAL_PUSHER_BLOCK, ModRegistries.ITEM_NORMAL_PUSHER_BLOCK, "Standard Pusher Plate", "Pushes entities that lands on it in the direction of the arrow.");
+        addBlock(ModRegistries.FAST_PUSHER_BLOCK, ModRegistries.ITEM_FAST_PUSHER_BLOCK, "Advanced Pusher Plate", "Quickly pushes entities that lands on it in the direction of the arrow.");
         addBlock(ModRegistries.THIN_LIGHT, ModRegistries.ITEM_THIN_LIGHT, "Light");
         addBlock(ModRegistries.POWERED_THIN_LIGHT, ModRegistries.ITEM_POWERED_THIN_LIGHT, "Powered Light");
         addBlock(ModRegistries.BLOCK_PLACER, ModRegistries.ITEM_BLOCK_PLACER, "Block Placer", "Places blocks in front of it.");
@@ -151,7 +153,10 @@ public class Translations extends LanguageProvider {
         addConfig(ModConfig.whooshWandMultiplier, "Whoosh Wand Movement Multiplier", "The multiplier for the boost the whoosh wand gives you.");
         addConfig(ModConfig.whooshWandCooldown, "Whoosh Wand Cooldown", "The cooldown applied to the wand after each use.");
         addConfig(ModConfig.necklaceWorksInInventory, "Necklace Works in Inventory", "If the chocolate necklace should work anywhere in the inventory. Otherwise it will only work while it's being held or in curio/trinket slot.");
-        addConfig(ModConfig.entityMoverBlockSpeed, "Pusher Block Speed Multiplier", "The multiplier for the speed addon calculation. [{current speed} + ({multiplier} * 1.5)]");
+        addConfig(ModConfig.defaultMoverBlockSpeed, "Default Pusher Block Speed Multiplier", "The multiplier for the speed addon calculation. [{current speed} + ({multiplier} * 1.5)]");
+        addConfig(ModConfig.slowMoverBlockSpeed, "Basic Pusher Block Speed Multiplier", "The multiplier for the speed addon calculation. [{current speed} + ({multiplier} * 1.5)]");
+        addConfig(ModConfig.normalMoverBlockSpeed, "Standard Pusher Block Speed Multiplier", "The multiplier for the speed addon calculation. [{current speed} + ({multiplier} * 1.5)]");
+        addConfig(ModConfig.fastMoverBlockSpeed, "Advanced Pusher Block Speed Multiplier", "The multiplier for the speed addon calculation. [{current speed} + ({multiplier} * 1.5)]");
         addConfig(ModConfig.oreMinerEnabled, "Ore Miner Enabled", "If the ore miner enchantment should be enabled.");
         addConfig(ModConfig.oreMinerMiningLimit, "Ore Miner Limit", "The amount of blocks the ore miner enchantment is allowed to mine. NOTE: LARGE NUMBERS CAN CAUSE LAG");
         addConfig(ModConfig.oreMinerScanRange, "Ore Miner Scan Range", "How far away from each block it should scan. This is not the originally mined block, but rather next block in the scan queue.");

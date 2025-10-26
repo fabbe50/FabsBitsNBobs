@@ -34,4 +34,9 @@ public class Platform {
     public static void registerPotion(PotionBrewing.Builder builder, Holder<Potion> input, Item ingredient, Holder<Potion> output) {
         throw new AssertionError();
     }
+
+    @ExpectPlatform
+    public static void dataFix() {
+        throw new AssertionError();
+    }
 }

@@ -3,7 +3,6 @@ package com.fabbe50.fabsbnb;
 import com.fabbe50.fabsbnb.config.*;
 import com.fabbe50.fabsbnb.util.LangUtils;
 import dev.architectury.platform.Platform;
-import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,7 +17,7 @@ public class ModConfig {
 
     private static final Map<String, IConfigOption<?, ?>> configOptions = new LinkedHashMap<>();
 
-    public static BooleanOption debugMode = addConfig(new BooleanOption("debugMode", true));
+    public static BooleanOption debugMode = addConfig(new BooleanOption("debugMode", false));
 
     public static IntegerSliderOption woodenBuildingWandRadius = addConfig(new IntegerSliderOption("woodenBuildingWandRadius", 1, 1, 30).makeBuilder().textGetter(LangUtils.VALUE_BLOCKS).subCategory("building_wands").build());
     public static IntegerSliderOption stoneBuildingWandRadius = addConfig(new IntegerSliderOption("stoneBuildingWandRadius", 2, 1, 30).makeBuilder().textGetter(LangUtils.VALUE_BLOCKS).subCategory("building_wands").build());
@@ -34,7 +33,10 @@ public class ModConfig {
     public static BooleanOption necklaceWorksInInventory = addConfig(new BooleanOption("necklaceWorksInInventory", true));
     public static IntegerOption necklaceDurability = addConfig(new IntegerOption("necklaceDurability", 256));
 
-    public static DoubleOption entityMoverBlockSpeed = addConfig(new DoubleOption("entityMoverBlockSpeed", 0.3d));
+    public static DoubleOption defaultMoverBlockSpeed = addConfig(new DoubleOption("entityMoverBlockSpeed", 0.3d));
+    public static DoubleOption slowMoverBlockSpeed = addConfig(new DoubleOption("slowMoverBlockSpeed", 0.06d));
+    public static DoubleOption normalMoverBlockSpeed = addConfig(new DoubleOption("normalMoverBlockSpeed", 0.3d));
+    public static DoubleOption fastMoverBlockSpeed = addConfig(new DoubleOption("fastMoverBlockSpeed", 1.5d));
     public static BooleanOption experimentalSquidPushing = addConfig(new BooleanOption("experimentalSquidPushing", false));
 
     public static IntegerOption xpHolderCollectionRange = addConfig(new IntegerOption("xpHolderCollectionRange", 5, 1, 20));

@@ -1,7 +1,6 @@
 package com.fabbe50.fabsbnb.world.block;
 
 import com.fabbe50.fabsbnb.ModConfig;
-import com.fabbe50.fabsbnb.registries.ModRegistries;
 import com.fabbe50.fabsbnb.world.block.base.ExtHorizontalDirectionalBlock;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
@@ -27,10 +26,16 @@ import org.jetbrains.annotations.NotNull;
 public class PusherBlock extends ExtHorizontalDirectionalBlock {
     public static final MapCodec<PusherBlock> CODEC = simpleCodec(PusherBlock::new);
     protected static final VoxelShape SHAPE = Block.box(0.0F, 0.0F, 0.0F, 16.0F, 1.0F, 16.0F);
+    private final double SPEED;
 
-    public PusherBlock(Properties properties) {
+    protected PusherBlock(Properties properties) {
+        this(0, properties);
+    }
+
+    public PusherBlock(double speed, Properties properties) {
         super(1, properties.strength(2.0f).sound(SoundType.STONE).isValidSpawn((blockState, blockGetter, blockPos, object) -> true));
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
+        this.SPEED = speed;
     }
 
     @Override
@@ -71,7 +76,10 @@ public class PusherBlock extends ExtHorizontalDirectionalBlock {
     protected void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity, InsideBlockEffectApplier insideBlockEffectApplier) {
         if (!entity.isCrouching()) {
             Direction facing = blockState.getValue(FACING).getOpposite();
-            double speedMultiplier = ModConfig.entityMoverBlockSpeed.getValue();
+            double speedMultiplier = SPEED;
+            if (speedMultiplier == 0) {
+                speedMultiplier = ModConfig.defaultMoverBlockSpeed.getValue();
+            }
             if (ModConfig.experimentalSquidPushing.getValue() && entity instanceof Squid squid) {
                 squid.move(MoverType.SELF, new Vec3(speedMultiplier * (facing.getStepX() * 1.5), 0, speedMultiplier * (facing.getStepZ() * 1.5)));
             }

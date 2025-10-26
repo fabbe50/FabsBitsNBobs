@@ -31,7 +31,9 @@ public class ItemInformations {
         addComponent("whoosh_wand", ModRegistries.WHOOSH_WAND.get());
         addComponent("wrench", ModRegistries.WRENCH.get());
         addComponent("lava_sponge", ModRegistries.ITEM_LAVA_SPONGE.get(), ModRegistries.ITEM_LAVA_SPONGE_USED.get());
-        addComponent("pusher_plate", ModRegistries.ITEM_PUSHER_BLOCK.get());
+        addComponent("slow_pusher_plate", ModRegistries.ITEM_SLOW_PUSHER_BLOCK.get());
+        addComponent("normal_pusher_plate", ModRegistries.ITEM_NORMAL_PUSHER_BLOCK.get());
+        addComponent("fast_pusher_plate", ModRegistries.ITEM_FAST_PUSHER_BLOCK.get());
         addComponent("lights", ModRegistries.ITEM_THIN_LIGHT.get(), ModRegistries.ITEM_POWERED_THIN_LIGHT.get());
         addComponent("cat_claw", ModRegistries.CAT_CLAW.get());
         addComponent("block_placer", 3, ModRegistries.ITEM_BLOCK_PLACER.get());

@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "fabsbnb:block/slow_pusher_block"
+  }
+}

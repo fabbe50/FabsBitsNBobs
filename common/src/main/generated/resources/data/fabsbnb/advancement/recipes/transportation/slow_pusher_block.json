@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "fabsbnb:pusher_block"
+        "recipe": "fabsbnb:slow_pusher_block"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "fabsbnb:pusher_block"
+      "fabsbnb:slow_pusher_block"
     ]
   }
 }

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "fabsbnb_pushers",
+  "key": {
+    "I": "minecraft:iron_nugget",
+    "R": "minecraft:sugar",
+    "S": "minecraft:slime_ball"
+  },
+  "pattern": [
+    "ISI",
+    "RSR",
+    "ISI"
+  ],
+  "result": {
+    "count": 8,
+    "id": "fabsbnb:slow_pusher_block"
+  }
+}

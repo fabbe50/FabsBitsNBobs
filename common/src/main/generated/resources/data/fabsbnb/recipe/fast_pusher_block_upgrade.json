@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "fabsbnb_pushers",
+  "ingredients": [
+    "minecraft:iron_ingot",
+    "minecraft:redstone",
+    "fabsbnb:normal_pusher_block",
+    "fabsbnb:normal_pusher_block"
+  ],
+  "result": {
+    "count": 2,
+    "id": "fabsbnb:fast_pusher_block"
+  }
+}

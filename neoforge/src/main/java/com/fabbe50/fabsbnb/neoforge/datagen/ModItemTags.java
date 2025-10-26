@@ -73,5 +73,10 @@ public class ModItemTags extends ItemTagsProvider {
 
         tag(ModRegistries.WAND_OF_HOLDING_ACCEPTS)
                 .add(Items.STONE);
+
+        tag(ModRegistries.PUSHER_BLOCK_ITEMS)
+                .add(ModRegistries.ITEM_SLOW_PUSHER_BLOCK.get())
+                .add(ModRegistries.ITEM_NORMAL_PUSHER_BLOCK.get())
+                .add(ModRegistries.ITEM_FAST_PUSHER_BLOCK.get());
     }
 }

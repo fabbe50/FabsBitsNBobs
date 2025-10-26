@@ -1,0 +1,7 @@
+{
+  "parent": "fabsbnb:block/pusher_block",
+  "textures": {
+    "0": "fabsbnb:block/fast_pusher_block",
+    "particle": "fabsbnb:block/fast_pusher_block"
+  }
+}

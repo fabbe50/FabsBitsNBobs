@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "fabsbnb:pusher_block"
+          "name": "fabsbnb:slow_pusher_block"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "fabsbnb:blocks/pusher_block"
+  "random_sequence": "fabsbnb:blocks/slow_pusher_block"
 }

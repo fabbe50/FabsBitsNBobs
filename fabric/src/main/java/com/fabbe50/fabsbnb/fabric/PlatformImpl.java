@@ -1,10 +1,12 @@
 package com.fabbe50.fabsbnb.fabric;
 
+import com.fabbe50.fabsbnb.data.DataFixer;
 import com.fabbe50.fabsbnb.fabric.integration.Trinkets;
 import com.fabbe50.fabsbnb.registries.ModRegistries;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
@@ -37,5 +39,10 @@ public class PlatformImpl {
 
     public static void registerPotion(PotionBrewing.Builder builder, Holder<Potion> input, Item ingredient, Holder<Potion> output) {
         builder.registerPotionRecipe(input, Ingredient.of(ingredient), output);
+    }
+
+    public static void dataFix() {
+        DataFixer.BLOCK_FIXER.forEach(BuiltInRegistries.BLOCK::addAlias);
+        DataFixer.ITEM_FIXER.forEach(BuiltInRegistries.ITEM::addAlias);
     }
 }
