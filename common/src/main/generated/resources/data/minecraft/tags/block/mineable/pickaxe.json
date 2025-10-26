@@ -1,6 +1,8 @@
 {
   "values": [
-    "fabsbnb:pusher_block",
+    "fabsbnb:slow_pusher_block",
+    "fabsbnb:normal_pusher_block",
+    "fabsbnb:fast_pusher_block",
     "fabsbnb:thin_light",
     "fabsbnb:powered_thin_light",
     "fabsbnb:block_breaker",
